@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bodoni_Moda, JetBrains_Mono, Metrophobic } from "next/font/google";
 import "./globals.css";
 
@@ -42,13 +42,36 @@ export const metadata: Metadata = {
   },
 };
 
+/* Ruleaza sincron la parsarea HTML-ului, inainte de primul paint, deci tema
+   salvata se aplica fara flash. Fara valoare salvata nu setam nimic si CSS-ul
+   cade pe `prefers-color-scheme`. */
+const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`;
+
+/* In Next 16 `themeColor` traieste in export-ul `viewport`, nu in `metadata`. */
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8faf3" },
+    { media: "(prefers-color-scheme: dark)", color: "#10150f" },
+  ],
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="ro"
+      suppressHydrationWarning
       className={`${bodoni.variable} ${metrophobic.variable} ${jetbrains.variable} h-full`}
     >
-      <body className="font-body-md text-body-md bg-background text-on-surface min-h-full antialiased">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      {/* Extensiile de browser (ColorZilla, Grammarly etc.) injecteaza atribute
+          pe <body> inainte de hidratare — ex. `cz-shortcut-listen`. Suprimarea
+          se aplica doar atributelor acestui element, nu si copiilor. */}
+      <body
+        suppressHydrationWarning
+        className="font-body-md text-body-md bg-background text-on-surface min-h-full antialiased"
+      >
         {children}
       </body>
     </html>

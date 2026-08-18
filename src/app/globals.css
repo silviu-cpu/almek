@@ -2,17 +2,59 @@
 
 /* ---------------------------------------------------------------------------
    ALMEK — "Lignum Tech-Modern"
-   Paleta este dark-only: nu exista tema light, deci nu se foloseste varianta
-   `dark:` nicaieri. Tokenii de mai jos SUNT tema.
+   Doua teme. Trei stari: fara `data-theme` pe <html> se urmeaza preferinta
+   sistemului; `data-theme="light"` / `"dark"` forteaza explicit.
+   Blocurile dark apar de doua ori (media query + atribut) pentru ca CSS nu
+   permite combinarea lor intr-un singur selector — sunt generate din aceeasi
+   sursa, deci nu pot diverge.
    --------------------------------------------------------------------------- */
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* Marginea de siguranta este singurul token de spatiu responsiv.
-     `@theme` o refera prin indirectare, deci media query-urile de mai jos
-     se aplica la runtime pentru toate utilitarele *-margin-safe. */
+  /* Marginea de siguranta este singurul token de spatiu responsiv. */
   --margin-safe: 20px;
+
+  --c-background: #f8faf3;
+  --c-on-background: #191d17;
+  --c-surface: #f8faf3;
+  --c-surface-dim: #d9dbd4;
+  --c-surface-bright: #f8faf3;
+  --c-surface-variant: #e1e4dc;
+  --c-surface-tint: #8f4c35;
+  --c-surface-container-lowest: #ffffff;
+  --c-surface-container-low: #f2f5ed;
+  --c-surface-container: #edefe8;
+  --c-surface-container-high: #e7e9e2;
+  --c-surface-container-highest: #e1e4dc;
+  --c-on-surface: #191d17;
+  --c-on-surface-variant: #52443f;
+  --c-inverse-surface: #2e322c;
+  --c-inverse-on-surface: #f0f2ea;
+  --c-outline: #857370;
+  --c-outline-variant: #d7c2bc;
+  --c-primary: #8f4c35;
+  --c-on-primary: #ffffff;
+  --c-primary-container: #ffdbd0;
+  --c-on-primary-container: #6a3a2a;
+  --c-inverse-primary: #fbb6a0;
+  --c-secondary: #4f6350;
+  --c-on-secondary: #ffffff;
+  --c-secondary-container: #d1e9cf;
+  --c-on-secondary-container: #384c39;
+  --c-tertiary: #645d4f;
+  --c-on-tertiary: #ffffff;
+  --c-tertiary-container: #ece1d2;
+  --c-on-tertiary-container: #4c463b;
+  --c-error: #ba1a1a;
+  --c-on-error: #ffffff;
+  --c-error-container: #ffdad6;
+  --c-on-error-container: #410002;
+  --c-blueprint-line: rgba(25, 29, 23, 0.05);
+  --c-blueprint-accent: rgba(143, 76, 53, 0.06);
+  --c-glow: rgba(143, 76, 53, 0.05);
+  --c-grain-opacity: 0.05;
+  --c-wood-opacity: 0.04;
 }
 
 @media (width >= 48rem) {
@@ -27,61 +69,196 @@
   }
 }
 
+/* Sistemul cere dark si utilizatorul nu a ales explicit light. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --c-background: #10150f;
+    --c-on-background: #dfe4db;
+    --c-surface: #10150f;
+    --c-surface-dim: #10150f;
+    --c-surface-bright: #353b34;
+    --c-surface-variant: #313630;
+    --c-surface-tint: #fbb6a0;
+    --c-surface-container-lowest: #0a0f0a;
+    --c-surface-container-low: #181d17;
+    --c-surface-container: #1c211b;
+    --c-surface-container-high: #262b25;
+    --c-surface-container-highest: #313630;
+    --c-on-surface: #dfe4db;
+    --c-on-surface-variant: #d7c2bc;
+    --c-inverse-surface: #dfe4db;
+    --c-inverse-on-surface: #2c322c;
+    --c-outline: #9f8d87;
+    --c-outline-variant: #52443f;
+    --c-primary: #fbb6a0;
+    --c-on-primary: #4f2415;
+    --c-primary-container: #613323;
+    --c-on-primary-container: #dd9c86;
+    --c-inverse-primary: #85513f;
+    --c-secondary: #b6cdb4;
+    --c-on-secondary: #223523;
+    --c-secondary-container: #384c39;
+    --c-on-secondary-container: #a4bba3;
+    --c-tertiary: #cfc5b6;
+    --c-on-tertiary: #353025;
+    --c-tertiary-container: #453f34;
+    --c-on-tertiary-container: #b4aa9c;
+    --c-error: #ffb4ab;
+    --c-on-error: #690005;
+    --c-error-container: #93000a;
+    --c-on-error-container: #ffdad6;
+    --c-blueprint-line: rgba(223, 228, 219, 0.02);
+    --c-blueprint-accent: rgba(251, 182, 160, 0.03);
+    --c-glow: rgba(251, 182, 160, 0.03);
+    --c-grain-opacity: 0.12;
+    --c-wood-opacity: 0.03;
+  }
+}
+
+/* Alegere explicita — bate preferinta sistemului in ambele sensuri. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --c-background: #10150f;
+  --c-on-background: #dfe4db;
+  --c-surface: #10150f;
+  --c-surface-dim: #10150f;
+  --c-surface-bright: #353b34;
+  --c-surface-variant: #313630;
+  --c-surface-tint: #fbb6a0;
+  --c-surface-container-lowest: #0a0f0a;
+  --c-surface-container-low: #181d17;
+  --c-surface-container: #1c211b;
+  --c-surface-container-high: #262b25;
+  --c-surface-container-highest: #313630;
+  --c-on-surface: #dfe4db;
+  --c-on-surface-variant: #d7c2bc;
+  --c-inverse-surface: #dfe4db;
+  --c-inverse-on-surface: #2c322c;
+  --c-outline: #9f8d87;
+  --c-outline-variant: #52443f;
+  --c-primary: #fbb6a0;
+  --c-on-primary: #4f2415;
+  --c-primary-container: #613323;
+  --c-on-primary-container: #dd9c86;
+  --c-inverse-primary: #85513f;
+  --c-secondary: #b6cdb4;
+  --c-on-secondary: #223523;
+  --c-secondary-container: #384c39;
+  --c-on-secondary-container: #a4bba3;
+  --c-tertiary: #cfc5b6;
+  --c-on-tertiary: #353025;
+  --c-tertiary-container: #453f34;
+  --c-on-tertiary-container: #b4aa9c;
+  --c-error: #ffb4ab;
+  --c-on-error: #690005;
+  --c-error-container: #93000a;
+  --c-on-error-container: #ffdad6;
+  --c-blueprint-line: rgba(223, 228, 219, 0.02);
+  --c-blueprint-accent: rgba(251, 182, 160, 0.03);
+  --c-glow: rgba(251, 182, 160, 0.03);
+  --c-grain-opacity: 0.12;
+  --c-wood-opacity: 0.03;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --c-background: #f8faf3;
+  --c-on-background: #191d17;
+  --c-surface: #f8faf3;
+  --c-surface-dim: #d9dbd4;
+  --c-surface-bright: #f8faf3;
+  --c-surface-variant: #e1e4dc;
+  --c-surface-tint: #8f4c35;
+  --c-surface-container-lowest: #ffffff;
+  --c-surface-container-low: #f2f5ed;
+  --c-surface-container: #edefe8;
+  --c-surface-container-high: #e7e9e2;
+  --c-surface-container-highest: #e1e4dc;
+  --c-on-surface: #191d17;
+  --c-on-surface-variant: #52443f;
+  --c-inverse-surface: #2e322c;
+  --c-inverse-on-surface: #f0f2ea;
+  --c-outline: #857370;
+  --c-outline-variant: #d7c2bc;
+  --c-primary: #8f4c35;
+  --c-on-primary: #ffffff;
+  --c-primary-container: #ffdbd0;
+  --c-on-primary-container: #6a3a2a;
+  --c-inverse-primary: #fbb6a0;
+  --c-secondary: #4f6350;
+  --c-on-secondary: #ffffff;
+  --c-secondary-container: #d1e9cf;
+  --c-on-secondary-container: #384c39;
+  --c-tertiary: #645d4f;
+  --c-on-tertiary: #ffffff;
+  --c-tertiary-container: #ece1d2;
+  --c-on-tertiary-container: #4c463b;
+  --c-error: #ba1a1a;
+  --c-on-error: #ffffff;
+  --c-error-container: #ffdad6;
+  --c-on-error-container: #410002;
+  --c-blueprint-line: rgba(25, 29, 23, 0.05);
+  --c-blueprint-accent: rgba(143, 76, 53, 0.06);
+  --c-glow: rgba(143, 76, 53, 0.05);
+  --c-grain-opacity: 0.05;
+  --c-wood-opacity: 0.04;
+}
+
 @theme {
-  /* --- Culori ----------------------------------------------------------- */
-  --color-background: #10150f;
-  --color-on-background: #dfe4db;
+  /* --- Culori: fiecare token pointeaza spre variabila de tema de mai sus --- */
+  --color-background: var(--c-background);
+  --color-on-background: var(--c-on-background);
+  --color-surface: var(--c-surface);
+  --color-surface-dim: var(--c-surface-dim);
+  --color-surface-bright: var(--c-surface-bright);
+  --color-surface-variant: var(--c-surface-variant);
+  --color-surface-tint: var(--c-surface-tint);
+  --color-surface-container-lowest: var(--c-surface-container-lowest);
+  --color-surface-container-low: var(--c-surface-container-low);
+  --color-surface-container: var(--c-surface-container);
+  --color-surface-container-high: var(--c-surface-container-high);
+  --color-surface-container-highest: var(--c-surface-container-highest);
+  --color-on-surface: var(--c-on-surface);
+  --color-on-surface-variant: var(--c-on-surface-variant);
+  --color-inverse-surface: var(--c-inverse-surface);
+  --color-inverse-on-surface: var(--c-inverse-on-surface);
+  --color-outline: var(--c-outline);
+  --color-outline-variant: var(--c-outline-variant);
+  --color-primary: var(--c-primary);
+  --color-on-primary: var(--c-on-primary);
+  --color-primary-container: var(--c-primary-container);
+  --color-on-primary-container: var(--c-on-primary-container);
+  --color-inverse-primary: var(--c-inverse-primary);
+  --color-secondary: var(--c-secondary);
+  --color-on-secondary: var(--c-on-secondary);
+  --color-secondary-container: var(--c-secondary-container);
+  --color-on-secondary-container: var(--c-on-secondary-container);
+  --color-tertiary: var(--c-tertiary);
+  --color-on-tertiary: var(--c-on-tertiary);
+  --color-tertiary-container: var(--c-tertiary-container);
+  --color-on-tertiary-container: var(--c-on-tertiary-container);
+  --color-error: var(--c-error);
+  --color-on-error: var(--c-on-error);
+  --color-error-container: var(--c-error-container);
+  --color-on-error-container: var(--c-on-error-container);
 
-  --color-surface: #10150f;
-  --color-surface-dim: #10150f;
-  --color-surface-bright: #353b34;
-  --color-surface-variant: #313630;
-  --color-surface-tint: #fbb6a0;
-  --color-surface-container-lowest: #0a0f0a;
-  --color-surface-container-low: #181d17;
-  --color-surface-container: #1c211b;
-  --color-surface-container-high: #262b25;
-  --color-surface-container-highest: #313630;
-  --color-on-surface: #dfe4db;
-  --color-on-surface-variant: #d7c2bc;
-  --color-inverse-surface: #dfe4db;
-  --color-inverse-on-surface: #2c322c;
-
-  --color-outline: #9f8d87;
-  --color-outline-variant: #52443f;
-
-  --color-primary: #fbb6a0;
-  --color-on-primary: #4f2415;
-  --color-primary-container: #613323;
-  --color-on-primary-container: #dd9c86;
-  --color-inverse-primary: #85513f;
+  /* Culorile "fixed" sunt identice in ambele teme, prin definitie. */
   --color-primary-fixed: #ffdbd0;
   --color-primary-fixed-dim: #fbb6a0;
   --color-on-primary-fixed: #341004;
   --color-on-primary-fixed-variant: #6a3a2a;
-
-  --color-secondary: #b6cdb4;
-  --color-on-secondary: #223523;
-  --color-secondary-container: #384c39;
-  --color-on-secondary-container: #a4bba3;
   --color-secondary-fixed: #d1e9cf;
   --color-secondary-fixed-dim: #b6cdb4;
   --color-on-secondary-fixed: #0d2010;
   --color-on-secondary-fixed-variant: #384c39;
-
-  --color-tertiary: #cfc5b6;
-  --color-on-tertiary: #353025;
-  --color-tertiary-container: #453f34;
-  --color-on-tertiary-container: #b4aa9c;
   --color-tertiary-fixed: #ece1d2;
   --color-tertiary-fixed-dim: #cfc5b6;
   --color-on-tertiary-fixed: #201b12;
   --color-on-tertiary-fixed-variant: #4c463b;
-
-  --color-error: #ffb4ab;
-  --color-on-error: #690005;
-  --color-error-container: #93000a;
-  --color-on-error-container: #ffdad6;
 
   /* --- Familii de fonturi ----------------------------------------------- */
   --font-display-lg: var(--font-bodoni), Georgia, "Times New Roman", serif;
@@ -94,8 +271,6 @@
   --font-label-caps: var(--font-jetbrains), ui-monospace, "Courier New", monospace;
 
   /* --- Scara tipografica ------------------------------------------------- */
-  /* Display si headline sunt fluide: mockup-ul le avea fixe la 72px / 48px,
-     ceea ce sparge layout-ul sub ~420px latime. */
   --text-display-lg: clamp(2.5rem, 5.5vw + 1.25rem, 4.5rem);
   --text-display-lg--line-height: 1.1;
   --text-display-lg--letter-spacing: -0.02em;
@@ -139,26 +314,44 @@
 
 /* Fara tokeni de border-radius: forma este strict ortogonala (0px).
    Singura exceptie sunt containerele circulare de iconita, care folosesc
-   `rounded-full` din setul implicit Tailwind. Mockup-ul redefinea
-   `full: 0.75rem`, ceea ce ar fi transformat cercurile in patrate rotunjite. */
+   `rounded-full` din setul implicit Tailwind. */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-on-surface);
+  background-color: var(--c-background);
+  color: var(--c-on-surface);
 }
 
 /* ---------------------------------------------------------------------------
-   Straturi de textura
+   Container
    --------------------------------------------------------------------------- */
 
-/* Granulatie: SVG feTurbulence inline — fara request de retea, independent
-   de rezolutie. Inlocuieste tile-ul extern de pe transparenttextures.com. */
+/* Latimea maxima a continutului este 1200px, centrat, cu marginea de siguranta
+   in exterior. Se aplica pe un wrapper INTERIOR sectiunii, nu pe <section>,
+   ca fundalurile si bordurile orizontale sa ramana pe toata latimea. */
+@utility shell {
+  width: 100%;
+  max-width: calc(1200px + var(--margin-safe) * 2);
+  margin-inline: auto;
+  padding-inline: var(--margin-safe);
+}
+
+/* ---------------------------------------------------------------------------
+   Straturi de textura — toate reactioneaza la tema
+   --------------------------------------------------------------------------- */
+
+/* Granulatie: SVG feTurbulence inline, fara request de retea. Opacitatea scade
+   pe light, unde acelasi zgomot ar arata murdar. */
 @utility grain-overlay {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.12;
+  opacity: var(--c-grain-opacity);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
 }
 
@@ -167,14 +360,13 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.03;
+  opacity: var(--c-wood-opacity);
   background-image: url("/textures/wood.png");
   background-size: 800px;
 }
 
 /* background-attachment: fixed este buggy si costisitor la scroll pe iOS
-   Safari; la opacity 0.03 diferenta nu se vede, deci il pornim doar pe
-   ecrane mari cu pointer fin. */
+   Safari; la opacitate atat de mica diferenta nu se vede. */
 @media (width >= 64rem) and (pointer: fine) {
   .wood-overlay {
     background-attachment: fixed;
@@ -183,27 +375,31 @@ body {
 
 @utility blueprint-bg {
   background-image:
-    linear-gradient(rgba(223, 228, 219, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(223, 228, 219, 0.02) 1px, transparent 1px);
+    linear-gradient(var(--c-blueprint-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--c-blueprint-line) 1px, transparent 1px);
   background-size: 160px 160px;
 }
 
 @utility blueprint-detail {
   background-image:
-    linear-gradient(rgba(251, 182, 160, 0.03) 0.5px, transparent 0.5px),
-    linear-gradient(90deg, rgba(251, 182, 160, 0.03) 0.5px, transparent 0.5px);
+    linear-gradient(var(--c-blueprint-accent) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, var(--c-blueprint-accent) 0.5px, transparent 0.5px);
   background-size: 20px 20px;
 }
 
 @utility section-gradient {
   background: radial-gradient(
     circle at 30% 20%,
-    rgba(251, 182, 160, 0.03) 0%,
+    var(--c-glow) 0%,
     transparent 60%
   );
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
