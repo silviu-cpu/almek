@@ -1,26 +1,213 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   ALMEK — "Lignum Tech-Modern"
+   Paleta este dark-only: nu exista tema light, deci nu se foloseste varianta
+   `dark:` nicaieri. Tokenii de mai jos SUNT tema.
+   --------------------------------------------------------------------------- */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  /* Marginea de siguranta este singurul token de spatiu responsiv.
+     `@theme` o refera prin indirectare, deci media query-urile de mai jos
+     se aplica la runtime pentru toate utilitarele *-margin-safe. */
+  --margin-safe: 20px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (width >= 48rem) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --margin-safe: 40px;
   }
 }
 
+@media (width >= 64rem) {
+  :root {
+    --margin-safe: 64px;
+  }
+}
+
+@theme {
+  /* --- Culori ----------------------------------------------------------- */
+  --color-background: #10150f;
+  --color-on-background: #dfe4db;
+
+  --color-surface: #10150f;
+  --color-surface-dim: #10150f;
+  --color-surface-bright: #353b34;
+  --color-surface-variant: #313630;
+  --color-surface-tint: #fbb6a0;
+  --color-surface-container-lowest: #0a0f0a;
+  --color-surface-container-low: #181d17;
+  --color-surface-container: #1c211b;
+  --color-surface-container-high: #262b25;
+  --color-surface-container-highest: #313630;
+  --color-on-surface: #dfe4db;
+  --color-on-surface-variant: #d7c2bc;
+  --color-inverse-surface: #dfe4db;
+  --color-inverse-on-surface: #2c322c;
+
+  --color-outline: #9f8d87;
+  --color-outline-variant: #52443f;
+
+  --color-primary: #fbb6a0;
+  --color-on-primary: #4f2415;
+  --color-primary-container: #613323;
+  --color-on-primary-container: #dd9c86;
+  --color-inverse-primary: #85513f;
+  --color-primary-fixed: #ffdbd0;
+  --color-primary-fixed-dim: #fbb6a0;
+  --color-on-primary-fixed: #341004;
+  --color-on-primary-fixed-variant: #6a3a2a;
+
+  --color-secondary: #b6cdb4;
+  --color-on-secondary: #223523;
+  --color-secondary-container: #384c39;
+  --color-on-secondary-container: #a4bba3;
+  --color-secondary-fixed: #d1e9cf;
+  --color-secondary-fixed-dim: #b6cdb4;
+  --color-on-secondary-fixed: #0d2010;
+  --color-on-secondary-fixed-variant: #384c39;
+
+  --color-tertiary: #cfc5b6;
+  --color-on-tertiary: #353025;
+  --color-tertiary-container: #453f34;
+  --color-on-tertiary-container: #b4aa9c;
+  --color-tertiary-fixed: #ece1d2;
+  --color-tertiary-fixed-dim: #cfc5b6;
+  --color-on-tertiary-fixed: #201b12;
+  --color-on-tertiary-fixed-variant: #4c463b;
+
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
+
+  /* --- Familii de fonturi ----------------------------------------------- */
+  --font-display-lg: var(--font-bodoni), Georgia, "Times New Roman", serif;
+  --font-headline-lg: var(--font-bodoni), Georgia, "Times New Roman", serif;
+  --font-headline-lg-mobile: var(--font-bodoni), Georgia, "Times New Roman", serif;
+  --font-headline-md: var(--font-bodoni), Georgia, "Times New Roman", serif;
+  --font-body-lg: var(--font-metrophobic), ui-sans-serif, system-ui, sans-serif;
+  --font-body-md: var(--font-metrophobic), ui-sans-serif, system-ui, sans-serif;
+  --font-technical-data: var(--font-jetbrains), ui-monospace, "Courier New", monospace;
+  --font-label-caps: var(--font-jetbrains), ui-monospace, "Courier New", monospace;
+
+  /* --- Scara tipografica ------------------------------------------------- */
+  /* Display si headline sunt fluide: mockup-ul le avea fixe la 72px / 48px,
+     ceea ce sparge layout-ul sub ~420px latime. */
+  --text-display-lg: clamp(2.5rem, 5.5vw + 1.25rem, 4.5rem);
+  --text-display-lg--line-height: 1.1;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 600;
+
+  --text-headline-lg: clamp(2rem, 2.5vw + 1.25rem, 3rem);
+  --text-headline-lg--line-height: 1.2;
+  --text-headline-lg--font-weight: 500;
+
+  --text-headline-lg-mobile: 2rem;
+  --text-headline-lg-mobile--line-height: 1.2;
+  --text-headline-lg-mobile--font-weight: 500;
+
+  --text-headline-md: clamp(1.5rem, 1.25vw + 1.125rem, 2rem);
+  --text-headline-md--line-height: 1.3;
+  --text-headline-md--font-weight: 400;
+
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--font-weight: 400;
+
+  --text-body-md: 1rem;
+  --text-body-md--line-height: 1.6;
+  --text-body-md--font-weight: 400;
+
+  --text-technical-data: 0.875rem;
+  --text-technical-data--line-height: 1.4;
+  --text-technical-data--font-weight: 400;
+
+  --text-label-caps: 0.75rem;
+  --text-label-caps--line-height: 1.5;
+  --text-label-caps--letter-spacing: 0.1em;
+  --text-label-caps--font-weight: 500;
+
+  /* --- Spatiere ---------------------------------------------------------- */
+  --spacing-unit: 4px;
+  --spacing-gutter: 24px;
+  --spacing-grid-overlay: 64px;
+  --spacing-margin-safe: var(--margin-safe);
+}
+
+/* Fara tokeni de border-radius: forma este strict ortogonala (0px).
+   Singura exceptie sunt containerele circulare de iconita, care folosesc
+   `rounded-full` din setul implicit Tailwind. Mockup-ul redefinea
+   `full: 0.75rem`, ceea ce ar fi transformat cercurile in patrate rotunjite. */
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+}
+
+/* ---------------------------------------------------------------------------
+   Straturi de textura
+   --------------------------------------------------------------------------- */
+
+/* Granulatie: SVG feTurbulence inline — fara request de retea, independent
+   de rezolutie. Inlocuieste tile-ul extern de pe transparenttextures.com. */
+@utility grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+@utility wood-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.03;
+  background-image: url("/textures/wood.png");
+  background-size: 800px;
+}
+
+/* background-attachment: fixed este buggy si costisitor la scroll pe iOS
+   Safari; la opacity 0.03 diferenta nu se vede, deci il pornim doar pe
+   ecrane mari cu pointer fin. */
+@media (width >= 64rem) and (pointer: fine) {
+  .wood-overlay {
+    background-attachment: fixed;
+  }
+}
+
+@utility blueprint-bg {
+  background-image:
+    linear-gradient(rgba(223, 228, 219, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(223, 228, 219, 0.02) 1px, transparent 1px);
+  background-size: 160px 160px;
+}
+
+@utility blueprint-detail {
+  background-image:
+    linear-gradient(rgba(251, 182, 160, 0.03) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, rgba(251, 182, 160, 0.03) 0.5px, transparent 0.5px);
+  background-size: 20px 20px;
+}
+
+@utility section-gradient {
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(251, 182, 160, 0.03) 0%,
+    transparent 60%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
