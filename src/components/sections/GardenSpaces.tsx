@@ -1,14 +1,17 @@
 import { ArrowUpRight } from "lucide-react";
 
 import { TechLabel } from "@/components/ui/TechLabel";
+import { SectionRule } from "@/components/ui/TextureOverlays";
 import { gardenCategories, gardenIntro } from "@/lib/content";
 
 export function GardenSpaces() {
   return (
     <section
       id="gradina"
-      className="border-outline-variant section-gradient relative overflow-hidden border-t py-32"
+      className="section-timeline relative overflow-hidden py-32"
     >
+      <SectionRule />
+
       <div className="shell">
       <div className="relative z-10 mb-16 max-w-3xl">
         <TechLabel className="mb-2">{"Amenajări grădină"}</TechLabel>

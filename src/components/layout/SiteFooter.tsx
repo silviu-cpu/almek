@@ -3,9 +3,16 @@ import Image from "next/image";
 import { anpcLinks, company, footerServices, socialLinks } from "@/lib/content";
 
 export function SiteFooter() {
+  /* Fara border-t: linia de deasupra vine din `SectionRule` al sectiunii
+     Parteneri, ultima din <main>. */
   return (
-    <footer className="border-outline-variant bg-surface relative overflow-hidden border-t py-16">
-      <div aria-hidden className="blueprint-bg absolute inset-0 opacity-10" />
+    <footer className="bg-secondary-container relative z-10 overflow-hidden py-16">
+      {/* Ca si la Interioare: fundalul opac ascunde axa fixa, deci footer-ul isi
+          deseneaza propriul segment pe aceeasi coordonata. */}
+      <div
+        aria-hidden
+        className="bg-on-secondary-container/20 pointer-events-none absolute top-0 left-1/2 z-0 h-full w-px"
+      />
 
       <div className="shell relative z-10 grid grid-cols-1 gap-gutter md:grid-cols-12">
         <div className="flex flex-col gap-8 md:col-span-4">

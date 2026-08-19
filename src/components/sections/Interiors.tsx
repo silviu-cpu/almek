@@ -1,17 +1,25 @@
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 
-import { ArchitecturalBackdrop } from "@/components/ui/ArchitecturalBackdrop";
 import { TechLabel } from "@/components/ui/TechLabel";
+import { SectionRule } from "@/components/ui/TextureOverlays";
 import { images } from "@/lib/content";
 
 export function Interiors() {
   return (
     <section
       id="interioare"
-      className="relative overflow-hidden py-32"
+      className="section-timeline bg-secondary-container relative overflow-hidden py-32"
     >
-      <ArchitecturalBackdrop image={images.backdropInteriors} opacity={0.04} />
+      <SectionRule />
+
+      {/* Fundalul verde acopera axa fixa din spatele paginii (`main` este z-10,
+          axa z-0), asa ca sectiunea isi deseneaza propriul segment pe aceeasi
+          coordonata. Fara el coloana s-ar rupe in dreptul blocului verde. */}
+      <div
+        aria-hidden
+        className="bg-on-secondary-container/20 pointer-events-none absolute top-0 left-1/2 z-0 h-full w-px"
+      />
 
       <div className="shell grid grid-cols-12 items-center gap-gutter">
 

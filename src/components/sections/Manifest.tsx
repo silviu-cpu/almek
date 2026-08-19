@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-import { ArchitecturalBackdrop } from "@/components/ui/ArchitecturalBackdrop";
 import { TechLabel } from "@/components/ui/TechLabel";
+import { SectionRule } from "@/components/ui/TextureOverlays";
 import { ecosiaNote, features, images, stats } from "@/lib/content";
 
 export function Manifest() {
@@ -9,10 +9,10 @@ export function Manifest() {
     <section
       id="despre"
       /* pb suplimentar: imaginea decalata (-bottom-12) iese din sectiune si ar
-         calca peste border-ul sectiunii urmatoare. */
-      className="border-outline-variant blueprint-bg section-gradient relative overflow-hidden border-t py-32 md:pb-44"
+         calca peste continutul sectiunii urmatoare. */
+      className="section-timeline relative overflow-hidden py-32 md:pb-44"
     >
-      <ArchitecturalBackdrop image={images.backdropManifest} position="right top" />
+      <SectionRule />
 
       <div className="shell grid grid-cols-12 gap-gutter">
 

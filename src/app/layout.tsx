@@ -50,8 +50,8 @@ const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(t===
 /* In Next 16 `themeColor` traieste in export-ul `viewport`, nu in `metadata`. */
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8faf3" },
-    { media: "(prefers-color-scheme: dark)", color: "#10150f" },
+    { media: "(prefers-color-scheme: light)", color: "#fbf9f6" },
+    { media: "(prefers-color-scheme: dark)", color: "#121412" },
   ],
 };
 

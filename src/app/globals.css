@@ -15,46 +15,44 @@
   /* Marginea de siguranta este singurul token de spatiu responsiv. */
   --margin-safe: 20px;
 
-  --c-background: #f8faf3;
-  --c-on-background: #191d17;
-  --c-surface: #f8faf3;
-  --c-surface-dim: #d9dbd4;
-  --c-surface-bright: #f8faf3;
-  --c-surface-variant: #e1e4dc;
-  --c-surface-tint: #8f4c35;
+  --c-background: #fbf9f6;
+  --c-on-background: #1b1c1b;
+  --c-surface: #fbf9f6;
+  --c-surface-dim: #e0ded8;
+  --c-surface-bright: #fbf9f6;
+  --c-surface-variant: #e3e4de;
+  --c-surface-tint: #7c5a2e;
   --c-surface-container-lowest: #ffffff;
-  --c-surface-container-low: #f2f5ed;
-  --c-surface-container: #edefe8;
-  --c-surface-container-high: #e7e9e2;
-  --c-surface-container-highest: #e1e4dc;
-  --c-on-surface: #191d17;
-  --c-on-surface-variant: #52443f;
-  --c-inverse-surface: #2e322c;
-  --c-inverse-on-surface: #f0f2ea;
-  --c-outline: #857370;
-  --c-outline-variant: #d7c2bc;
-  --c-primary: #8f4c35;
+  --c-surface-container-low: #f5f3ee;
+  --c-surface-container: #efede7;
+  --c-surface-container-high: #e9e7e1;
+  --c-surface-container-highest: #e3e1db;
+  --c-on-surface: #1b1c1b;
+  --c-on-surface-variant: #454842;
+  --c-inverse-surface: #30312f;
+  --c-inverse-on-surface: #f2f0ec;
+  --c-outline: #75786f;
+  --c-outline-variant: #c5c8bf;
+  --c-primary: #7c5a2e;
   --c-on-primary: #ffffff;
-  --c-primary-container: #ffdbd0;
-  --c-on-primary-container: #6a3a2a;
-  --c-inverse-primary: #fbb6a0;
-  --c-secondary: #4f6350;
+  --c-primary-container: #f3ddbe;
+  --c-on-primary-container: #5e411a;
+  --c-inverse-primary: #c19a6b;
+  --c-secondary: #3d5546;
   --c-on-secondary: #ffffff;
-  --c-secondary-container: #d1e9cf;
-  --c-on-secondary-container: #384c39;
-  --c-tertiary: #645d4f;
+  --c-secondary-container: #cfe4d5;
+  --c-on-secondary-container: #24382c;
+  --c-tertiary: #4d6353;
   --c-on-tertiary: #ffffff;
-  --c-tertiary-container: #ece1d2;
-  --c-on-tertiary-container: #4c463b;
+  --c-tertiary-container: #cfe8d6;
+  --c-on-tertiary-container: #374a3e;
   --c-error: #ba1a1a;
   --c-on-error: #ffffff;
   --c-error-container: #ffdad6;
   --c-on-error-container: #410002;
-  --c-blueprint-line: rgba(25, 29, 23, 0.05);
-  --c-blueprint-accent: rgba(143, 76, 53, 0.06);
-  --c-glow: rgba(143, 76, 53, 0.05);
+  --c-shine: #ffffff;
+  --c-logo-filter: grayscale(1);
   --c-grain-opacity: 0.05;
-  --c-wood-opacity: 0.04;
 }
 
 @media (width >= 48rem) {
@@ -74,46 +72,44 @@
   :root:not([data-theme="light"]) {
     color-scheme: dark;
 
-    --c-background: #10150f;
-    --c-on-background: #dfe4db;
-    --c-surface: #10150f;
-    --c-surface-dim: #10150f;
-    --c-surface-bright: #353b34;
-    --c-surface-variant: #313630;
-    --c-surface-tint: #fbb6a0;
-    --c-surface-container-lowest: #0a0f0a;
-    --c-surface-container-low: #181d17;
-    --c-surface-container: #1c211b;
-    --c-surface-container-high: #262b25;
-    --c-surface-container-highest: #313630;
-    --c-on-surface: #dfe4db;
-    --c-on-surface-variant: #d7c2bc;
-    --c-inverse-surface: #dfe4db;
-    --c-inverse-on-surface: #2c322c;
-    --c-outline: #9f8d87;
-    --c-outline-variant: #52443f;
-    --c-primary: #fbb6a0;
-    --c-on-primary: #4f2415;
-    --c-primary-container: #613323;
-    --c-on-primary-container: #dd9c86;
-    --c-inverse-primary: #85513f;
-    --c-secondary: #b6cdb4;
-    --c-on-secondary: #223523;
-    --c-secondary-container: #384c39;
-    --c-on-secondary-container: #a4bba3;
-    --c-tertiary: #cfc5b6;
-    --c-on-tertiary: #353025;
-    --c-tertiary-container: #453f34;
-    --c-on-tertiary-container: #b4aa9c;
+    --c-background: #121412;
+    --c-on-background: #e3e2e0;
+    --c-surface: #121412;
+    --c-surface-dim: #121412;
+    --c-surface-bright: #393938;
+    --c-surface-variant: #343534;
+    --c-surface-tint: #c19a6b;
+    --c-surface-container-lowest: #0d0e0d;
+    --c-surface-container-low: #1b1c1b;
+    --c-surface-container: #1f201f;
+    --c-surface-container-high: #292a29;
+    --c-surface-container-highest: #343534;
+    --c-on-surface: #e3e2e0;
+    --c-on-surface-variant: #c2c8c2;
+    --c-inverse-surface: #e3e2e0;
+    --c-inverse-on-surface: #30312f;
+    --c-outline: #8c928d;
+    --c-outline-variant: #424844;
+    --c-primary: #c19a6b;
+    --c-on-primary: #1a2f23;
+    --c-primary-container: #5e411a;
+    --c-on-primary-container: #d7ae7d;
+    --c-inverse-primary: #7c5a2e;
+    --c-secondary: #b4ccbb;
+    --c-on-secondary: #203529;
+    --c-secondary-container: #1a2f23;
+    --c-on-secondary-container: #d0e8d6;
+    --c-tertiary: #cfe8d6;
+    --c-on-tertiary: #203529;
+    --c-tertiary-container: #2a3e33;
+    --c-on-tertiary-container: #b4ccbb;
     --c-error: #ffb4ab;
     --c-on-error: #690005;
     --c-error-container: #93000a;
     --c-on-error-container: #ffdad6;
-    --c-blueprint-line: rgba(223, 228, 219, 0.02);
-    --c-blueprint-accent: rgba(251, 182, 160, 0.03);
-    --c-glow: rgba(251, 182, 160, 0.03);
+    --c-shine: #fbf9f6;
+    --c-logo-filter: grayscale(1) invert(1);
     --c-grain-opacity: 0.12;
-    --c-wood-opacity: 0.03;
   }
 }
 
@@ -121,91 +117,87 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --c-background: #10150f;
-  --c-on-background: #dfe4db;
-  --c-surface: #10150f;
-  --c-surface-dim: #10150f;
-  --c-surface-bright: #353b34;
-  --c-surface-variant: #313630;
-  --c-surface-tint: #fbb6a0;
-  --c-surface-container-lowest: #0a0f0a;
-  --c-surface-container-low: #181d17;
-  --c-surface-container: #1c211b;
-  --c-surface-container-high: #262b25;
-  --c-surface-container-highest: #313630;
-  --c-on-surface: #dfe4db;
-  --c-on-surface-variant: #d7c2bc;
-  --c-inverse-surface: #dfe4db;
-  --c-inverse-on-surface: #2c322c;
-  --c-outline: #9f8d87;
-  --c-outline-variant: #52443f;
-  --c-primary: #fbb6a0;
-  --c-on-primary: #4f2415;
-  --c-primary-container: #613323;
-  --c-on-primary-container: #dd9c86;
-  --c-inverse-primary: #85513f;
-  --c-secondary: #b6cdb4;
-  --c-on-secondary: #223523;
-  --c-secondary-container: #384c39;
-  --c-on-secondary-container: #a4bba3;
-  --c-tertiary: #cfc5b6;
-  --c-on-tertiary: #353025;
-  --c-tertiary-container: #453f34;
-  --c-on-tertiary-container: #b4aa9c;
+  --c-background: #121412;
+  --c-on-background: #e3e2e0;
+  --c-surface: #121412;
+  --c-surface-dim: #121412;
+  --c-surface-bright: #393938;
+  --c-surface-variant: #343534;
+  --c-surface-tint: #c19a6b;
+  --c-surface-container-lowest: #0d0e0d;
+  --c-surface-container-low: #1b1c1b;
+  --c-surface-container: #1f201f;
+  --c-surface-container-high: #292a29;
+  --c-surface-container-highest: #343534;
+  --c-on-surface: #e3e2e0;
+  --c-on-surface-variant: #c2c8c2;
+  --c-inverse-surface: #e3e2e0;
+  --c-inverse-on-surface: #30312f;
+  --c-outline: #8c928d;
+  --c-outline-variant: #424844;
+  --c-primary: #c19a6b;
+  --c-on-primary: #1a2f23;
+  --c-primary-container: #5e411a;
+  --c-on-primary-container: #d7ae7d;
+  --c-inverse-primary: #7c5a2e;
+  --c-secondary: #b4ccbb;
+  --c-on-secondary: #203529;
+  --c-secondary-container: #1a2f23;
+  --c-on-secondary-container: #d0e8d6;
+  --c-tertiary: #cfe8d6;
+  --c-on-tertiary: #203529;
+  --c-tertiary-container: #2a3e33;
+  --c-on-tertiary-container: #b4ccbb;
   --c-error: #ffb4ab;
   --c-on-error: #690005;
   --c-error-container: #93000a;
   --c-on-error-container: #ffdad6;
-  --c-blueprint-line: rgba(223, 228, 219, 0.02);
-  --c-blueprint-accent: rgba(251, 182, 160, 0.03);
-  --c-glow: rgba(251, 182, 160, 0.03);
+  --c-shine: #fbf9f6;
+  --c-logo-filter: grayscale(1) invert(1);
   --c-grain-opacity: 0.12;
-  --c-wood-opacity: 0.03;
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --c-background: #f8faf3;
-  --c-on-background: #191d17;
-  --c-surface: #f8faf3;
-  --c-surface-dim: #d9dbd4;
-  --c-surface-bright: #f8faf3;
-  --c-surface-variant: #e1e4dc;
-  --c-surface-tint: #8f4c35;
+  --c-background: #fbf9f6;
+  --c-on-background: #1b1c1b;
+  --c-surface: #fbf9f6;
+  --c-surface-dim: #e0ded8;
+  --c-surface-bright: #fbf9f6;
+  --c-surface-variant: #e3e4de;
+  --c-surface-tint: #7c5a2e;
   --c-surface-container-lowest: #ffffff;
-  --c-surface-container-low: #f2f5ed;
-  --c-surface-container: #edefe8;
-  --c-surface-container-high: #e7e9e2;
-  --c-surface-container-highest: #e1e4dc;
-  --c-on-surface: #191d17;
-  --c-on-surface-variant: #52443f;
-  --c-inverse-surface: #2e322c;
-  --c-inverse-on-surface: #f0f2ea;
-  --c-outline: #857370;
-  --c-outline-variant: #d7c2bc;
-  --c-primary: #8f4c35;
+  --c-surface-container-low: #f5f3ee;
+  --c-surface-container: #efede7;
+  --c-surface-container-high: #e9e7e1;
+  --c-surface-container-highest: #e3e1db;
+  --c-on-surface: #1b1c1b;
+  --c-on-surface-variant: #454842;
+  --c-inverse-surface: #30312f;
+  --c-inverse-on-surface: #f2f0ec;
+  --c-outline: #75786f;
+  --c-outline-variant: #c5c8bf;
+  --c-primary: #7c5a2e;
   --c-on-primary: #ffffff;
-  --c-primary-container: #ffdbd0;
-  --c-on-primary-container: #6a3a2a;
-  --c-inverse-primary: #fbb6a0;
-  --c-secondary: #4f6350;
+  --c-primary-container: #f3ddbe;
+  --c-on-primary-container: #5e411a;
+  --c-inverse-primary: #c19a6b;
+  --c-secondary: #3d5546;
   --c-on-secondary: #ffffff;
-  --c-secondary-container: #d1e9cf;
-  --c-on-secondary-container: #384c39;
-  --c-tertiary: #645d4f;
+  --c-secondary-container: #cfe4d5;
+  --c-on-secondary-container: #24382c;
+  --c-tertiary: #4d6353;
   --c-on-tertiary: #ffffff;
-  --c-tertiary-container: #ece1d2;
-  --c-on-tertiary-container: #4c463b;
+  --c-tertiary-container: #cfe8d6;
+  --c-on-tertiary-container: #374a3e;
   --c-error: #ba1a1a;
   --c-on-error: #ffffff;
   --c-error-container: #ffdad6;
   --c-on-error-container: #410002;
-  --c-blueprint-line: rgba(25, 29, 23, 0.05);
-  --c-blueprint-accent: rgba(143, 76, 53, 0.06);
-  --c-glow: rgba(143, 76, 53, 0.05);
+  --c-shine: #ffffff;
+  --c-logo-filter: grayscale(1);
   --c-grain-opacity: 0.05;
-  --c-wood-opacity: 0.04;
 }
 
 @theme {
@@ -247,18 +239,18 @@
   --color-on-error-container: var(--c-on-error-container);
 
   /* Culorile "fixed" sunt identice in ambele teme, prin definitie. */
-  --color-primary-fixed: #ffdbd0;
-  --color-primary-fixed-dim: #fbb6a0;
-  --color-on-primary-fixed: #341004;
-  --color-on-primary-fixed-variant: #6a3a2a;
-  --color-secondary-fixed: #d1e9cf;
-  --color-secondary-fixed-dim: #b6cdb4;
-  --color-on-secondary-fixed: #0d2010;
-  --color-on-secondary-fixed-variant: #384c39;
-  --color-tertiary-fixed: #ece1d2;
-  --color-tertiary-fixed-dim: #cfc5b6;
-  --color-on-tertiary-fixed: #201b12;
-  --color-on-tertiary-fixed-variant: #4c463b;
+  --color-primary-fixed: #f3ddbe;
+  --color-primary-fixed-dim: #c19a6b;
+  --color-on-primary-fixed: #2a1700;
+  --color-on-primary-fixed-variant: #5e411a;
+  --color-secondary-fixed: #d0e9d6;
+  --color-secondary-fixed-dim: #b4ccbb;
+  --color-on-secondary-fixed: #0a2014;
+  --color-on-secondary-fixed-variant: #364c3e;
+  --color-tertiary-fixed: #d0e9d6;
+  --color-tertiary-fixed-dim: #b4ccbb;
+  --color-on-tertiary-fixed: #0a2014;
+  --color-on-tertiary-fixed-variant: #364c3e;
 
   /* --- Familii de fonturi ----------------------------------------------- */
   --font-display-lg: var(--font-bodoni), Georgia, "Times New Roman", serif;
@@ -355,44 +347,348 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
 }
 
-@utility wood-overlay {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: var(--c-wood-opacity);
-  background-image: url("/textures/wood.png");
-  background-size: 800px;
+/* ---------------------------------------------------------------------------
+   Banda de parteneri — derulare continua
+   Lista este randata de doua ori, iar pista se deplaseaza cu exact -50%: in
+   momentul in care prima copie a iesit complet, a doua este in pozitia de
+   start, deci bucla nu are cusatura. A doua copie este `aria-hidden`.
+
+   Viteza este constanta indiferent de cati parteneri sunt: sectiunea trimite
+   `--marquee-duration` calculat din numarul de elemente.
+
+   WCAG 2.2.2 cere un mecanism de oprire pentru continut care se misca peste 5s:
+   banda se opreste la hover si la focus din tastatura, iar la `prefers-reduced-
+   motion` nu porneste deloc si se aseaza pe randuri.
+   --------------------------------------------------------------------------- */
+
+@utility marquee {
+  overflow: hidden;
+  /* Estompeaza capetele, ca elementele sa nu apara si sa dispara brusc. */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
 }
 
-/* background-attachment: fixed este buggy si costisitor la scroll pe iOS
-   Safari; la opacitate atat de mica diferenta nu se vede. */
-@media (width >= 64rem) and (pointer: fine) {
-  .wood-overlay {
-    background-attachment: fixed;
+@utility marquee-track {
+  display: flex;
+  width: max-content;
+}
+
+/* Decalajul pe verticala vine dintr-o variabila setata inline de sectiune, nu
+   direct din `margin-top`: asa regula de mai jos il poate anula la miscare
+   redusa, unde pista se aseaza pe randuri si un zigzag ar arata doar strambat.
+   (Un `style` inline ar bate orice clasa.) */
+@utility partner-item {
+  margin-top: var(--partner-offset, 0px);
+}
+
+/* Logo-urile sunt PNG-uri cu marcaj inchis pe transparent, deci pe tema dark
+   trebuie inversate ca sa se vada; pe light raman doar desaturate, ca in
+   referinta. Culoarea reala revine la hover. */
+@utility partner-logo {
+  filter: var(--c-logo-filter);
+  opacity: 0.65;
+  transition:
+    opacity 250ms ease,
+    filter 250ms ease;
+}
+
+.group:hover .partner-logo {
+  filter: none;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .marquee-track {
+    animation: marquee-scroll var(--marquee-duration, 40s) linear infinite;
+  }
+
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
   }
 }
 
-@utility blueprint-bg {
-  background-image:
-    linear-gradient(var(--c-blueprint-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--c-blueprint-line) 1px, transparent 1px);
-  background-size: 160px 160px;
+/* Fara miscare: pista redevine un rand normal, centrat, iar copia duplicata
+   dispare — altfel s-ar vedea fiecare partener de doua ori. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .marquee-track {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .marquee-copy-duplicate {
+    display: none;
+  }
+
+  .partner-item {
+    margin-top: 0;
+  }
 }
 
-@utility blueprint-detail {
-  background-image:
-    linear-gradient(var(--c-blueprint-accent) 0.5px, transparent 0.5px),
-    linear-gradient(90deg, var(--c-blueprint-accent) 0.5px, transparent 0.5px);
-  background-size: 20px 20px;
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
 }
 
-@utility section-gradient {
-  background: radial-gradient(
-    circle at 30% 20%,
-    var(--c-glow) 0%,
-    transparent 60%
+/* ---------------------------------------------------------------------------
+   Butoane — reflex de lumina care traverseaza de la stanga la dreapta
+
+   Reflexul este un strat de lumina peste buton, nu o culoare taiata in litere.
+   Varianta cu `background-clip: text` a fost incercata si abandonata: pe
+   butoanele pline textul are polaritate inversa fata de pagina (inchis pe
+   cedru), asa ca in varful reflexului contrastul cadea pe la 2:1 — o data in
+   dark pentru butoanele pline, o data in light pentru cele conturate. Un strat
+   care ridica deopotriva textul si fundalul nu are problema asta.
+
+   `shine` da reflexul pe suprafata (deci si peste text), `shine-edge` il da pe
+   chenar. Se folosesc impreuna.
+
+   Trece o data la 3s, nu continuu: pe fiecare buton din pagina o miscare
+   permanenta ar fi obositoare. Pauza vine din keyframe — traversarea ocupa 30%
+   din ciclu, restul e liniste.
+   --------------------------------------------------------------------------- */
+
+@utility shine {
+  position: relative;
+  overflow: hidden;
+  /* Fara asta, `overflow: hidden` de mai sus nu ar taia coltul reflexului pe
+     elementele care primesc si un `transform` la hover. */
+  isolation: isolate;
+}
+
+.shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: linear-gradient(
+    100deg,
+    transparent 35%,
+    var(--c-shine) 50%,
+    transparent 65%
   );
+  background-size: 220% 100%;
+  background-position: 220% 0;
+  background-repeat: no-repeat;
+  /* Ridica text si fundal impreuna, deci raportul de contrast nu se strica. */
+  mix-blend-mode: soft-light;
+  opacity: 0.9;
+}
+
+@utility shine-edge {
+  position: relative;
+}
+
+.shine-edge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  padding: 1px;
+  background-image: linear-gradient(
+    100deg,
+    transparent 35%,
+    var(--c-shine) 50%,
+    transparent 65%
+  );
+  background-size: 220% 100%;
+  background-position: 220% 0;
+  background-repeat: no-repeat;
+  /* Pastreaza doar chenarul: stratul content-box este scazut din cel complet. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shine::before,
+  .shine-edge::after {
+    animation: shine-sweep 3s ease-in-out infinite;
+  }
+}
+
+/* Miscare redusa: reflexul dispare complet, butonul ramane exact culoarea lui
+   din tokeni. Blocul global de la finalul fisierului doar scurteaza durata, ceea
+   ce aici ar produce un blitz, nu o oprire. */
+@media (prefers-reduced-motion: reduce) {
+  .shine::before,
+  .shine-edge::after {
+    display: none;
+  }
+}
+
+@keyframes shine-sweep {
+  0% {
+    background-position: 220% 0;
+  }
+
+  /* ATENTIE: durata reala a traversarii este `durata ciclului × procentul de
+     mai jos`, deci cele doua se schimba impreuna. Scurtand doar ciclul, acelasi
+     procent grabeste si reflexul. Aici: 3s × 50% = 1.5s de traversare, restul
+     de 1.5s pauza. */
+  50%,
+  100% {
+    background-position: -120% 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Lumina de pe liniile de fundal — animatii CSS legate de scroll
+   Zero JavaScript, zero listener de scroll: progresul vine din `scroll()` /
+   `view()`, deci ruleaza in afara thread-ului principal.
+
+   Toate straturile animate pornesc invizibile si se aprind doar in interiorul
+   lui `@supports (animation-timeline: scroll())`. Firefox stabil inca nu are
+   functia (e dupa flag), asa ca acolo raman exact liniile statice de dinainte,
+   fara vreun segment intepenit in varf.
+
+   Protectia de miscare redusa este si ea explicita: pe o animatie legata de
+   scroll durata nu mai inseamna nimic, deci `animation-duration: 0.01ms` din
+   blocul `prefers-reduced-motion` de la finalul fisierului NU le-ar opri.
+   --------------------------------------------------------------------------- */
+
+/* Portiunea aprinsa a axei verticale — creste de sus in jos cu scroll-ul. */
+@utility axis-progress {
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+/* Capul luminos din varful portiunii aprinse. Ramane un segment dreptunghiular,
+   nu un punct: forma paginii este strict ortogonala. */
+@utility axis-head {
+  opacity: 0;
+  box-shadow:
+    0 0 12px 2px var(--c-primary),
+    0 0 32px 6px var(--c-primary);
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .axis-progress {
+      opacity: 1;
+      animation: axis-fill linear both;
+      animation-timeline: scroll(root block);
+    }
+
+    .axis-head {
+      opacity: 1;
+      animation: axis-travel linear both;
+      animation-timeline: scroll(root block);
+    }
+
+    /* Linia orizontala se intensifica cat timp sectiunea ei traverseaza
+       ecranul. Se leaga de `--section-view`, publicat de <section>, ca sa
+       urmareasca sectiunea intreaga, nu propriul ei pixel. */
+    .section-rule {
+      animation: section-rule-glow linear both;
+      animation-timeline: --section-view;
+    }
+  }
+}
+
+@keyframes axis-fill {
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes axis-travel {
+  to {
+    /* 5rem = inaltimea capului, ca sa se opreasca exact pe muchia de jos. */
+    transform: translateY(calc(100dvh - 5rem));
+  }
+}
+
+/* Linia se picteaza in `bg-tertiary/40` si sta la `opacity: .5`, deci in repaus
+   arata identic cu vechiul `bg-tertiary/20`; varful duce la intensitate dubla. */
+@keyframes section-rule-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  40%,
+  60% {
+    opacity: 1;
+  }
+}
+
+/* Sectiunea isi publica propriul progres prin viewport, ca linia ei sa il poata
+   consuma. `view-timeline-name` nu are efect vizual singur. */
+@utility section-timeline {
+  view-timeline-name: --section-view;
+}
+
+/* ---------------------------------------------------------------------------
+   Tranzitia de tema — View Transitions API
+   Varianta "rectangle / right-left / blur" din Skiper UI skiper26, transcrisa
+   ca CSS static: variant, directie si blur sunt fixate, deci nu are rost
+   generatorul lui de stiluri injectate la runtime.
+   Tema noua intra ca o perdea dinspre dreapta spre stanga, cu blur care se
+   limpezeste; cea veche ramane nemiscata dedesubt.
+   `ThemeToggle` sare peste `startViewTransition` cand utilizatorul cere
+   miscare redusa — regulile de mai jos nu se mai aplica atunci.
+   Pseudo-elementele `::view-transition-*` nu sunt descendenti de element, deci
+   blocul `prefers-reduced-motion` de mai jos nu le atinge.
+   --------------------------------------------------------------------------- */
+
+::view-transition-group(root) {
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Snapshot-ul vechi sta pe loc, sub cel nou — perdeaua il descopera. */
+::view-transition-old(root) {
+  animation: none;
+  z-index: -1;
+}
+
+::view-transition-new(root) {
+  animation-name: theme-reveal-right-left;
+  filter: blur(2px);
+}
+
+@keyframes theme-reveal-right-left {
+  from {
+    clip-path: polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%);
+    filter: blur(8px);
+  }
+
+  50% {
+    filter: blur(4px);
+  }
+
+  to {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    filter: blur(0px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

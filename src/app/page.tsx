@@ -10,7 +10,7 @@ import { Partners } from "@/components/sections/Partners";
 import { Projects } from "@/components/sections/Projects";
 import { Services } from "@/components/sections/Services";
 import { Testimonials } from "@/components/sections/Testimonials";
-import { GrainOverlay, WoodOverlay } from "@/components/ui/TextureOverlays";
+import { BlueprintBackdrop, GrainOverlay } from "@/components/ui/TextureOverlays";
 import { company } from "@/lib/content";
 
 const jsonLd = {
@@ -46,7 +46,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <GrainOverlay />
-      <WoodOverlay />
+      <BlueprintBackdrop />
       <SiteHeader />
       <main className="relative z-10">
         <Hero />

@@ -1,9 +1,14 @@
 import type { StaticImageData } from "next/image";
 
-import backdropInteriors from "../../public/images/backdrop-interiors.png";
-import backdropManifest from "../../public/images/backdrop-manifest.png";
-import backdropTestimonials from "../../public/images/backdrop-testimonials.png";
 import interior44 from "../../public/images/interior-44.png";
+import bencompLogo from "../../public/images/parteneri/bencomp.png";
+import ikoLogo from "../../public/images/parteneri/iko.png";
+import interioLogo from "../../public/images/parteneri/interio.png";
+import kroncolorLogo from "../../public/images/parteneri/kroncolor.png";
+import lindabLogo from "../../public/images/parteneri/lindab.png";
+import rennerLogo from "../../public/images/parteneri/renner.png";
+import rothoblaasLogo from "../../public/images/parteneri/rothoblaas.png";
+import steicoLogo from "../../public/images/parteneri/steico.png";
 import joineryDetail from "../../public/images/joinery-detail.png";
 import projPolovragi from "../../public/images/proj-polovragi.png";
 import projPriporu from "../../public/images/proj-priporu.png";
@@ -133,16 +138,24 @@ export const projectsIntro: string[] = [
   "Dacă ai un concept propriu te vom ajuta să dezvoltăm proiectul împreună de la zero, alături de arhitecții și designerii noștri colaboratori. Astfel, ne asigurăm că rezultatul final este perfect aliniat cu viziunea ta.",
 ];
 
-/** Numele apar ca text; logo-urile reale se pun in public/images/parteneri/. */
-export const partners: string[] = [
-  "Interio Arhitecture",
-  "BenComp",
-  "IKO",
-  "KronColor",
-  "Lindab",
-  "Renner",
-  "Steico",
-  "Rothoblaas",
+/**
+ * Logo-urile sunt importate static, ca `next/image` sa le stie dimensiunile la
+ * build. Fisierele sunt PNG cu fundal transparent, derivate din JPEG-urile de pe
+ * almekwoodarch.ro (fundalul alb a fost decupat dupa culoarea din colturi, cu o
+ * rampa pe margini ca sa nu ramana halou). `logo` este optional: fara el banda
+ * deseneaza o monograma din initiale, deci se pot adauga pe rand.
+ */
+export type Partner = { name: string; logo?: StaticImageData };
+
+export const partners: Partner[] = [
+  { name: "Interio Arhitecture", logo: interioLogo },
+  { name: "BenComp", logo: bencompLogo },
+  { name: "IKO", logo: ikoLogo },
+  { name: "KronColor", logo: kroncolorLogo },
+  { name: "Lindab", logo: lindabLogo },
+  { name: "Renner", logo: rennerLogo },
+  { name: "Steico", logo: steicoLogo },
+  { name: "Rothoblaas", logo: rothoblaasLogo },
 ];
 
 export const projects: Project[] = [
@@ -288,7 +301,4 @@ export const images = {
   joineryDetail,
   timberMacro,
   interior44,
-  backdropManifest,
-  backdropInteriors,
-  backdropTestimonials,
 };

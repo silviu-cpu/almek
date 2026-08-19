@@ -2,15 +2,16 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 
 import { TechLabel } from "@/components/ui/TechLabel";
+import { SectionRule } from "@/components/ui/TextureOverlays";
 import { projects, projectsIntro } from "@/lib/content";
 
 export function Projects() {
   return (
     <section
       id="proiecte"
-      className="bg-surface-container-low/30 relative overflow-hidden py-32"
+      className="section-timeline relative overflow-hidden py-32"
     >
-      <div aria-hidden className="blueprint-bg absolute inset-0 opacity-40" />
+      <SectionRule />
 
       <div className="shell">
 
@@ -78,7 +79,7 @@ export function Projects() {
       <div className="relative z-10 mt-16">
         <a
           href="#contact"
-          className="group border-primary text-primary hover:bg-primary hover:text-on-primary font-technical-data text-technical-data inline-flex items-center gap-3 border px-8 py-4 tracking-widest uppercase transition-colors"
+          className="group shine shine-edge border-primary text-primary hover:bg-primary hover:text-on-primary font-technical-data text-technical-data inline-flex items-center gap-3 border px-8 py-4 tracking-widest uppercase transition-colors"
         >
           {"Descoperă proiectele noastre"}
           <ArrowUpRight

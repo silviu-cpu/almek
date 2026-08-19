@@ -1,14 +1,14 @@
-import { ArchitecturalBackdrop } from "@/components/ui/ArchitecturalBackdrop";
 import { TechLabel } from "@/components/ui/TechLabel";
-import { images, testimonials } from "@/lib/content";
+import { SectionRule } from "@/components/ui/TextureOverlays";
+import { testimonials } from "@/lib/content";
 
 export function Testimonials() {
   return (
     <section
       id="recenzii"
-      className="border-outline-variant relative overflow-hidden border-t py-32"
+      className="section-timeline relative overflow-hidden py-32"
     >
-      <ArchitecturalBackdrop image={images.backdropTestimonials} opacity={0.03} />
+      <SectionRule />
 
       <div className="shell grid grid-cols-1 gap-gutter md:grid-cols-12">
         <div className="relative z-10 md:col-span-4">

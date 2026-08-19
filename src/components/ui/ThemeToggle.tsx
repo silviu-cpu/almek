@@ -10,6 +10,7 @@ type Theme = "light" | "dark";
 const STORAGE_KEY = "theme";
 const CHANGE_EVENT = "almek:themechange";
 const DARK_QUERY = "(prefers-color-scheme: dark)";
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
 /**
  * Tema reala traieste in DOM (`data-theme` pe <html>), pusa acolo de scriptul
@@ -42,8 +43,7 @@ export function ThemeToggle() {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const isDark = theme === "dark";
 
-  const toggle = () => {
-    const next: Theme = isDark ? "light" : "dark";
+  const apply = (next: Theme) => {
     document.documentElement.setAttribute("data-theme", next);
     try {
       localStorage.setItem(STORAGE_KEY, next);
@@ -51,6 +51,24 @@ export function ThemeToggle() {
       // modul privat poate refuza scrierea; tema tine pana la reincarcare
     }
     window.dispatchEvent(new Event(CHANGE_EVENT));
+  };
+
+  /* Perdeaua dreapta→stanga cu blur traieste in globals.css, pe
+     `::view-transition-*`; aici doar pornim tranzitia. Fara suport in browser
+     (Firefox, Safari vechi) sau cand utilizatorul cere miscare redusa, tema se
+     schimba instant — pseudo-elementele nu apar deloc, deci CSS-ul e inert. */
+  const toggle = () => {
+    const next: Theme = isDark ? "light" : "dark";
+
+    if (
+      typeof document.startViewTransition !== "function" ||
+      window.matchMedia(REDUCED_MOTION_QUERY).matches
+    ) {
+      apply(next);
+      return;
+    }
+
+    document.startViewTransition(() => apply(next));
   };
 
   const label = isDark ? "Temă deschisă" : "Temă închisă";

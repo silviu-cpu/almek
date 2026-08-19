@@ -1,5 +1,6 @@
 import { MapPin, Smartphone } from "lucide-react";
 
+import { SectionRule } from "@/components/ui/TextureOverlays";
 import { company } from "@/lib/content";
 
 /* Bordura este mereu 2px si isi schimba doar culoarea la focus: cu 1px -> 2px
@@ -15,9 +16,9 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="border-outline-variant relative overflow-hidden border-t py-32"
+      className="section-timeline relative overflow-hidden py-32"
     >
-      <div aria-hidden className="blueprint-detail absolute inset-0 opacity-10" />
+      <SectionRule />
 
       <div className="shell relative z-10 grid grid-cols-12 gap-gutter">
         <div className="col-span-12 md:col-span-5">
@@ -127,7 +128,7 @@ export function Contact() {
             </div>
             <button
               type="button"
-              className="bg-primary text-on-primary font-technical-data text-technical-data hover:bg-primary/90 w-full py-4 tracking-widest uppercase transition-all"
+              className="shine shine-edge bg-primary text-on-primary font-technical-data text-technical-data hover:bg-primary/90 w-full py-4 tracking-widest uppercase transition-all"
             >
               {"Trimitere formular"}
             </button>

@@ -1,13 +1,17 @@
 import Image from "next/image";
 
+import { SectionRule } from "@/components/ui/TextureOverlays";
+
 import heroImage from "../../../public/images/hero.png";
 
 export function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-screen flex-col justify-end overflow-hidden pb-24"
+      className="section-timeline relative flex min-h-screen flex-col justify-end overflow-hidden pb-24"
     >
+      <SectionRule />
+
       <div className="absolute inset-0 z-0">
         <Image
           src={heroImage}
@@ -37,7 +41,7 @@ export function Hero() {
         <div className="flex flex-wrap items-center gap-6">
           <a
             href="#contact"
-            className="bg-primary text-on-primary font-technical-data text-technical-data px-10 py-4 tracking-widest uppercase transition-transform hover:scale-[1.02]"
+            className="shine shine-edge bg-primary text-on-primary font-technical-data text-technical-data px-10 py-4 tracking-widest uppercase transition-transform hover:scale-[1.02]"
           >
             {"Cereți ofertă"}
           </a>

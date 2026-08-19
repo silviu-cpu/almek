@@ -1,4 +1,5 @@
 import { TechLabel } from "@/components/ui/TechLabel";
+import { SectionRule } from "@/components/ui/TextureOverlays";
 import { Carousel_003 } from "@/components/ui/skiper-ui/skiper49";
 import { services } from "@/lib/content";
 
@@ -13,9 +14,9 @@ export function Services() {
   return (
     <section
       id="servicii"
-      className="border-outline-variant relative overflow-hidden border-y py-32"
+      className="section-timeline relative overflow-hidden py-32"
     >
-      <div aria-hidden className="blueprint-detail absolute inset-0 opacity-20" />
+      <SectionRule />
 
       <div className="shell">
         <div className="relative z-10 mb-16 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">

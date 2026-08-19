@@ -1,12 +1,15 @@
 import { TechLabel } from "@/components/ui/TechLabel";
+import { SectionRule } from "@/components/ui/TextureOverlays";
 import { benefits } from "@/lib/content";
 
 export function Benefits() {
   return (
     <section
       id="beneficii"
-      className="border-outline-variant blueprint-detail relative overflow-hidden border-t py-32"
+      className="section-timeline relative overflow-hidden py-32"
     >
+      <SectionRule />
+
       <div className="shell relative z-10 grid grid-cols-12 gap-gutter">
         <div className="col-span-12 md:col-span-4">
           <TechLabel className="mb-2">{"De ce lemn"}</TechLabel>

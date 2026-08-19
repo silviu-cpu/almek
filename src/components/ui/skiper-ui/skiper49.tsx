@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import React from "react";
 import {
@@ -92,6 +91,24 @@ const Carousel_003 = ({
   autoplay?: boolean;
   spaceBetween?: number;
 }) => {
+  /* PATCH ALMEK: Swiper poate bucla doar daca vede mai putin de jumatate din
+     slide-uri deodata. Aici incap ~3,7 slide-uri intregi de 300px plus doua
+     partiale, iar sursa are doar 5: la initializare umplea numai stanga
+     slide-ului activ si se repara abia la primul click pe sageti.
+
+     Repetam lista pana trecem pragul cu marja. Cu factorul 3 (nu 2) ajungem la
+     15 slide-uri: 5 vizibile fata de 7,5 permise. La factorul 2 ieseau 10, iar
+     5 < 5 este fals — exact pe muchie, adica tot rupt. Utilizatorul nu vede
+     repetitia: ar trebui sa parcurga un ciclu intreg. */
+  const MAX_VISIBLE_SLIDES = 5;
+  const cycles =
+    loop && images.length > 0
+      ? Math.max(1, Math.ceil((MAX_VISIBLE_SLIDES * 3) / images.length))
+      : 1;
+  const slides = Array.from({ length: cycles }, (_, cycle) =>
+    images.map((image, index) => ({ image, key: `${cycle}-${index}` })),
+  ).flat();
+
   const css = `
   .Carousal_003 {
     width: 100%;
@@ -112,23 +129,16 @@ const Carousel_003 = ({
 
 `;
   return (
-    <motion.div
-      initial={{ opacity: 0, translateY: 20 }}
-      animate={{ opacity: 1, translateY: 0 }}
-      transition={{
-        duration: 0.3,
-        delay: 0.5,
-      }}
-      className={cn("relative w-full max-w-4xl px-5", className)}
-    >
+    /* PATCH ALMEK: aici erau doua <motion.div> de intrare — cel exterior tinea
+       un `translateY` timp de 0.5s dupa montare. Swiper se initializa inauntrul
+       unui container inca transformat si in miscare, iar `observeParents` se
+       declansa la fiecare cadru al animatiei, ceea ce lasa `loopFix()` pe
+       jumatate aplicat: slide-uri doar in stanga celui activ. Containerul e
+       static acum. */
+    <div className={cn("relative w-full max-w-4xl px-5", className)}>
       <style>{css}</style>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        className="w-full"
-      >
+      <div className="w-full">
         <Swiper
           spaceBetween={spaceBetween}
           autoplay={
@@ -144,6 +154,24 @@ const Carousel_003 = ({
           slidesPerView="auto"
           centeredSlides={true}
           loop={loop}
+          /* PATCH ALMEK: rezerva pentru `loopFix()` pe ambele parti, plus
+             remasurare cand containerul se schimba — fonturile Google se
+             incarca dupa primul paint si misca layout-ul sub carusel. */
+          loopAdditionalSlides={2}
+          observer={true}
+          observeParents={true}
+          /* PATCH ALMEK: in dev, React Strict Mode monteaza de doua ori, iar
+             instanta refolosita ramane cu masuratorile primei montari. Fortam o
+             remasurare in cadrul urmator — atunci layout-ul e asezat — si
+             recompunem bucla, ca slide-urile sa apara pe ambele parti fara sa
+             fie nevoie de un click pe sageti. */
+          onSwiper={(swiper) => {
+            requestAnimationFrame(() => {
+              if (swiper.destroyed) return;
+              swiper.update();
+              if (loop) swiper.loopFix();
+            });
+          }}
           coverflowEffect={{
             rotate: 40,
             stretch: 0,
@@ -169,8 +197,8 @@ const Carousel_003 = ({
           className="Carousal_003"
           modules={[EffectCoverflow, Autoplay, Pagination, Navigation]}
         >
-          {images.map((image, index) => (
-            <SwiperSlide key={index} className="">
+          {slides.map(({ image, key }) => (
+            <SwiperSlide key={key} className="">
               {/* PATCH ALMEK: slide-ul original era doar <img>. Am adaugat un
                   overlay optional cu titlu si descriere, ca sectiunea sa nu
                   piarda continutul text pe care il avea inainte de carusel. */}
@@ -206,8 +234,8 @@ const Carousel_003 = ({
             </div>
           )}
         </Swiper>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 
