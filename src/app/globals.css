@@ -356,9 +356,11 @@ body {
    Viteza este constanta indiferent de cati parteneri sunt: sectiunea trimite
    `--marquee-duration` calculat din numarul de elemente.
 
-   WCAG 2.2.2 cere un mecanism de oprire pentru continut care se misca peste 5s:
-   banda se opreste la hover si la focus din tastatura, iar la `prefers-reduced-
-   motion` nu porneste deloc si se aseaza pe randuri.
+   Banda NU se opreste la hover — a fost incercat si respins, fiindca oprirea
+   rupea senzatia de curgere continua. Colorarea logo-ului la hover ramane, deci
+   marcajele se aprind pe rand pe masura ce trec pe sub cursor.
+   Protectia care ramane este `prefers-reduced-motion`: acolo banda nu porneste
+   deloc si se aseaza pe randuri.
    --------------------------------------------------------------------------- */
 
 @utility marquee {
@@ -412,11 +414,6 @@ body {
 @media (prefers-reduced-motion: no-preference) {
   .marquee-track {
     animation: marquee-scroll var(--marquee-duration, 40s) linear infinite;
-  }
-
-  .marquee:hover .marquee-track,
-  .marquee:focus-within .marquee-track {
-    animation-play-state: paused;
   }
 }
 

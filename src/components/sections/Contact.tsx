@@ -23,11 +23,11 @@ export function Contact() {
       <div className="shell relative z-10 grid grid-cols-12 gap-gutter">
         <div className="col-span-12 md:col-span-5">
           <h2 className="font-headline-lg text-headline-lg text-on-surface mb-8">
-            {"Aveți o idee de casă ideală?"}
+            {"Aveți o idee de casă ideală ? Sau poate grădina are nevoie de o terasă nouă ?"}
           </h2>
           <p className="font-body-lg text-body-lg text-on-surface-variant mb-12">
             {
-              "Sau poate grădina are nevoie de o terasă nouă? Vă putem ajuta. Doar completați formularul alăturat cu cât mai multe detalii și promitem să vă contactăm în cel mai scurt timp."
+              "Vă putem ajuta. Doar completați formularul alăturat cu cât mai multe detalii și promitem să vă contactăm în cel mai scurt timp"
             }
           </p>
           <div className="flex flex-col gap-6">
@@ -69,7 +69,7 @@ export function Contact() {
               Action in src/app/actions/contact.ts + useActionState. */}
           <p className="font-technical-data text-technical-data text-on-surface-variant border-outline-variant mb-8 border-b pb-6">
             {
-              "Completați formularul de mai jos pentru a cere o ofertă. Promitem să vă contactăm în cel mai scurt timp."
+              "Completați formularul de mai jos pentru a cere o oferta. Promitem sa vă contactăm în cel mai scurt timp."
             }
           </p>
           <form className="space-y-8">
@@ -116,7 +116,7 @@ export function Contact() {
             </div>
             <div className="flex flex-col gap-2">
               <label htmlFor="contact-message" className={labelClass}>
-                {"Detaliile cererii dumneavoastră"}
+                {"Detaliile cererii dumneavoastra"}
               </label>
               <textarea
                 id="contact-message"

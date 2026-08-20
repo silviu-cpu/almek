@@ -96,6 +96,13 @@ const TextRoll: React.FC<{
           cititoarele de ecran il silabisesc si il repeta. */}
       <span className="sr-only">{children}</span>
 
+      {/* PATCH ALMEK: literele poarta `align-top`. Fiind `inline-block` aliniate
+          implicit pe linia de baza, randul isi rezerva spatiu suplimentar pentru
+          descendente, deci containerul iese mai inalt decat o litera. A doua
+          copie se translateaza cu 100% din inaltimea *ei*, nu a containerului,
+          asa ca diferenta ramanea vizibila sub prima si textul parea dublat —
+          cu atat mai mult cu cat `lineHeight` creste peste 0.75. */}
+
       <div aria-hidden>
         {children.split("").map((l, i) => {
           const delay = center
@@ -116,7 +123,7 @@ const TextRoll: React.FC<{
                 ease: "easeInOut",
                 delay,
               }}
-              className="inline-block"
+              className="inline-block align-top"
               key={i}
             >
               {renderChar(l)}
@@ -144,7 +151,7 @@ const TextRoll: React.FC<{
                 ease: "easeInOut",
                 delay,
               }}
-              className="inline-block"
+              className="inline-block align-top"
               key={i}
             >
               {renderChar(l)}

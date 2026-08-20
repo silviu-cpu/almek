@@ -1,8 +1,28 @@
+import { Blocks, Factory, Handshake, Leaf, PencilRuler } from "lucide-react";
 import Image from "next/image";
 
+import { Marquee, repeatToFill } from "@/components/ui/Marquee";
 import { TechLabel } from "@/components/ui/TechLabel";
 import { SectionRule } from "@/components/ui/TextureOverlays";
 import { ecosiaNote, features, images, stats } from "@/lib/content";
+
+/* Iconul sta aici, nu in content.ts: acolo traieste strict textul. Cheile
+   trebuie sa fie identice cu intrarile din `features`. */
+const FEATURE_ICONS: Record<string, typeof Leaf> = {
+  "Materialele sunt fabricate în România": Factory,
+  "Partener cu experienta": Handshake,
+  "Materiale ecologice": Leaf,
+  "Sistem 100% prefabricat": Blocks,
+  "Modele personalizabile": PencilRuler,
+};
+
+/** Latimea aproximativa a unui element, folosita ca sa umplem o copie intreaga. */
+const STAT_ITEM_WIDTH = 256;
+const SECONDS_PER_STAT = 4.5;
+
+/* Doar 4 statistici sunt mai inguste decat cei 1200px ai continutului, deci o
+   singura copie ar lasa un gol in bucla. */
+const statsTrack = repeatToFill(stats, STAT_ITEM_WIDTH);
 
 export function Manifest() {
   return (
@@ -17,39 +37,31 @@ export function Manifest() {
       <div className="shell grid grid-cols-12 gap-gutter">
 
       <div className="relative z-10 col-span-12 md:col-span-5">
-        <TechLabel className="mb-2">{"Reconectează-te cu natura"}</TechLabel>
+        <TechLabel className="mb-2">{"Despre noi"}</TechLabel>
         <h2 className="font-headline-lg text-headline-lg text-on-surface mb-6">
-          {"O reîntoarcere la simplitate."}
+          {"Reconectează-te cu natura"}
         </h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-12">
           {
             "Privită ca pe o reîntoarcere la natură, casa din lemn are intenția de a-i face pe oameni să abordeze un stil de viață simplu și sănătos, menit să le prelungească durata de viață."
           }
         </p>
-        <ul className="mb-12 flex flex-wrap gap-x-6 gap-y-3">
-          {features.map((feature) => (
-            <li
-              key={feature}
-              className="font-technical-data text-technical-data text-on-surface-variant flex items-center gap-2"
-            >
-              <span aria-hidden className="bg-primary size-[2px] shrink-0" />
-              {feature}
-            </li>
-          ))}
+        <ul className="mb-12 flex flex-col gap-5">
+          {features.map((feature) => {
+            const Icon = FEATURE_ICONS[feature] ?? Leaf;
+            return (
+              <li
+                key={feature}
+                className="font-body-md text-body-md text-on-surface-variant flex items-center gap-4"
+              >
+                <span className="border-outline-variant text-primary flex h-11 w-11 shrink-0 items-center justify-center border">
+                  <Icon size={20} strokeWidth={1.5} aria-hidden />
+                </span>
+                {feature}
+              </li>
+            );
+          })}
         </ul>
-
-        <dl className="border-outline-variant grid grid-cols-2 gap-8 border-t pt-8">
-          {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col gap-1">
-              <dd className="font-display-lg text-primary text-[48px] leading-none">
-                {stat.value}
-              </dd>
-              <dt className="font-technical-data text-technical-data text-on-surface-variant uppercase">
-                {stat.label}
-              </dt>
-            </div>
-          ))}
-        </dl>
 
         <p className="font-technical-data text-technical-data text-on-surface-variant border-outline-variant mt-8 border-t pt-6">
           {ecosiaNote}
@@ -59,9 +71,6 @@ export function Manifest() {
       <div className="relative col-span-12 md:col-span-7">
         <div className="border-outline-variant bg-surface-container-low relative z-10 aspect-[4/3] w-full overflow-hidden border p-2 shadow-2xl">
           <div className="relative h-full w-full">
-            <span className="font-technical-data text-technical-data text-on-surface bg-surface-container-highest/90 absolute top-4 right-4 z-20 px-2 py-1">
-              {"DET_JOINERY_01.A"}
-            </span>
             <Image
               src={images.joineryDetail}
               alt="Detaliu de îmbinare a grinzilor din lemn masiv, execuție ALMEK"
@@ -85,6 +94,28 @@ export function Manifest() {
           </div>
         </div>
       </div>
+      </div>
+
+      {/* Cifrele au devenit o banda care se deruleaza, ca logo-urile de
+          parteneri. Raman aliniate pe acelasi rand — decalajul in zigzag e
+          potrivit pentru marci, dar pe perechi cifra/eticheta ar parea o
+          greseala de asezare. */}
+      <div className="shell relative z-10 mt-20">
+        <Marquee seconds={statsTrack.length * SECONDS_PER_STAT}>
+          {statsTrack.map((stat, i) => (
+            <div
+              key={`${stat.label}-${i}`}
+              className="flex w-56 shrink-0 flex-col gap-1 px-8 sm:w-64"
+            >
+              <span className="font-display-lg text-primary text-[48px] leading-none">
+                {stat.value}
+              </span>
+              <span className="font-technical-data text-technical-data text-on-surface-variant uppercase">
+                {stat.label}
+              </span>
+            </div>
+          ))}
+        </Marquee>
       </div>
     </section>
   );

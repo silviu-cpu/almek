@@ -31,7 +31,7 @@ export function Hero() {
           {"EST. 1993 // CASE DIN LEMN MASIV"}
         </p>
         <h1 className="font-display-lg text-display-lg text-on-surface mb-8 drop-shadow-lg">
-          {"Arhitectură în echilibru cu esența materiei prime."}
+          {"Case din lemn masiv"}
         </h1>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-2xl">
           {
@@ -43,7 +43,7 @@ export function Hero() {
             href="#contact"
             className="shine shine-edge bg-primary text-on-primary font-technical-data text-technical-data px-10 py-4 tracking-widest uppercase transition-transform hover:scale-[1.02]"
           >
-            {"Cereți ofertă"}
+            {"Contact"}
           </a>
           <div className="bg-outline-variant hidden h-px w-24 sm:block" />
           <span className="font-technical-data text-technical-data text-on-surface-variant">

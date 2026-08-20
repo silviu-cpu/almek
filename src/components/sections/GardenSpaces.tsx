@@ -35,7 +35,7 @@ export function GardenSpaces() {
               </span>
               <span className="flex items-center gap-3">
                 <span className="font-technical-data text-technical-data text-primary tracking-widest uppercase">
-                  {"Descoperă"}
+                  {"Descopera"}
                 </span>
                 <ArrowUpRight
                   className="text-primary transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"

@@ -1,5 +1,3 @@
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Benefits } from "@/components/sections/Benefits";
 import { Contact } from "@/components/sections/Contact";
 import { GardenSpaces } from "@/components/sections/GardenSpaces";
@@ -10,7 +8,6 @@ import { Partners } from "@/components/sections/Partners";
 import { Projects } from "@/components/sections/Projects";
 import { Services } from "@/components/sections/Services";
 import { Testimonials } from "@/components/sections/Testimonials";
-import { BlueprintBackdrop, GrainOverlay } from "@/components/ui/TextureOverlays";
 import { company } from "@/lib/content";
 
 const jsonLd = {
@@ -45,22 +42,16 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <GrainOverlay />
-      <BlueprintBackdrop />
-      <SiteHeader />
-      <main className="relative z-10">
-        <Hero />
-        <Manifest />
-        <Benefits />
-        <Services />
-        <GardenSpaces />
-        <Interiors />
-        <Projects />
-        <Testimonials />
-        <Contact />
-        <Partners />
-      </main>
-      <SiteFooter />
+      <Hero />
+      <Manifest />
+      <Benefits />
+      <Services />
+      <GardenSpaces />
+      <Interiors />
+      <Projects />
+      <Testimonials />
+      <Contact />
+      <Partners />
     </>
   );
 }

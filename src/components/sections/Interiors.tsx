@@ -25,9 +25,6 @@ export function Interiors() {
 
       <div className="order-2 col-span-12 md:order-1 md:col-span-7">
         <div className="border-outline-variant bg-surface-container relative border p-2 shadow-2xl">
-          <span className="font-technical-data text-label-caps text-primary bg-background border-outline-variant absolute -top-4 -left-4 z-20 border px-3 py-1">
-            {"INTERIOR_REF_44"}
-          </span>
           <div className="relative aspect-video w-full">
             <Image
               src={images.interior44}
@@ -44,11 +41,11 @@ export function Interiors() {
       <div className="relative z-10 order-1 col-span-12 flex flex-col justify-center md:order-2 md:col-span-5">
         <TechLabel className="mb-4">{"Amenajări interioare"}</TechLabel>
         <h2 className="font-headline-lg text-headline-lg text-on-surface mb-6 leading-tight">
-          {"Totul făcut din pasiune."}
+          {"Totul făcut din pasiune"}
         </h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-8">
           {
-            "La noi, amenajările interioare sunt artă, și fiecare spațiu este o pagină într-o carte de poveste. Aducem calitatea și eleganța în fiecare cameră a casei tale."
+            "La noi, amenajările interioare sunt artă, și fiecare spațiu este o pagină într-o carte de poveste. Aducem calitatea și eleganța în fiecare cameră a casei tale, iar fiecare detaliu este pus la punct ca la carte."
           }
         </p>
         {/* Era un `<div>` cu cursor-pointer — inaccesibil la tastatura. */}

@@ -16,9 +16,9 @@ export function Projects() {
       <div className="shell">
 
       <div className="relative z-10 mb-16">
-        <TechLabel className="mb-2">{"Proiectele noastre"}</TechLabel>
+        <TechLabel className="mb-2">{"Proiectele nostre"}</TechLabel>
         <h2 className="font-headline-lg text-headline-lg text-on-surface mb-6 max-w-3xl">
-          {"Cauți inspirație? Descoperă proiectele noastre gata de realizat!"}
+          {"Cauți inspiratie ? Descoperă proiectele noastre gata de realizat !"}
         </h2>
         <div className="max-w-3xl space-y-4">
           {projectsIntro.map((paragraph) => (
@@ -59,15 +59,15 @@ export function Projects() {
               </h3>
               <dl className="border-outline-variant flex flex-col gap-1 border-t pt-4">
                 <div className="font-technical-data text-technical-data flex justify-between gap-4">
-                  <dt className="text-on-surface-variant">{"TIP CONSTRUCȚIE"}</dt>
+                  <dt className="text-on-surface-variant">{"Tip constructie:"}</dt>
                   <dd className="text-on-surface text-right">{project.buildingType}</dd>
                 </div>
                 <div className="font-technical-data text-technical-data flex justify-between">
-                  <dt className="text-on-surface-variant">{"SUPRAFAȚĂ CONSTRUITĂ"}</dt>
+                  <dt className="text-on-surface-variant">{"Suprafata construita:"}</dt>
                   <dd className="text-on-surface">{project.area}</dd>
                 </div>
                 <div className="font-technical-data text-technical-data flex justify-between">
-                  <dt className="text-on-surface-variant">{"PREȚ"}</dt>
+                  <dt className="text-on-surface-variant">{"Pret:"}</dt>
                   <dd className="text-primary">{project.budget}</dd>
                 </div>
               </dl>
@@ -81,7 +81,7 @@ export function Projects() {
           href="#contact"
           className="group shine shine-edge border-primary text-primary hover:bg-primary hover:text-on-primary font-technical-data text-technical-data inline-flex items-center gap-3 border px-8 py-4 tracking-widest uppercase transition-colors"
         >
-          {"Descoperă proiectele noastre"}
+          {"Descoperă Proiectele Noastre"}
           <ArrowUpRight
             size={18}
             strokeWidth={1.5}

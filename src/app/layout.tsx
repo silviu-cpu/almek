@@ -1,4 +1,8 @@
 import type { Metadata, Viewport } from "next";
+
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { BlueprintBackdrop, GrainOverlay } from "@/components/ui/TextureOverlays";
 import { Bodoni_Moda, JetBrains_Mono, Metrophobic } from "next/font/google";
 import "./globals.css";
 
@@ -72,7 +76,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         suppressHydrationWarning
         className="font-body-md text-body-md bg-background text-on-surface min-h-full antialiased"
       >
-        {children}
+        {/* Shell-ul este comun tuturor rutelor. A stat in page.tsx cat timp
+            exista o singura pagina; cu cele din Portofoliu s-ar fi dublat. */}
+        <GrainOverlay />
+        <BlueprintBackdrop />
+        <SiteHeader />
+        <main className="relative z-10">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );

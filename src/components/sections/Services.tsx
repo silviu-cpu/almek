@@ -26,9 +26,6 @@ export function Services() {
               {"Ce putem să construim"}
             </h2>
           </div>
-          <span className="font-technical-data text-technical-data text-on-surface-variant">
-            {"[ CATEG_01 - 05 ]"}
-          </span>
         </div>
       </div>
 

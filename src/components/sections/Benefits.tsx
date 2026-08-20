@@ -14,7 +14,7 @@ export function Benefits() {
         <div className="col-span-12 md:col-span-4">
           <TechLabel className="mb-2">{"De ce lemn"}</TechLabel>
           <h2 className="font-headline-lg text-headline-lg text-on-surface">
-            {"Casa din lemn aduce mai multe beneficii"}
+            {"Casa din lemn aduce mai multe beneficii:"}
           </h2>
         </div>
 

@@ -42,16 +42,21 @@ export type Testimonial = {
   role: string;
 };
 
-/* Linkurile din mockup erau in engleza si duceau toate in `#`. Cum livram
-   deocamdata doar homepage-ul, sunt ancore catre sectiunile reale. */
+/** Linkurile simple din bara. Restul intra sub grupul "Portofoliu". */
 export const navLinks: NavLink[] = [
-  { label: "Despre", href: "#despre" },
-  { label: "Beneficii", href: "#beneficii" },
-  { label: "Servicii", href: "#servicii" },
-  { label: "Grădină", href: "#gradina" },
-  { label: "Proiecte", href: "#proiecte" },
-  { label: "Recenzii", href: "#recenzii" },
+  { label: "Acasă", href: "/" },
+  { label: "Magazin", href: "/magazin" },
 ];
+
+/** Grupul cu submeniu — aceeasi structura ca pe almekwoodarch.ro. */
+export const portfolioNav = {
+  label: "Portofoliu",
+  links: [
+    { label: "Portofoliu realizări", href: "/portofoliu-almek" },
+    { label: "Proiecte", href: "/proiecte" },
+    { label: "Filmări pe teren", href: "/filmari-pe-teren" },
+  ] satisfies NavLink[],
+};
 
 export const services: Service[] = [
   {
@@ -63,20 +68,20 @@ export const services: Service[] = [
   },
   {
     nr: "02",
-    title: "Căsuță de grădină",
+    title: "Casuta de gradina",
     image: "/images/servicii/casuta-gradina.png",
     description: "Construcții ergonomice adaptate mediului natural.",
   },
   {
     nr: "03",
-    title: "Foișoare și terase",
+    title: "Foisoare si terase",
     image: "/images/servicii/foisoare-terase.png",
     description:
       "Amenajări unice gândite să aducă liniște și frumusețe spațiului tău.",
   },
   {
     nr: "04",
-    title: "Mobilier pentru grădină",
+    title: "Mobilier pentru gradina",
     image: "/images/servicii/mobilier-gradina.png",
     description: "Piese de exterior lucrate manual, rezistente la intemperii.",
   },
@@ -92,7 +97,7 @@ export const services: Service[] = [
 /** Cele 5 argumente afisate ca badge-uri sub "Reconecteaza-te cu natura". */
 export const features: string[] = [
   "Materialele sunt fabricate în România",
-  "Partener cu experiență",
+  "Partener cu experienta",
   "Materiale ecologice",
   "Sistem 100% prefabricat",
   "Modele personalizabile",
@@ -110,10 +115,10 @@ export const benefits: string[] = [
 export type Stat = { value: string; label: string };
 
 export const stats: Stat[] = [
-  { value: "18", label: "Ani experiență" },
+  { value: "18", label: "Ani experienta" },
   { value: "300", label: "Proiecte realizate" },
-  { value: "29.540", label: "Pomi plantați" },
-  { value: "220", label: "Clienți mulțumiți" },
+  { value: "29540", label: "Pomi Plantati" },
+  { value: "220", label: "Clienti multumiti" },
 ];
 
 export const ecosiaNote =
@@ -122,12 +127,12 @@ export const ecosiaNote =
 export type GardenCategory = { name: string; href: string };
 
 export const gardenCategories: GardenCategory[] = [
-  { name: "Foișoare", href: "#contact" },
+  { name: "Foisoare", href: "#contact" },
   { name: "Gard", href: "#contact" },
-  { name: "Leagăn", href: "#contact" },
+  { name: "Leagan", href: "#contact" },
   { name: "Alte piese de mobilier", href: "#contact" },
   { name: "Terase", href: "#contact" },
-  { name: "Căsuțe de grădină", href: "#contact" },
+  { name: "Casute de gradina", href: "#contact" },
 ];
 
 export const gardenIntro =
@@ -175,7 +180,7 @@ export const projects: Project[] = [
     location: "POLOVRAGI",
     buildingType: "Case Log House",
     area: "76,38 mp",
-    budget: "de la 37.500 EUR",
+    budget: "de la 37.500 Euro",
     image: projPolovragi,
     alt: "Casă din lemn masiv realizată de ALMEK la Polovragi, 76,38 mp",
   },
@@ -194,7 +199,7 @@ export const projects: Project[] = [
 export const testimonials: Testimonial[] = [
   {
     quote:
-      "Mi-am extins o casa veche, din cărămidă, cu ei și mi-au făcut și un foișor. Sunt foarte buni la ceea ce fac, îmbinările sunt perfecte, zici că taie lemnul cu laserul, sunt flexibili și comunicarea cu ei este facilă. Foișorul meu a fost deosebit de lăudat de către vecinii mei, oameni cu înclinații tehnice care și-au ridicat și casele și foișoarele. Recomand! 5 Stele!",
+      "Mi-am extins o casa veche, din cărămidă, cu ei și mi-au făcut și un foișor. Sunt foarte buni la ceea ce fac, îmbinările sunt perfecte, zici că taie lemnul cu laserul, sunt flexibili și comunicarea cu ei este facilă. Foișorul meu a fost deosebit de lăudat de către vecinii mei, oameni cu înclinații tehnice care și-au ridicat și casele și foișoarele 🙂 Recomand! 5 Stele!",
     author: "George Preduca",
     role: "Client rezidențial",
   },
@@ -222,7 +227,7 @@ export const testimonials: Testimonial[] = [
     role: "Client",
   },
   {
-    quote: "Seriozitate, profesionalism! Recomand!",
+    quote: "Seriozitate,profesionalism! Recomand !",
     author: "Dorina Schiopu",
     role: "Client",
   },
