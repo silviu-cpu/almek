@@ -70,6 +70,7 @@ export interface Config {
     articles: Article;
     products: Product;
     projects: Project;
+    works: Work;
     media: Media;
     users: User;
     'payload-kv': PayloadKv;
@@ -82,6 +83,7 @@ export interface Config {
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    works: WorksSelect<false> | WorksSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -265,6 +267,23 @@ export interface Project {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "works".
+ */
+export interface Work {
+  id: number;
+  name: string;
+  /**
+   * Apare în adresa paginii. Doar litere mici, cifre și cratime. Odată publicat, schimbarea lui rupe linkurile existente.
+   */
+  slug: string;
+  status: 'draft' | 'published';
+  category: 'Case' | 'Căsuțe de grădină' | 'Foișoare și terase' | 'Mobilier pentru grădină' | 'Amenajări interioare';
+  image: number | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -324,6 +343,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'works';
+        value: number | Work;
       } | null)
     | ({
         relationTo: 'media';
@@ -419,6 +442,19 @@ export interface ProjectsSelect<T extends boolean = true> {
   dimensions?: T;
   usableGroundFloor?: T;
   usableLoft?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "works_select".
+ */
+export interface WorksSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  status?: T;
+  category?: T;
   image?: T;
   updatedAt?: T;
   createdAt?: T;

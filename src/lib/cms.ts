@@ -4,7 +4,7 @@ import config from "@payload-config";
 import { connection } from "next/server";
 import { getPayload } from "payload";
 
-import type { Article, Media, Product, Project } from "@/payload-types";
+import type { Article, Media, Product, Project, Work } from "@/payload-types";
 
 /**
  * Accesul la continutul din CMS.
@@ -68,6 +68,13 @@ export type ProjectView = {
   dimensions: string;
   usableGroundFloor: number;
   usableLoft?: number;
+  image: ImageView;
+};
+
+export type WorkView = {
+  slug: string;
+  name: string;
+  category: Work["category"];
   image: ImageView;
 };
 
@@ -184,6 +191,25 @@ export async function getProjects(): Promise<ProjectView[]> {
         usableLoft: doc.usableLoft ?? undefined,
         image,
       },
+    ];
+  });
+}
+
+export async function getWorks(): Promise<WorkView[]> {
+  const payload = await client();
+  const { docs } = await payload.find({
+    collection: "works",
+    where: publishedOnly,
+    sort: "name",
+    depth: 1,
+    limit: 1000,
+  });
+
+  return docs.flatMap((doc) => {
+    const image = toImage(doc.image);
+    if (!image) return [];
+    return [
+      { slug: doc.slug, name: doc.name, category: doc.category, image },
     ];
   });
 }

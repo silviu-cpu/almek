@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { WorksGrid } from "@/components/portfolio/WorksGrid";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { portfolioItems } from "@/lib/portfolio";
+import { getWorks } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Portofoliu realizări | ALMEK",
@@ -11,13 +11,15 @@ export const metadata: Metadata = {
     "Lucrări ALMEK duse la capăt: case din lemn, căsuțe de grădină, foișoare și terase, mobilier și amenajări interioare.",
 };
 
-export default function PortofoliuPage() {
+export default async function PortofoliuPage() {
+  const works = await getWorks();
+
   return (
     <>
       <PageHeader
         eyebrow="Portofoliu"
         title="Lucrari de portofoliu"
-        intro={`${portfolioItems.length} lucrări duse la capăt, de la case din lemn masiv până la mobilier și amenajări interioare.`}
+        intro="Lucrări duse la capăt, de la case din lemn masiv până la mobilier și amenajări interioare."
       />
 
       <Suspense
@@ -29,7 +31,7 @@ export default function PortofoliuPage() {
           </div>
         }
       >
-        <WorksGrid />
+        <WorksGrid works={works} />
       </Suspense>
     </>
   );

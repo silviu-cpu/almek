@@ -11,6 +11,7 @@ import { Articles } from "./collections/Articles";
 import { Media } from "./collections/Media";
 import { Products } from "./collections/Products";
 import { Projects } from "./collections/Projects";
+import { Works } from "./collections/Works";
 import { Users } from "./collections/Users";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -33,7 +34,7 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
   },
 
-  collections: [Articles, Products, Projects, Media, Users],
+  collections: [Articles, Products, Projects, Works, Media, Users],
 
   editor: lexicalEditor(),
 

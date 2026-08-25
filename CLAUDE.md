@@ -7,14 +7,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev      # dev server on http://localhost:3000
-npm run build    # production build
-npm run start    # serve the production build
-npm run lint     # eslint (flat config, no path arg needed)
-npx tsc --noEmit # typecheck; the build does not emit JS
+docker compose up -d db      # Postgres for local dev — start this first
+npm run dev                  # dev server on http://localhost:3000
+npm run build                # production build
+npm run start                # serve the production build
+npm run lint                 # eslint (flat config, no path arg needed)
+npx tsc --noEmit             # typecheck; the build does not emit JS
+npm run generate:types       # regenerate src/payload-types.ts after a collection change
+npm run generate:importmap   # regenerate the admin import map
 ```
 
 No test runner is configured.
+
+`.env.local` is required (copy `.env.example`). `docker compose` currently fails on this
+machine with an API-version error from Docker Desktop; `docker run` works — see the compose
+file for the equivalent flags.
 
 ## Architecture
 
@@ -23,19 +30,20 @@ timber-construction company. Routes:
 
 | Route | Notes |
 |---|---|
-| `/` | homepage, assembled in [page.tsx](src/app/page.tsx) from section components |
-| `/proiecte` | project catalogue with a multi-select filter bar |
-| `/proiecte/[slug]` | 14 SSG detail pages via `generateStaticParams` |
-| `/portofoliu-almek` | 89 finished works, same filter bar and grid as `/proiecte` |
-| `/filmari-pe-teren` | six YouTube clips |
-| `/magazin` | product catalogue, same filter bar as `/proiecte` |
-| `/cos` | cart contents; checkout button is inert |
+| `/` | homepage, assembled in `(frontend)/page.tsx` from section components — static |
+| `/proiecte`, `/proiecte/[slug]` | project catalogue and detail — **from CMS, dynamic** |
+| `/portofoliu-almek` | finished works — **from CMS, dynamic** |
+| `/magazin`, `/cos` | shop and cart — **from CMS, dynamic** |
+| `/blog`, `/blog/[slug]` | articles — **from CMS, dynamic** |
+| `/filmari-pe-teren` | six YouTube clips — static, still from `portfolio.ts` |
+| `/admin`, `/api/*` | Payload admin and REST/GraphQL |
 
 Paths deliberately mirror almekwoodarch.ro so the migration keeps its URLs.
 
-**The shell lives in [layout.tsx](src/app/layout.tsx)** — grain overlay, backdrop, header,
-`<main>`, footer. Each `page.tsx` renders only its own content; putting the shell back into a
-page would duplicate it across four routes.
+**Two route groups, no root layout.** `src/app/(frontend)/` holds the site and its shell —
+grain overlay, backdrop, header, `<main>`, footer. `src/app/(payload)/` holds the admin, which
+must **not** inherit that shell, so each group carries its own layout and there is no layout at
+`src/app/`. `globals.css` stays at `src/app/`, imported as `../globals.css`.
 
 Server Components throughout, except: [SiteHeader](src/components/layout/SiteHeader.tsx)
 (nav drawer + Portofoliu submenu), the catalogue/grid/video components under
@@ -44,19 +52,16 @@ Server Components throughout, except: [SiteHeader](src/components/layout/SiteHea
 - `@/*` maps to `src/*`. Sections live in [src/components/sections/](src/components/sections/),
   shell in [src/components/layout/](src/components/layout/), primitives in
   [src/components/ui/](src/components/ui/).
-- Portfolio data lives in **[src/lib/portfolio.ts](src/lib/portfolio.ts)**, kept apart from
-  `content.ts` purely for size — 14 projects, 89 works and the video list. It is **generated**
-  from almekwoodarch.ro rather than typed by hand; if the live data changes, regenerate it.
-  `levelsOf()` derives *Parter* / *Parter + supantă* from whether a project has a loft area —
-  storing both would let them contradict each other. Project images are static imports (few,
-  shown large); the 89 work thumbnails are uniform 800×600 and use `workImageSrc(slug)` plus
-  the shared `WORK_IMAGE` size, because 89 more static imports would bloat the module for no
-  gain. All of these images are **generated placeholders**, not photography.
+- **Projects, works, products and articles live in the CMS**, not in files. `portfolio.ts`
+  keeps only what stays pure and is safe for client components: the filter option lists and
+  `levelsOf()`, which derives *Parter* / *Parter + supantă* from whether a project has a loft
+  area — storing both would let them contradict each other. `shop.ts` likewise keeps only
+  `formatPrice`, the price ranges and the availability options. The six field videos are the
+  one collection still held in `portfolio.ts`.
 - Catalogue filter state lives in the **URL** (`?tip=…&nivel=…`, comma-separated for
-  multi-select) and is applied client-side over the in-memory list. That keeps the pages
-  statically prerendered while filtered views stay shareable; the `searchParams` page prop
-  (a `Promise` in Next 16) would force dynamic rendering for no benefit at this size.
-  `useSearchParams` needs a `<Suspense>` boundary in a static page or the build fails —
+  multi-select) and is applied client-side over the list handed down as a prop. The catalogue
+  components take their data from the server page — they must never import from `cms.ts`,
+  which is `server-only`. `useSearchParams` needs a `<Suspense>` boundary or the build fails —
   that is what the wrappers in the `page.tsx` files are for. Navigation uses `router.replace`,
   not `push`, so ticking filters does not fill the history stack.
 - `/proiecte` and `/portofoliu-almek` share one layout on purpose: a filter bar at the very
@@ -80,10 +85,11 @@ Server Components throughout, except: [SiteHeader](src/components/layout/SiteHea
   `text-technical-data` line height) so Romanian diacritics are not clipped, and it takes a
   plain string — which is why the selected-count `( 2 )` sits in its own span beside the label
   rather than inside it.
-- `WorksGrid` deliberately has **no `useMemo`**: `readList` builds a fresh array each render,
-  so React Compiler could not preserve the manual memoization and bailed out of optimising the
-  whole component (the lint config turns that into an error). Filtering 89 items is free —
-  let the compiler memoize.
+- The catalogue components deliberately have **no `useMemo`**: `readList` builds a fresh array
+  each render, so React Compiler could not preserve the manual memoization and bailed out of
+  optimising the whole component (the lint config turns that into an error). Once the lists
+  became props there was a second reason — a hand-written dependency array silently went stale.
+  The lists are small; let the compiler memoize.
 - **All homepage copy and data live in [src/lib/content.ts](src/lib/content.ts)** — services, projects,
   testimonials, nav links, and the `company` record (address, phones, CUI, coordinates).
   Contact details render in two places, so edit them there, not in the JSX.
@@ -130,22 +136,51 @@ Server Components throughout, except: [SiteHeader](src/components/layout/SiteHea
   counter desyncs the moment someone swipes. `scrollTo` is not covered by the global
   `prefers-reduced-motion` block, so the smooth behaviour is checked in JS.
 
+### CMS (Payload)
+
+Payload 3.88 runs **inside this app**, not as a separate service. `@payloadcms/next` requires
+`next >= 16.2.6`, which is why the Next version cannot be rolled back.
+
+- **The project is ESM** (`"type": "module"` in package.json). Payload's CLI cannot `require()`
+  its own ESM entrypoints and dies with `ERR_REQUIRE_ASYNC_MODULE` otherwise. That is also why
+  `next.config.ts` uses `import.meta.dirname` instead of `__dirname`.
+- Collections live in [src/collections/](src/collections/): `articles`, `products`, `projects`,
+  `works`, plus `media` and `users`. `slugField` and `statusField` are shared in `fields.ts`.
+- **Local API bypasses access control.** `getPayload()` defaults to `overrideAccess: true`, so
+  the collections' "visitors only see published" rule does **not** apply to reads from
+  [cms.ts](src/lib/cms.ts). Every query there filters on `status` explicitly — drop that filter
+  and drafts go live.
+- [cms.ts](src/lib/cms.ts) imports `server-only` and calls **`connection()`** before every
+  query. `connection()` stops prerendering, which is what keeps the database out of the build:
+  CI needs no credentials and no network path to Postgres. The cost is that CMS-backed pages
+  render per request; there is no cache layer over them yet, though the `revalidateFor` hooks
+  are already wired for when one lands.
+- `revalidateFor` also purges the **old** path when a slug changes or a document is deleted —
+  otherwise a stale page keeps being served from a URL that no longer exists.
+- **Media storage is conditional.** The S3 plugin is only registered when all four `S3_*`
+  variables are present; without them Payload writes to `public/media` (gitignored). So local
+  work needs no AWS credentials and cannot pollute the production bucket.
+- Schema changes are pushed automatically in development (`push: NODE_ENV !== "production"`).
+  For production, generate migrations and commit them — otherwise the first boot alters RDS
+  with no trace in history.
+- After changing a collection, run `npm run generate:types`; `payload-types.ts` is generated,
+  never hand-edited.
+
 ### Shop
 
-- **Prices in `shop.ts` are invented.** There is no real source for them — replace before any
-  launch. Product *names* are real ALMEK work, lifted from the portfolio list; thumbnails reuse
-  the generated placeholders in `public/images/portofoliu/`.
+- Products are entered in the CMS. `shop.ts` no longer holds any — only `formatPrice`, the
+  price ranges and the availability options.
 - Money is stored as `priceMinor`, an **integer in bani** (RON × 100). Never floats: Stripe
   bills in the smallest unit anyway, and float arithmetic loses accuracy exactly where totals
   are summed. `formatPrice()` is the only place that renders money.
 - `inStock` splits the two flows: in-stock products go to the cart, the rest open
-  [OrderModal](src/components/shop/OrderModal.tsx). It is a **static flag** — real stock needs a
-  database, and as written two buyers can take the last unit at once.
+  [OrderModal](src/components/shop/OrderModal.tsx). It is a **plain checkbox**, not a counter —
+  two buyers can still take the last unit at once. Real stock needs reservation at checkout.
 - The cart is [cart-store.ts](src/lib/cart-store.ts), an external store read through
   `useSyncExternalStore` — same pattern as `ThemeToggle`, because the lint config rejects
   `useState` in an effect. It stores **only slug + quantity, never price**: price is looked up
-  in `shop.ts` at render, so there is one source of truth and nothing price-shaped can be
-  tampered with in `localStorage`. `getServerSnapshot` returns an empty cart, and `EMPTY` is a
+  on the server — `/cos` loads the catalogue and passes it down — so nothing price-shaped can
+  be tampered with in `localStorage`. `getServerSnapshot` returns an empty cart, and `EMPTY` is a
   shared constant because `useSyncExternalStore` compares snapshots with `Object.is` — a fresh
   `[]` each call would loop forever. Storage reads happen on first `subscribe`, not at module
   load, so the server never touches `localStorage`; every access is wrapped in `try/catch` for
@@ -271,11 +306,13 @@ is time:
   installed, it depends on `next-themes`). The toggle skips the transition when the browser
   lacks the API or the user prefers reduced motion; those pseudo-elements are not reachable
   by the `*` rules in the `prefers-reduced-motion` block, so the JS guard is what matters.
-- Fonts are wired in [src/app/layout.tsx](src/app/layout.tsx) as CSS variables:
-  Bodoni Moda (display/headings), Metrophobic (body/UI), JetBrains Mono (technical labels).
-  **All three need `subsets: ["latin", "latin-ext"]`** — Romanian `ă/â/î/ș/ț` are not in
-  `latin`. **Metrophobic ships weight 400 only**, so never put `font-bold` on it; emphasis
-  comes from JetBrains Mono uppercase with wide tracking.
+- Fonts are wired in `(frontend)/layout.tsx` as CSS variables: **Hanken Grotesk** for both
+  display and body, JetBrains Mono for technical labels. Both need
+  `subsets: ["latin", "latin-ext"]` — Romanian `ă/â/î/ș/ț` are not in `latin`.
+  Headings run at weight 700 and body copy at 600, on request. Hanken Grotesk is variable
+  (100–900), so those are **real weights**: the previous pairing (Bodoni Moda serif +
+  Metrophobic, which ships 400 only) had to be replaced rather than just bolded, because
+  `font-bold` on a single-weight face is browser-synthesised and looks wrong.
 
 ### Layout
 

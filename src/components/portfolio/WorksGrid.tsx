@@ -4,18 +4,14 @@ import { Search } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import {
-  WORK_IMAGE,
-  portfolioCategories,
-  portfolioItems,
-  workImageSrc,
-} from "@/lib/portfolio";
+import type { WorkView } from "@/lib/cms";
+import { portfolioCategories } from "@/lib/portfolio";
 
 /** Aceeasi conventie ca la Proiecte: selectie multipla, lista separata prin virgula. */
 const readList = (raw: string | null) =>
   raw ? raw.split(",").filter(Boolean) : [];
 
-export function WorksGrid() {
+export function WorksGrid({ works }: { works: WorkView[] }) {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -41,10 +37,10 @@ export function WorksGrid() {
 
   /* Fara `useMemo`: `readList` produce un array nou la fiecare randare, deci
      React Compiler nu putea pastra memoizarea manuala si renunta sa optimizeze
-     tot componentul. La 89 de elemente filtrarea e oricum neglijabila, iar
+     tot componentul. Lista e mica, deci filtrarea e oricum neglijabila, iar
      compilatorul memoizeaza singur. */
   const needle = q.trim().toLowerCase();
-  const filtered = portfolioItems.filter((item) => {
+  const filtered = works.filter((item) => {
     if (categorii.length && !categorii.includes(item.category)) return false;
     if (needle && !item.name.toLowerCase().includes(needle)) return false;
     return true;
@@ -123,7 +119,9 @@ export function WorksGrid() {
       <div className="mt-10">
         {filtered.length === 0 ? (
           <p className="font-body-lg text-body-lg text-on-surface-variant border-outline-variant border p-12 text-center">
-            {"Nicio lucrare nu corespunde filtrelor alese."}
+            {works.length === 0
+              ? "Nu există încă lucrări publicate."
+              : "Nicio lucrare nu corespunde filtrelor alese."}
           </p>
         ) : (
           <ul className="grid grid-cols-1 gap-gutter sm:grid-cols-2 lg:grid-cols-3">
@@ -131,10 +129,10 @@ export function WorksGrid() {
               <li key={item.slug} className="group flex flex-col">
                 <div className="border-outline-variant group-hover:border-primary relative aspect-[4/3] w-full overflow-hidden border transition-colors">
                   <Image
-                    src={workImageSrc(item.slug)}
-                    alt={item.name}
-                    width={WORK_IMAGE.width}
-                    height={WORK_IMAGE.height}
+                    src={item.image.url}
+                    alt={item.image.alt}
+                    width={item.image.width}
+                    height={item.image.height}
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
