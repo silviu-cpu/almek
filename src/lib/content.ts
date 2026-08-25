@@ -46,6 +46,7 @@ export type Testimonial = {
 export const navLinks: NavLink[] = [
   { label: "Acasă", href: "/" },
   { label: "Magazin", href: "/magazin" },
+  { label: "Blog", href: "/blog" },
 ];
 
 /** Grupul cu submeniu — aceeasi structura ca pe almekwoodarch.ro. */

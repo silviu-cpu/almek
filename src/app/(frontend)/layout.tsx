@@ -3,26 +3,20 @@ import type { Metadata, Viewport } from "next";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { BlueprintBackdrop, GrainOverlay } from "@/components/ui/TextureOverlays";
-import { Bodoni_Moda, JetBrains_Mono, Metrophobic } from "next/font/google";
-import "./globals.css";
+import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
+/* globals.css ramane in src/app/, ca sa fie folosit si de grupul (payload). */
+import "../globals.css";
 
 // `latin-ext` este obligatoriu: diacriticele romanesti (ă, â, î, ș, ț) nu
 // sunt in subsetul `latin`, iar fara el fiecare cuvant cu diacritice cade pe
 // fontul de fallback.
-const bodoni = Bodoni_Moda({
+// O singura familie sans pentru titluri si text. Hanken Grotesk este variabila
+// (100-900), deci `bold` este o greutate reala din font, nu ingrosare sintetica
+// facuta de browser — motiv pentru care Metrophobic, care exista doar in 400, a
+// trebuit inlocuit, nu doar completat.
+const sans = Hanken_Grotesk({
   subsets: ["latin", "latin-ext"],
-  axes: ["opsz"],
-  variable: "--font-bodoni",
-  display: "swap",
-});
-
-// Metrophobic exista intr-o singura greutate (400, normal). Orice `font-bold`
-// pe acest font ar fi bold sintetizat de browser, asa ca accentul vine din
-// JetBrains Mono uppercase, nu din greutate.
-const metrophobic = Metrophobic({
-  subsets: ["latin", "latin-ext"],
-  weight: "400",
-  variable: "--font-metrophobic",
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -64,7 +58,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="ro"
       suppressHydrationWarning
-      className={`${bodoni.variable} ${metrophobic.variable} ${jetbrains.variable} h-full`}
+      className={`${sans.variable} ${jetbrains.variable} h-full`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />

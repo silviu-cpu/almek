@@ -4,30 +4,28 @@ import { Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo } from "react";
 
 import { FilterDropdown } from "@/components/portfolio/FilterDropdown";
+import type { ProjectView } from "@/lib/cms";
 import {
   areaRanges,
   buildingTypes,
   levelOptions,
   levelsOf,
-  projects,
-  type Project,
 } from "@/lib/portfolio";
 
 const SORTS = {
   "suprafata-desc": {
     label: "Suprafață descrescător",
-    compare: (a: Project, b: Project) => b.builtArea - a.builtArea,
+    compare: (a: ProjectView, b: ProjectView) => b.builtArea - a.builtArea,
   },
   "suprafata-asc": {
     label: "Suprafață crescător",
-    compare: (a: Project, b: Project) => a.builtArea - b.builtArea,
+    compare: (a: ProjectView, b: ProjectView) => a.builtArea - b.builtArea,
   },
   nume: {
     label: "Alfabetic",
-    compare: (a: Project, b: Project) => a.name.localeCompare(b.name, "ro"),
+    compare: (a: ProjectView, b: ProjectView) => a.name.localeCompare(b.name, "ro"),
   },
 } as const;
 
@@ -38,7 +36,7 @@ const DEFAULT_SORT: SortId = "suprafata-desc";
 const readList = (raw: string | null) =>
   raw ? raw.split(",").filter(Boolean) : [];
 
-export function ProjectsCatalog() {
+export function ProjectsCatalog({ projects }: { projects: ProjectView[] }) {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -71,24 +69,26 @@ export function ProjectsCatalog() {
     setParam(key, next.join(","));
   };
 
-  const filtered = useMemo(() => {
-    const needle = q.trim().toLowerCase();
-    const ranges = areaRanges.filter((r) => suprafata.includes(r.id));
+  /* Fara `useMemo`: `readList` produce array-uri noi la fiecare randare, deci
+     React Compiler nu ar putea pastra memoizarea si ar renunta sa optimizeze
+     tot componentul. In plus, de cand `projects` este prop, o lista de
+     dependinte scrisa de mana ar fi ramas usor in urma. */
+  const needle = q.trim().toLowerCase();
+  const ranges = areaRanges.filter((r) => suprafata.includes(r.id));
 
-    return projects
-      .filter((p) => {
-        if (tip.length && !tip.includes(p.buildingType)) return false;
-        if (nivel.length && !nivel.includes(levelsOf(p))) return false;
-        if (
-          ranges.length &&
-          !ranges.some((r) => p.builtArea >= r.min && p.builtArea < r.max)
-        )
-          return false;
-        if (needle && !p.name.toLowerCase().includes(needle)) return false;
-        return true;
-      })
-      .sort(SORTS[sort].compare);
-  }, [tip, nivel, suprafata, q, sort]);
+  const filtered = projects
+    .filter((p) => {
+      if (tip.length && !tip.includes(p.buildingType)) return false;
+      if (nivel.length && !nivel.includes(levelsOf(p))) return false;
+      if (
+        ranges.length &&
+        !ranges.some((r) => p.builtArea >= r.min && p.builtArea < r.max)
+      )
+        return false;
+      if (needle && !p.name.toLowerCase().includes(needle)) return false;
+      return true;
+    })
+    .sort(SORTS[sort].compare);
 
   /* Chipsurile de sub bara: fiecare selectie activa, cu × care o scoate. */
   const active = [
@@ -188,7 +188,9 @@ export function ProjectsCatalog() {
       <div className="mt-10">
         {filtered.length === 0 ? (
           <p className="font-body-lg text-body-lg text-on-surface-variant border-outline-variant border p-12 text-center">
-            {"Niciun proiect nu corespunde filtrelor alese."}
+            {projects.length === 0
+              ? "Nu există încă proiecte publicate."
+              : "Niciun proiect nu corespunde filtrelor alese."}
           </p>
         ) : (
           <ul className="grid grid-cols-1 gap-gutter sm:grid-cols-2 lg:grid-cols-3">
@@ -200,11 +202,10 @@ export function ProjectsCatalog() {
                 >
                   <div className="border-outline-variant group-hover:border-primary relative aspect-[4/3] w-full overflow-hidden border transition-colors">
                     <Image
-                      src={project.image}
-                      alt={project.name}
+                      src={project.image.url}
+                      alt={project.image.alt}
                       fill
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      placeholder="blur"
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   </div>

@@ -1,183 +1,24 @@
-import type { StaticImageData } from "next/image";
-
-import imgCabanaDinLemnMontana from "../../public/images/proiecte/cabana-din-lemn-montana.png";
-import imgCasaAFrame from "../../public/images/proiecte/casa-a-frame.png";
-import imgCasaAFrameCosoba from "../../public/images/proiecte/casa-a-frame-cosoba.png";
-import imgCasaDinLemnCalimanesti from "../../public/images/proiecte/casa-din-lemn-calimanesti.png";
-import imgCasaDinLemnCraiova from "../../public/images/proiecte/casa-din-lemn-craiova.png";
-import imgCasaDinLemnCuMansarda from "../../public/images/proiecte/casa-din-lemn-cu-mansarda.png";
-import imgCasaDinLemnDragasani from "../../public/images/proiecte/casa-din-lemn-dragasani.png";
-import imgCasaDinLemnFeteni from "../../public/images/proiecte/casa-din-lemn-feteni.png";
-import imgCasaDinLemnJiblea from "../../public/images/proiecte/casa-din-lemn-jiblea.png";
-import imgCasaDinLemnMorilor from "../../public/images/proiecte/casa-din-lemn-morilor.png";
-import imgCasaDinLemnPolovragi from "../../public/images/proiecte/casa-din-lemn-polovragi.png";
-import imgCasaDinLemnPriporu from "../../public/images/proiecte/casa-din-lemn-priporu.png";
-import imgCasaDinLemnValcea from "../../public/images/proiecte/casa-din-lemn-valcea.png";
-import imgCasaDinLemnVladesti from "../../public/images/proiecte/casa-din-lemn-vladesti.png";
-
 /* ---------------------------------------------------------------------------
-   Datele sectiunii Portofoliu. Textele si specificatiile sunt preluate de pe
-   almekwoodarch.ro; imaginile sunt deocamdata placeholder-e generate.
+   Lucrarile de portofoliu si filmarile. Textele sunt preluate de pe
+   almekwoodarch.ro; imaginile sunt placeholder-e generate.
 
-   Fisierul este generat, nu scris de mana — daca datele se schimba pe live,
-   e mai sigur sa se regenereze decat sa se editeze punctual.
+   Aceste doua colectii NU au trecut in CMS: sunt liste stabile, fara editare
+   frecventa. Proiectele si produsele, in schimb, se administreaza din /admin.
    --------------------------------------------------------------------------- */
 
-export type BuildingType = "Case Log House" | "Case A-frame";
+/* Proiectele au trecut in CMS: se citesc cu `getProjects()` din `cms.ts`, iar
+   forma lor este `ProjectView`. Aici raman doar optiunile de filtrare si
+   functia care deduce nivelul — lucruri pure, folosite si de componentele
+   client, care nu au voie sa atinga baza de date. */
+import type { Project } from "@/payload-types";
+
+export type BuildingType = Project["buildingType"];
 export type Levels = "Parter" | "Parter + supantă";
 
-export type Project = {
-  slug: string;
-  name: string;
-  buildingType: BuildingType;
-  /** m², folosita si la filtrare si la sortare, deci numar, nu text. */
-  builtArea: number;
-  dimensions: string;
-  usableGroundFloor: number;
-  /** Lipseste la casele fara supanta — de aici se deduce si `levels`. */
-  usableLoft?: number;
-  image: StaticImageData;
-};
-
-const rawProjects: Project[] = [
-  {
-    slug: "casa-din-lemn-cu-mansarda",
-    name: "Proiect Casă din lemn cu Mansardă",
-    buildingType: "Case Log House",
-    builtArea: 114.57,
-    dimensions: "16 x 6,7",
-    usableGroundFloor: 71.0,
-    usableLoft: 66.64,
-    image: imgCasaDinLemnCuMansarda,
-  },
-  {
-    slug: "cabana-din-lemn-montana",
-    name: "Proiect Cabană din Lemn Montană",
-    buildingType: "Case Log House",
-    builtArea: 50.6,
-    dimensions: "12,34 x 6,04 metri",
-    usableGroundFloor: 44.26,
-    image: imgCabanaDinLemnMontana,
-  },
-  {
-    slug: "casa-din-lemn-calimanesti",
-    name: "Proiect Casă din Lemn Călimănești",
-    buildingType: "Case Log House",
-    builtArea: 80.5,
-    dimensions: "11 x 7 metri",
-    usableGroundFloor: 53.1,
-    image: imgCasaDinLemnCalimanesti,
-  },
-  {
-    slug: "casa-a-frame",
-    name: "Proiect Casă A-frame",
-    buildingType: "Case A-frame",
-    builtArea: 58.8,
-    dimensions: "8,6 x 7 metri",
-    usableGroundFloor: 48.17,
-    usableLoft: 16.29,
-    image: imgCasaAFrame,
-  },
-  {
-    slug: "casa-din-lemn-valcea",
-    name: "Proiect Casă din lemn Vâlcea",
-    buildingType: "Case Log House",
-    builtArea: 113.0,
-    dimensions: "10,5 x 11 metri",
-    usableGroundFloor: 82.0,
-    image: imgCasaDinLemnValcea,
-  },
-  {
-    slug: "casa-din-lemn-polovragi",
-    name: "Proiect Casă din Lemn Polovragi",
-    buildingType: "Case Log House",
-    builtArea: 76.38,
-    dimensions: "6,24 x 12.24",
-    usableGroundFloor: 68.78,
-    image: imgCasaDinLemnPolovragi,
-  },
-  {
-    slug: "casa-din-lemn-priporu",
-    name: "Proiect Casă din lemn Priporu",
-    buildingType: "Case Log House",
-    builtArea: 67.59,
-    dimensions: "11 x 5,2 metri",
-    usableGroundFloor: 51.67,
-    usableLoft: 13.3,
-    image: imgCasaDinLemnPriporu,
-  },
-  {
-    slug: "casa-din-lemn-vladesti",
-    name: "Proiect Casă din Lemn Vlădești",
-    buildingType: "Case Log House",
-    builtArea: 60.0,
-    dimensions: "12 x 6 metri",
-    usableGroundFloor: 52.39,
-    image: imgCasaDinLemnVladesti,
-  },
-  {
-    slug: "casa-din-lemn-feteni",
-    name: "Proiect Casă din Lemn Fețeni",
-    buildingType: "Case Log House",
-    builtArea: 67.2,
-    dimensions: "10,5 x 6 metri",
-    usableGroundFloor: 51.3,
-    image: imgCasaDinLemnFeteni,
-  },
-  {
-    slug: "casa-din-lemn-morilor",
-    name: "Proiect Casă din Lemn Morilor",
-    buildingType: "Case Log House",
-    builtArea: 49.5,
-    dimensions: "9 x 5,5 metri",
-    usableGroundFloor: 38.92,
-    image: imgCasaDinLemnMorilor,
-  },
-  {
-    slug: "casa-din-lemn-dragasani",
-    name: "Proiect Casă din Lemn Drăgășani",
-    buildingType: "Case Log House",
-    builtArea: 88.0,
-    dimensions: "11 x 9,5 m",
-    usableGroundFloor: 67.5,
-    image: imgCasaDinLemnDragasani,
-  },
-  {
-    slug: "casa-din-lemn-craiova",
-    name: "Proiect Casă din lemn Craiova",
-    buildingType: "Case Log House",
-    builtArea: 78.13,
-    dimensions: "8,5 x 10,25 metri",
-    usableGroundFloor: 74.64,
-    image: imgCasaDinLemnCraiova,
-  },
-  {
-    slug: "casa-din-lemn-jiblea",
-    name: "Proiect Casă din Lemn Jiblea",
-    buildingType: "Case Log House",
-    builtArea: 101.0,
-    dimensions: "11,7 x 10 metri",
-    usableGroundFloor: 66.24,
-    image: imgCasaDinLemnJiblea,
-  },
-  {
-    slug: "casa-a-frame-cosoba",
-    name: "Proiect Casă A-frame Cosoba",
-    buildingType: "Case A-frame",
-    builtArea: 47.19,
-    dimensions: "7,26 x 6,5 metri",
-    usableGroundFloor: 32.0,
-    usableLoft: 9.0,
-    image: imgCasaAFrameCosoba,
-  },
-];
-
 /** Se deduce din prezenta supantei; tinut ca doua campuri s-ar putea contrazice. */
-export function levelsOf(project: Project): Levels {
+export function levelsOf(project: { usableLoft?: number | null }): Levels {
   return project.usableLoft ? "Parter + supantă" : "Parter";
 }
-
-export const projects: Project[] = rawProjects;
 
 export const buildingTypes: BuildingType[] = [
   "Case Log House",

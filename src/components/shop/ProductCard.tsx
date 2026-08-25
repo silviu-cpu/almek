@@ -5,7 +5,8 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { addItem } from "@/lib/cart-store";
-import { PRODUCT_IMAGE, formatPrice, type Product } from "@/lib/shop";
+import type { ProductView } from "@/lib/cms";
+import { formatPrice } from "@/lib/shop";
 
 const MAX_QUANTITY = 99;
 
@@ -21,8 +22,8 @@ export function ProductCard({
   product,
   onOrder,
 }: {
-  product: Product;
-  onOrder: (product: Product) => void;
+  product: ProductView;
+  onOrder: (product: ProductView) => void;
 }) {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
@@ -38,10 +39,10 @@ export function ProductCard({
     <li className="group flex flex-col">
       <div className="border-outline-variant group-hover:border-primary relative aspect-[4/3] w-full overflow-hidden border transition-colors">
         <Image
-          src={product.image}
-          alt={product.name}
-          width={PRODUCT_IMAGE.width}
-          height={PRODUCT_IMAGE.height}
+          src={product.image.url}
+          alt={product.image.alt}
+          width={product.image.width}
+          height={product.image.height}
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />

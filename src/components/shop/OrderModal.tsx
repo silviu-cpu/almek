@@ -3,7 +3,8 @@
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { formatPrice, type Product } from "@/lib/shop";
+import type { ProductView } from "@/lib/cms";
+import { formatPrice } from "@/lib/shop";
 
 /* Aceleasi clase ca la formularul de Contact, ca sa nu existe doua stiluri de
    camp in proiect. */
@@ -25,7 +26,7 @@ export function OrderModal({
   product,
   onClose,
 }: {
-  product: Product;
+  product: ProductView;
   onClose: () => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null);

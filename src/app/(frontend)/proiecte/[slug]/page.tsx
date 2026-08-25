@@ -5,17 +5,17 @@ import { notFound } from "next/navigation";
 
 import { TechLabel } from "@/components/ui/TechLabel";
 import { SectionRule } from "@/components/ui/TextureOverlays";
-import { levelsOf, projects } from "@/lib/portfolio";
+import { getProject } from "@/lib/cms";
+import { levelsOf } from "@/lib/portfolio";
 
-export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
-}
+/* Fara `generateStaticParams`: ar cere acces la baza de date in timpul
+   build-ului, exact ce am evitat. Paginile se randeaza la cerere. */
 
 export async function generateMetadata(
   props: PageProps<"/proiecte/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = await getProject(slug);
   if (!project) return {};
 
   return {
@@ -26,7 +26,7 @@ export async function generateMetadata(
 
 export default async function ProiectPage(props: PageProps<"/proiecte/[slug]">) {
   const { slug } = await props.params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = await getProject(slug);
   if (!project) notFound();
 
   const specs = [
@@ -61,12 +61,11 @@ export default async function ProiectPage(props: PageProps<"/proiecte/[slug]">) 
           <div className="col-span-12 md:col-span-7">
             <div className="border-outline-variant relative aspect-[4/3] w-full overflow-hidden border">
               <Image
-                src={project.image}
-                alt={project.name}
+                src={project.image.url}
+                alt={project.image.alt}
                 fill
                 priority
                 sizes="(min-width: 768px) 58vw, 100vw"
-                placeholder="blur"
                 className="object-cover"
               />
             </div>

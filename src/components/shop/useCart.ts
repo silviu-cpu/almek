@@ -8,9 +8,9 @@ import {
   subscribe,
   type CartLine,
 } from "@/lib/cart-store";
-import { findProduct, type Product } from "@/lib/shop";
+import type { ProductView } from "@/lib/cms";
 
-export type CartEntry = { product: Product; quantity: number; lineTotal: number };
+export type CartEntry = { product: ProductView; quantity: number; lineTotal: number };
 
 /** Liniile brute din cos (slug + cantitate). */
 export function useCartLines(): CartLine[] {
@@ -23,18 +23,21 @@ export function useCartCount(): number {
 }
 
 /**
- * Liniile imbogatite cu produsul si totalul. Pretul vine intotdeauna din
- * `shop.ts`, nu din ce s-a salvat in localStorage — altfel un pret vechi (sau
- * modificat manual) ar ajunge in total.
+ * Liniile imbogatite cu produsul si totalul. Pretul vine intotdeauna din lista
+ * incarcata de pe server, nu din ce s-a salvat in localStorage — altfel un pret
+ * vechi, sau modificat manual, ar ajunge in total.
  *
  * Liniile al caror slug nu mai exista in catalog sunt ignorate: produsul poate
  * fi scos din oferta dupa ce cineva l-a pus in cos.
  */
-export function useCartEntries(): { entries: CartEntry[]; total: number } {
+export function useCartEntries(products: ProductView[]): {
+  entries: CartEntry[];
+  total: number;
+} {
   const lines = useCartLines();
 
   const entries = lines.flatMap((line): CartEntry[] => {
-    const product = findProduct(line.slug);
+    const product = products.find((p) => p.slug === line.slug);
     if (!product) return [];
     return [
       {

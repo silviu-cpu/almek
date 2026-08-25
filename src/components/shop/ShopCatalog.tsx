@@ -7,18 +7,17 @@ import { useState } from "react";
 import { FilterDropdown } from "@/components/portfolio/FilterDropdown";
 import { OrderModal } from "@/components/shop/OrderModal";
 import { ProductCard } from "@/components/shop/ProductCard";
+import type { ProductView } from "@/lib/cms";
 import {
   availabilityOptions,
   priceRanges,
   productCategories,
-  products,
-  type Product,
 } from "@/lib/shop";
 
 const SORTS = {
-  "pret-asc": { label: "Preț crescător", compare: (a: Product, b: Product) => a.priceMinor - b.priceMinor },
-  "pret-desc": { label: "Preț descrescător", compare: (a: Product, b: Product) => b.priceMinor - a.priceMinor },
-  nume: { label: "Alfabetic", compare: (a: Product, b: Product) => a.name.localeCompare(b.name, "ro") },
+  "pret-asc": { label: "Preț crescător", compare: (a: ProductView, b: ProductView) => a.priceMinor - b.priceMinor },
+  "pret-desc": { label: "Preț descrescător", compare: (a: ProductView, b: ProductView) => b.priceMinor - a.priceMinor },
+  nume: { label: "Alfabetic", compare: (a: ProductView, b: ProductView) => a.name.localeCompare(b.name, "ro") },
 } as const;
 
 type SortId = keyof typeof SORTS;
@@ -27,12 +26,12 @@ const DEFAULT_SORT: SortId = "pret-asc";
 const readList = (raw: string | null) =>
   raw ? raw.split(",").filter(Boolean) : [];
 
-export function ShopCatalog() {
+export function ShopCatalog({ products }: { products: ProductView[] }) {
   const router = useRouter();
   const params = useSearchParams();
 
   /* Produsul pentru care e deschis modalul. `null` = niciun modal. */
-  const [ordering, setOrdering] = useState<Product | null>(null);
+  const [ordering, setOrdering] = useState<ProductView | null>(null);
 
   const categorie = readList(params.get("categorie"));
   const disponibilitate = readList(params.get("disponibilitate"));
@@ -59,7 +58,7 @@ export function ShopCatalog() {
 
   /* Fara `useMemo`: `readList` produce array-uri noi la fiecare randare, deci
      React Compiler nu ar putea pastra memoizarea si ar renunta sa optimizeze
-     tot componentul. La 26 de produse filtrarea e neglijabila. */
+     tot componentul. Lista e mica, deci filtrarea e neglijabila. */
   const needle = q.trim().toLowerCase();
   const ranges = priceRanges.filter((r) => pret.includes(r.id));
 
@@ -176,7 +175,9 @@ export function ShopCatalog() {
       <div className="mt-10">
         {filtered.length === 0 ? (
           <p className="font-body-lg text-body-lg text-on-surface-variant border-outline-variant border p-12 text-center">
-            {"Niciun produs nu corespunde filtrelor alese."}
+            {products.length === 0
+              ? "Nu există încă produse publicate."
+              : "Niciun produs nu corespunde filtrelor alese."}
           </p>
         ) : (
           <ul className="grid grid-cols-1 gap-gutter sm:grid-cols-2 lg:grid-cols-3">

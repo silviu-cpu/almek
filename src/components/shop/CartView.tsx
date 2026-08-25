@@ -6,10 +6,11 @@ import Link from "next/link";
 
 import { useCartEntries } from "@/components/shop/useCart";
 import { clear, removeItem, setQuantity } from "@/lib/cart-store";
-import { PRODUCT_IMAGE, formatPrice } from "@/lib/shop";
+import type { ProductView } from "@/lib/cms";
+import { formatPrice } from "@/lib/shop";
 
-export function CartView() {
-  const { entries, total } = useCartEntries();
+export function CartView({ products }: { products: ProductView[] }) {
+  const { entries, total } = useCartEntries(products);
 
   if (entries.length === 0) {
     return (
@@ -42,10 +43,10 @@ export function CartView() {
           >
             <div className="border-outline-variant relative aspect-[4/3] w-full shrink-0 overflow-hidden border sm:w-40">
               <Image
-                src={product.image}
-                alt={product.name}
-                width={PRODUCT_IMAGE.width}
-                height={PRODUCT_IMAGE.height}
+                src={product.image.url}
+                alt={product.image.alt}
+                width={product.image.width}
+                height={product.image.height}
                 sizes="160px"
                 className="h-full w-full object-cover"
               />

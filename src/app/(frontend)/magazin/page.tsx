@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { ShopCatalog } from "@/components/shop/ShopCatalog";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { products } from "@/lib/shop";
+import { getProducts } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Magazin | ALMEK",
@@ -11,13 +11,15 @@ export const metadata: Metadata = {
     "Mobilier din lemn masiv pentru grădină și interior, executat în atelierul ALMEK. Produse pe stoc și la comandă.",
 };
 
-export default function MagazinPage() {
+export default async function MagazinPage() {
+  const products = await getProducts();
+
   return (
     <>
       <PageHeader
         eyebrow="Magazin"
         title="Mobilier din lemn masiv"
-        intro={`${products.length} produse lucrate în atelierul nostru. Cele pe stoc se comandă direct; restul le executăm la cerere, pe dimensiunile tale.`}
+        intro="Mobilier lucrat în atelierul nostru. Cele pe stoc se comandă direct; restul le executăm la cerere, pe dimensiunile tale."
       />
 
       {/* `ShopCatalog` citeste filtrele cu `useSearchParams`, ceea ce intr-o
@@ -31,7 +33,7 @@ export default function MagazinPage() {
           </div>
         }
       >
-        <ShopCatalog />
+        <ShopCatalog products={products} />
       </Suspense>
     </>
   );
