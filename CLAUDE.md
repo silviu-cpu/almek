@@ -36,6 +36,7 @@ timber-construction company. Routes:
 | `/magazin`, `/cos` | shop and cart — **from CMS, dynamic** |
 | `/blog`, `/blog/[slug]` | articles — **from CMS, dynamic** |
 | `/filmari-pe-teren` | six YouTube clips — static, still from `portfolio.ts` |
+| `/despre-noi`, `/de-ce-casa-din-lemn`, `/etapele-necesare`, `/procesul-tehnologic`, `/variante-si-costuri`, `/intrebari-frecvente` | the six *Informații* pages — static, from `info.ts` |
 | `/admin`, `/api/*` | Payload admin and REST/GraphQL |
 
 Paths deliberately mirror almekwoodarch.ro so the migration keeps its URLs.
@@ -46,7 +47,7 @@ must **not** inherit that shell, so each group carries its own layout and there 
 `src/app/`. `globals.css` stays at `src/app/`, imported as `../globals.css`.
 
 Server Components throughout, except: [SiteHeader](src/components/layout/SiteHeader.tsx)
-(nav drawer + Portofoliu submenu), the catalogue/grid/video components under
+(nav drawer + the two submenus), the catalogue/grid/video components under
 [src/components/portfolio/](src/components/portfolio/), and the vendored Skiper UI pieces.
 
 - `@/*` maps to `src/*`. Sections live in [src/components/sections/](src/components/sections/),
@@ -72,6 +73,15 @@ Server Components throughout, except: [SiteHeader](src/components/layout/SiteHea
   everything on offer — with `Toate` meaning simply "nothing ticked"; chips would then just
   repeat the bar, so it only keeps "Șterge selecțiile". A left-hand category sidebar was tried
   on the works page and rejected.
+- The bar has two submenu groups, `Portofoliu` and `Informații`, both driven by the same
+  [NavDropdown](src/components/layout/NavDropdown.tsx) over `navGroups` in `content.ts` — the
+  second group was extracted into that component rather than copied, so hover timing, Escape
+  and outside-click stay in one place. The mobile drawer expands every group flat (no nesting)
+  and scrolls (`max-h-[80vh]`); with eleven destinations it overflows a phone otherwise.
+- The submenu links are **also rendered in the footer**, one column per `navGroup`. The header
+  panel only exists in the DOM once open, so without the footer none of the nine links appear
+  in the initial HTML and crawlers never reach the pages. Adding a group to `navGroups` fills
+  both places; do not hard-code footer links.
 - The Portofoliu submenu and the filter dropdowns **open on hover as well as on click**.
   `onPointerEnter` is gated on `pointerType === "mouse"` — on touch there is no hover and an
   unfiltered handler would fight the click. Closing runs through a ~120ms timer so the trip
@@ -135,6 +145,36 @@ Server Components throughout, except: [SiteHeader](src/components/layout/SiteHea
   is derived from an `IntersectionObserver` on the real scroll position, not a counter — a
   counter desyncs the moment someone swipes. `scrollTo` is not covered by the global
   `prefers-reduced-motion` block, so the smooth behaviour is checked in JS.
+
+### Informații pages
+
+Six static content pages, all copy in [src/lib/info.ts](src/lib/info.ts) — nothing here goes
+through the CMS. The text is technical and stable, and the layouts are purpose-built (numbered
+steps, price cards, wall build-ups, an accordion); moved into a rich-text editor it would
+degrade into running prose and lose exactly the structure that makes it readable.
+
+- Prices are **strings** (`"De la 420 Euro/mp"`), not numbers: nothing sorts, filters or sums
+  them, and the "De la" is part of the message. That is the deliberate opposite of the shop's
+  `priceMinor`, where the amount really is arithmetic.
+- The figures were **copied verbatim from almekwoodarch.ro and are not independently verified**
+  — the live page may be out of date. Confirm them with the client before this goes public.
+  One figure is **self-contradictory on the live site**: the 40 mm lambrisat wall is 420 Euro/mp
+  on `/procesul-tehnologic` and 520 Euro/mp on `/variante-si-costuri`. Both were copied as
+  found, and a comment in `info.ts` marks the spot; resolving it needs the client, not a guess.
+- `/intrebari-frecvente` is a native `<details name="faq">` accordion: single-open behaviour,
+  keyboard support and Ctrl+F-opens-the-match all come from the browser, with no JavaScript and
+  no client component. The `name` attribute is what makes it exclusive — do not swap it for a
+  hand-rolled `role`/`aria-expanded` widget. The marker is hidden with
+  `[&::-webkit-details-marker]:hidden` plus `list-none`, and the Plus icon rotates via
+  `group-open:rotate-45`.
+- On `/variante-si-costuri` the "not included in the price" note sits **immediately under the
+  prices it qualifies** (`PriceDisclaimer` in
+  [InfoBlocks](src/components/info/InfoBlocks.tsx)), not collected at the foot of the page
+  where nobody reads it.
+- Two errors on the live site were corrected, not reproduced: *"Cât durează construcția casei?"*
+  appeared twice with an identical answer, and the last step of the process carried the wrong
+  label. As elsewhere in the migration, the live pages contain injected casino spam — none of
+  it was copied.
 
 ### CMS (Payload)
 

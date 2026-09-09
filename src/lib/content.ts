@@ -49,15 +49,34 @@ export const navLinks: NavLink[] = [
   { label: "Blog", href: "/blog" },
 ];
 
-/** Grupul cu submeniu — aceeasi structura ca pe almekwoodarch.ro. */
-export const portfolioNav = {
-  label: "Portofoliu",
-  links: [
-    { label: "Portofoliu realizări", href: "/portofoliu-almek" },
-    { label: "Proiecte", href: "/proiecte" },
-    { label: "Filmări pe teren", href: "/filmari-pe-teren" },
-  ] satisfies NavLink[],
-};
+export type NavGroup = { label: string; links: NavLink[] };
+
+/**
+ * Grupurile cu submeniu, aceeasi structura ca pe almekwoodarch.ro. Sunt o lista,
+ * nu doua constante separate: header-ul le randeaza printr-un singur bloc, deci
+ * un grup nou nu mai cere cod nou.
+ */
+export const navGroups: NavGroup[] = [
+  {
+    label: "Portofoliu",
+    links: [
+      { label: "Portofoliu realizări", href: "/portofoliu-almek" },
+      { label: "Proiecte", href: "/proiecte" },
+      { label: "Filmări pe teren", href: "/filmari-pe-teren" },
+    ],
+  },
+  {
+    label: "Informații",
+    links: [
+      { label: "Despre noi", href: "/despre-noi" },
+      { label: "De ce casă din lemn", href: "/de-ce-casa-din-lemn" },
+      { label: "Etapele necesare", href: "/etapele-necesare" },
+      { label: "Procesul tehnologic", href: "/procesul-tehnologic" },
+      { label: "Variante și costuri", href: "/variante-si-costuri" },
+      { label: "Întrebări frecvente", href: "/intrebari-frecvente" },
+    ],
+  },
+];
 
 export const services: Service[] = [
   {
