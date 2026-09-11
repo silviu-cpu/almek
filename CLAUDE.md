@@ -498,15 +498,41 @@ A React Three Fiber scene sits behind the hero ([HeroScene](src/components/hero/
 a timber house that **builds itself as the page scrolls** — its pieces start scattered in a
 chaos cloud and fly into place bottom-up while the house turns.
 
-- **The source model is `structurainen4.skp` (SketchUp 2019), which three.js cannot read** —
-  SKP is a closed binary format; the only converter is Trimble's SDK. Until it is exported, the
-  scene renders a stand-in log house generated in code (`buildHouse()`: notched log courses
-  with door/window openings, gables, rafters, ridge). To use the real model, export it from
-  SketchUp as **glTF/GLB** (or COLLADA `.dae`, then convert) to `public/models/structura.glb`
-  and rebuild: [Hero](src/components/sections/Hero.tsx) checks for the file with `fs` **at
-  build time** (the page is static) and passes its URL down. Keep SketchUp groups/components
-  separate in the export — the build animation works per mesh, so a single welded mesh would
-  just drop in as one block.
+- **Alternative source: the client's `meke.ifc`** — the closed house (clad walls, glazed gable,
+  roof with battens, chimney, deck on piles). It was tried in the hero, then the user asked for
+  the bare `.skp` frame back (next bullet); the white walls also washed out on the light theme. [scripts/convert-ifc.py](scripts/convert-ifc.py) converts it in the same
+  headless Blender, with `ifcopenshell` 0.8 installed into Blender's own Python (the exact
+  commands are in the script header). That IFC was exported by SketchUp Pro 2015 and needs three
+  corrections, all in the script: its surface styles carry **NaN colours** (a NaN in the GLB
+  crashes the glTF exporter — replaced by a timber tone); it contains a **267 × 177 m terrain
+  slab** (removed by shape: it spans at least half the footprint on both axes and is flat);
+  and it comes out **10× too large** although its header declares millimetres (`IFC_SCALE=0.1`,
+  chosen after measuring, gives ~10.5 × 10.8 × 9.9 m). SketchUp exported the house as 48 grouped
+  elements; each is split into its solids through ifcopenshell's per-face `item_ids`, giving
+  **448 pieces**. The GLB is then compressed with gltf-transform **`dedup` + `meshopt` only**
+  (6.7 → 1.7 MB, 448 materials → 13): `optimize` would also join/flatten/instance and merge the
+  pieces the animation moves one by one. drei decodes meshopt with the decoder bundled in
+  three-stdlib — no CDN, unlike Draco. Dedup makes some nodes share a mesh; harmless, since the
+  animation only moves node transforms.
+- **The hero shows `structurainen4.skp`** (SketchUp 2019 — the bare timber frame on steel
+  piles: floor joists, stud walls, rafters; 877 separate meshes, ~11k faces), converted by
+  [scripts/convert-skp.py](scripts/convert-skp.py) and compressed with the same
+  `dedup` + `meshopt` step as the IFC (commands in the script header).
+  three.js cannot read SKP, a closed binary format, so the script runs in headless
+  **Blender 5.0.1** with the open-source SketchUp Importer 0.27 add-on
+  (RedHaloStudio/Sketchup_Importer), which bundles Trimble's SDK. Blender is installed portable
+  at `C:\Users\barbu\.tools\blender-5.0.1`; its `portable/` folder keeps config and the add-on
+  out of the user profile. After the model changes, re-run the command in the script's header,
+  then rebuild — [Hero](src/components/sections/Hero.tsx) checks for the GLB with `fs` **at
+  build time** (the page is static). Traps the script already handles: paths must use `\`
+  (the add-on derives its texture temp folder by splitting on `os.path.sep`), and Blender must
+  sit on a **short path** — under the session temp dir numpy's DLLs exceeded Windows' 260-char
+  limit and the glTF export died. `max_instance` is set huge so every component imports as a
+  real object: the animation needs one mesh per piece. The script also writes a
+  `-control.png` render next to the GLB, to check the conversion by eye.
+- Without the GLB the scene falls back to a stand-in log house generated in code
+  (`buildHouse()`). It is **not** the client's design: an earlier session shipped it as the
+  hero without saying so up front, and the user rightly objected.
 - The animation is **model-agnostic**: every mesh starts **scattered in a chaos cloud** around
   the model — a seeded random position and spin (`seeded(1993)`, so the chaos is identical on
   every load) — and flies to its place as the page scrolls, ranked bottom-up by bounding-box
@@ -528,6 +554,11 @@ chaos cloud and fly into place bottom-up while the house turns.
   of edges only — visible on the light theme, invisible on the dark one. It was first misread
   as blown-out lighting (all twelve edges showing, back ones included, is what gave it away:
   the faces were simply elsewhere). Keep that filter if the traversal changes.
+- Pieces **turn about their own bounding-box centre**, not their origin. In the SketchUp GLB
+  every mesh's origin is the model origin, tens of metres from the piece; spun about it, the
+  chaos flung the studs round a huge circle — tiny slivers across the whole screen. `applyBuild`
+  therefore interpolates each piece's centre and derives the position from it
+  (`position = centre − rotation·pivot`), which leaves the finished pose exactly as exported.
 - The build finishes at **`BUILD_END` = 85% of the track** ([track.ts](src/components/hero/track.ts)),
   and the last 15% holds the finished house on screen — asked for explicitly: the page must
   only move on once the animation is done. Without that reserve, the damping let the last pieces

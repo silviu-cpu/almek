@@ -193,12 +193,22 @@ function seeded(seed: number) {
 
 type Part = {
   obj: THREE.Object3D;
-  basePos: THREE.Vector3;
+  /**
+   * Centrul piesei in spatiul ei local (cu scara aplicata) — pivotul rotatiei.
+   * Intr-un GLB exportat din SketchUp originea fiecarei piese e originea
+   * modelului, la zeci de metri de piesa; rotita in jurul ei, piesa ar fi
+   * aruncata pe un cerc urias in loc sa se invarta pe loc.
+   */
+  pivot: THREE.Vector3;
+  /** Centrul piesei, in spatiul parintelui: la locul ei si in haos. */
+  baseCenter: THREE.Vector3;
+  chaosCenter: THREE.Vector3;
   baseQuat: THREE.Quaternion;
-  chaosPos: THREE.Vector3;
   chaosQuat: THREE.Quaternion;
   order: number;
 };
+
+const pivotTmp = new THREE.Vector3();
 
 /**
  * Aseaza fiecare piesa pentru un progres de constructie dat. Sta in afara
@@ -211,8 +221,11 @@ function applyBuild(parts: Part[], build: number) {
     const s = THREE.MathUtils.clamp((build * (1 + PIECE_WINDOW) - part.order) / PIECE_WINDOW, 0, 1);
     // easeInOutCubic: piesa se desprinde lin din haos si se aseaza lin la loc.
     const e = s < 0.5 ? 4 * s * s * s : 1 - (-2 * s + 2) ** 3 / 2;
-    part.obj.position.lerpVectors(part.chaosPos, part.basePos, e);
     part.obj.quaternion.slerpQuaternions(part.chaosQuat, part.baseQuat, e);
+    // Se interpoleaza centrul, iar pozitia se deduce din el: piesa se roteste in
+    // jurul propriului centru pe tot drumul, oriunde i-ar fi originea.
+    pivotTmp.copy(part.pivot).applyQuaternion(part.obj.quaternion);
+    part.obj.position.lerpVectors(part.chaosCenter, part.baseCenter, e).sub(pivotTmp);
   }
 }
 
@@ -253,19 +266,28 @@ function Build({
     const cloud = bounds.getCenter(new THREE.Vector3()).add(size.clone().multiply(SCATTER_SHIFT));
     const rand = seeded(1993);
     partsRef.current = found.map(({ obj }, i) => {
+      const geometry = (obj as THREE.Mesh).geometry;
+      geometry.computeBoundingBox();
+      const pivot = (geometry.boundingBox ?? new THREE.Box3())
+        .getCenter(new THREE.Vector3())
+        .multiply(obj.scale);
+      const baseQuat = obj.quaternion.clone();
+      const baseCenter = obj.position.clone().add(pivot.clone().applyQuaternion(baseQuat));
+      const order = i / last;
+
       // Fundatia (orice mesh marcat `anchor`) sta pe loc: placa de beton rotita
       // prin aer iesea ca o banda gri peste toata scena.
       if (obj.userData.anchor) {
         return {
           obj,
-          basePos: obj.position.clone(),
-          baseQuat: obj.quaternion.clone(),
-          chaosPos: obj.position.clone(),
-          chaosQuat: obj.quaternion.clone(),
-          order: i / last,
+          pivot,
+          baseCenter,
+          chaosCenter: baseCenter.clone(),
+          baseQuat,
+          chaosQuat: baseQuat.clone(),
+          order,
         };
       }
-      const world = obj.getWorldPosition(new THREE.Vector3());
       const parent = obj.parent ?? root;
       // Locul piesei in "haos": un punct din norul din dreapta-spatele casei, peste sol.
       const scattered = new THREE.Vector3(
@@ -273,7 +295,6 @@ function Build({
         Math.max(cloud.y + (rand() * 2 - 1) * span.y, bounds.min.y + 0.3),
         cloud.z + (rand() * 2 - 1) * span.z,
       );
-      const offset = parent.worldToLocal(scattered).sub(parent.worldToLocal(world.clone()));
       const spin = new THREE.Quaternion().setFromEuler(
         new THREE.Euler(
           (rand() * 2 - 1) * Math.PI,
@@ -283,11 +304,12 @@ function Build({
       );
       return {
         obj,
-        basePos: obj.position.clone(),
-        baseQuat: obj.quaternion.clone(),
-        chaosPos: obj.position.clone().add(offset),
-        chaosQuat: obj.quaternion.clone().multiply(spin),
-        order: i / last,
+        pivot,
+        baseCenter,
+        chaosCenter: parent.worldToLocal(scattered),
+        baseQuat,
+        chaosQuat: baseQuat.clone().multiply(spin),
+        order,
       };
     });
     shownRef.current = -1;
