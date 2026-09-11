@@ -78,6 +78,13 @@ Server Components throughout, except: [SiteHeader](src/components/layout/SiteHea
   second group was extracted into that component rather than copied, so hover timing, Escape
   and outside-click stay in one place. The mobile drawer expands every group flat (no nesting)
   and scrolls (`max-h-[80vh]`); with eleven destinations it overflows a phone otherwise.
+- The full desktop bar appears at **1100px** (`min-[1100px]`), below that everything moves into
+  the drawer. That threshold was **measured** with headless Chrome screenshots at
+  900/1024/1100/1200: at 1024 the labels clip and the CTA wraps onto two lines. An earlier
+  900px threshold came from a width estimate made at the wrong font size (12px instead of the
+  real 14px `text-technical-data`) and was broken. When adding a nav entry, re-shoot the bar
+  rather than re-estimating — e.g. `chrome --headless=new --window-size=1100,140
+  --screenshot=out.png http://localhost:3000/`.
 - The submenu links are **also rendered in the footer**, one column per `navGroup`. The header
   panel only exists in the DOM once open, so without the footer none of the nine links appear
   in the initial HTML and crawlers never reach the pages. Adding a group to `navGroups` fills
@@ -167,6 +174,50 @@ degrade into running prose and lose exactly the structure that makes it readable
   hand-rolled `role`/`aria-expanded` widget. The marker is hidden with
   `[&::-webkit-details-marker]:hidden` plus `list-none`, and the Plus icon rotates via
   `group-open:rotate-45`.
+- `/despre-noi` is a **zigzag**, not a text grid: the old two-column grid put *Angajamentul
+  nostru* (eight paragraphs) beside four one-sentence values and looked lopsided. The eight
+  paragraphs are split into three `aboutStory` blocks, each beside a portrait image, alternating
+  right/left on desktop and always text-then-image on mobile; the four values are equal cards.
+  The copy is unchanged, only regrouped — the first paragraph of the first block renders as a
+  pull-quote, so keep it the short sentence about passion. Images live in
+  `public/images/despre/` as **copies** of the homepage placeholders, so real photos for this
+  page replace those files without touching the homepage. They render through
+  [FramedImage](src/components/ui/FramedImage.tsx), which merges classes with `cn` so a caller's
+  `bg-*` overrides the default instead of losing to CSS order.
+- `/de-ce-casa-din-lemn` and `/etapele-necesare` open with the same text-left /
+  framed-images-right composition as `/despre-noi`; their placeholders live in
+  `public/images/de-ce-lemn/` and `public/images/etape/`, again copies, for the same reason.
+- `/de-ce-casa-din-lemn` ends in **vertical tabs**
+  ([InfoTabs](src/components/info/InfoTabs.tsx)), mirroring the live page's eight tabs with
+  their **full** text (`woodTabs`) — an earlier version had condensed them into seven
+  paraphrased sections. Every panel is rendered on the server and only toggled with
+  `hidden`, so all the copy is in the initial HTML. Keyboard follows the ARIA tabs pattern
+  (roving `tabIndex`, arrows on **both** axes because the list is a horizontal scroller on
+  mobile and a column on desktop, Home/End). Body strings may carry `**bold**`, rendered by the
+  tiny `Rich` helper in that file — it handles bold only, on purpose, since the text comes from
+  `info.ts`, never from users.
+- Both tab UIs run on one primitive, [Tabs](src/components/ui/Tabs.tsx) (client), which owns
+  state, ARIA and keyboard; `orientation` picks the layout (`vertical` for the text tabs,
+  `horizontal` for the wall types). Panels are built by the **server** page and passed in as
+  `ReactNode`, so the client bundle carries no page copy logic. `InfoTabs` is now a server
+  wrapper that only builds panels.
+- `/procesul-tehnologic` shows the three wall types as horizontal tabs, each with a thumbnail.
+  The renders in `public/images/procesul-tehnologic/` are the **real** ones from
+  almekwoodarch.ro (`Varianta-N-a/b`), not placeholders. On the live page both images of a
+  pair sit beside the first price of that wall type, so they are two views of the type, not
+  one per thickness — the panel stacks both, and the first doubles as the tab icon. Below the
+  tabs, the two `processNotes` sections stack as text-left / image-right rows; the montage
+  photos are real (from the live page), while `premontaj.png` is a placeholder — the live
+  page only has a stock illustration of a light-frame house there, which is not ALMEK's work
+  and not solid timber, so it was deliberately not reused.
+- `/variante-si-costuri` is four horizontal tabs (one per `priceGroups` entry). Each tab is a
+  stack of `blocks` — prices left, images right. All 35 images are the **real** ones from the
+  live page, imported in [variante-images.ts](src/lib/variante-images.ts) (kept out of
+  `info.ts` so 35 import lines do not bury the copy). The foișor galleries were a slider on
+  live: the files are the 1200×900 originals, not the slider's 240×120 cache thumbnails.
+  Up to two images stack; three or more become [Gallery](src/components/ui/Gallery.tsx) — a
+  large frame plus thumbnail buttons (`aria-pressed`, not a tablist: there is no panel, only
+  one image that changes). The old anchor chips (`#case`, …) were replaced by the tabs.
 - On `/variante-si-costuri` the "not included in the price" note sits **immediately under the
   prices it qualifies** (`PriceDisclaimer` in
   [InfoBlocks](src/components/info/InfoBlocks.tsx)), not collected at the foot of the page
@@ -307,9 +358,8 @@ is time:
   at 40%/75% (they floated over the text). The footer has no `border-t`; its top line is the
   Partners rule. Anything opaque on a section hides the lines, so keep any section-level fill
   alpha-blended. Internal borders — cards, list rows, form fields, the header's `border-b` —
-  are unaffected, as are card fills like `bg-surface-container-low/80`. The Hero's own
-  full-bleed photo still covers the axis in the first viewport; that is the section's
-  content, not a background layer.
+  are unaffected, as are card fills like `bg-surface-container-low/80`. The Hero no longer
+  has a photo: its 3D canvas is transparent, so the axis shows through behind the model.
 - **The lines are lit by CSS scroll-driven animations** (`animation-timeline`), not by any JS
   scroll listener — see the block above the view-transition rules in `globals.css`. The axis
   carries two extra layers: `axis-progress` (fills top-down with page scroll) and `axis-head`
@@ -418,6 +468,92 @@ uses `text-*` for size (`text-technical-data`) while Tailwind uses it for colour
 (`text-primary`); plain `tailwind-merge` treats both as one group and would silently drop the
 size. The custom `font-size`/`font-family` class groups fix that — keep them in sync when
 adding a token to the `@theme` type scale.
+
+### Contact
+
+- `/contact` mirrors the live page (same heading and form) and is **static**. The form card
+  and the address/phones block are shared components —
+  [ContactForm](src/components/contact/ContactForm.tsx) and
+  [ContactDetails](src/components/contact/ContactDetails.tsx) — used by both the homepage
+  `Contact` section and the page, so the two cannot drift. The field ids are fixed; that is
+  safe only because the two never render on the same page.
+- The map is a **link** to Google Maps by address, not an embedded iframe: an embed sets
+  third-party cookies on load, which needs consent. It queries the address rather than
+  `company.coordinates`, which are rounded to ~100 m.
+- `Contact` sits **after** the two submenu groups, as on live, via `navEndLinks` in
+  `content.ts`. "Cereți ofertă" and every `/#contact` link on inner pages now point to
+  `/contact`; in-page `#contact` anchors on the homepage itself were left alone.
+- The hero logo is `almek_logo.png`, keyed to transparency from the supplied
+  `almek_logo.jpeg` (kept as the source). The `#f7f7f7` ground was removed by **flood fill
+  from the image border** plus enclosed holes that are mostly exact-ground pixels (the counter
+  of the "A"), with the usual 12→38 ramp and colour decontamination. A plain colour key would
+  have eaten the logo's **white** interior bands (`#fff`, only ~14 away from the ground), which
+  sit inside the brown outline and are therefore never reached by the fill. The brown wordmark
+  (`#603223`) is ~1.75:1 on the dark theme's ground, so the image carries a soft light
+  `drop-shadow` halo — invisible on the light theme, legibility on the dark one.
+
+### Hero 3D scene
+
+A React Three Fiber scene sits behind the hero ([HeroScene](src/components/hero/HeroScene.tsx)):
+a timber house that **builds itself as the page scrolls** — its pieces start scattered in a
+chaos cloud and fly into place bottom-up while the house turns.
+
+- **The source model is `structurainen4.skp` (SketchUp 2019), which three.js cannot read** —
+  SKP is a closed binary format; the only converter is Trimble's SDK. Until it is exported, the
+  scene renders a stand-in log house generated in code (`buildHouse()`: notched log courses
+  with door/window openings, gables, rafters, ridge). To use the real model, export it from
+  SketchUp as **glTF/GLB** (or COLLADA `.dae`, then convert) to `public/models/structura.glb`
+  and rebuild: [Hero](src/components/sections/Hero.tsx) checks for the file with `fs` **at
+  build time** (the page is static) and passes its URL down. Keep SketchUp groups/components
+  separate in the export — the build animation works per mesh, so a single welded mesh would
+  just drop in as one block.
+- The animation is **model-agnostic**: every mesh starts **scattered in a chaos cloud** around
+  the model — a seeded random position and spin (`seeded(1993)`, so the chaos is identical on
+  every load) — and flies to its place as the page scrolls, ranked bottom-up by bounding-box
+  height so the house still rises from the ground. Nothing is ever hidden: the user asked for
+  the pieces of the finished structure to stay on screen as chaos rather than appear from
+  nowhere (an earlier version dropped invisible pieces in from above). Offsets are converted
+  into each mesh's **parent-local** space, because SketchUp groups arrive rotated and a
+  world-space offset applied locally would send them askew.
+- The chaos cloud is **shifted right, up and back** (`SCATTER_SHIFT`) and kept to ~0.6× the
+  model: centred on the house at 0.9× it filled the screen and ran planks across the hero
+  title. Meshes with `userData.anchor` (the stand-in's concrete slab) never scatter — a slab
+  tumbling through the air read as a grey band across the whole scene. The start rotation is
+  set on the group itself so the cloud, computed in world space, matches what is on screen at
+  the top of the track. A left-hand gradient under the hero text (md+) keeps the title legible
+  while pieces fly past.
+- A **piece is a mesh not nested inside another mesh**. drei's `<Edges>` outline is itself a
+  `Mesh` (`LineSegments2`) parented to its piece; when the traversal took it for a piece of
+  its own, every outline flew off on its own path and the chaos filled with "ghost" boxes made
+  of edges only — visible on the light theme, invisible on the dark one. It was first misread
+  as blown-out lighting (all twelve edges showing, back ones included, is what gave it away:
+  the faces were simply elsewhere). Keep that filter if the traversal changes.
+- The build finishes at **`BUILD_END` = 85% of the track** ([track.ts](src/components/hero/track.ts)),
+  and the last 15% holds the finished house on screen — asked for explicitly: the page must
+  only move on once the animation is done. Without that reserve, the damping let the last pieces
+  land while the hero was already leaving. Scroll is **not** hijacked (no wheel
+  `preventDefault`), which would break keyboard, touch and assistive tech; the hold zone does
+  the job with native scrolling.
+- [ScrollCue](src/components/hero/ScrollCue.tsx) is the "SCROLL TO EXPLORE_" indicator: accent
+  colour, a bouncing chevron (`motion-safe:` only), and a bar that fills with the **same**
+  `buildProgress` as the scene — full means built. It writes the CSS `scale` property through a
+  ref, not `transform`: Tailwind v4's `scale-x-0` sets `scale`, and a `transform` would
+  multiply with it and stay at zero.
+- Scroll drives it through a **400vh track with a sticky viewport** — the hero is pinned while
+  the house builds. The track length **is** the build speed, and the user asked for it slow:
+  ~225vh of scroll for the whole house, each piece's flight (`PIECE_WINDOW` 0.45) spanning
+  about a third of that, damped with a ~0.2s time constant. `overflow-hidden` therefore lives on the sticky child, never on the
+  section or any ancestor: that would turn the ancestor into the scroll container and silently
+  kill the pinning. Progress is read from the track's `getBoundingClientRect`, not from a
+  hijacked scroll container (no drei `ScrollControls`), so native scrolling stays intact.
+- **`frameloop="demand"`**: frames render only while the damped progress is still catching up
+  with the scroll target; a still page costs nothing. Under `prefers-reduced-motion` the house
+  is shown finished and scroll is ignored (via framer-motion's `useReducedMotion`, already a
+  dependency).
+- three.js is loaded with `next/dynamic` + `ssr: false` from
+  [HeroSceneLoader](src/components/hero/HeroSceneLoader.tsx) — that option is only allowed in a
+  Client Component, hence the extra file. An error boundary there drops the scene silently when
+  WebGL is unavailable; the hero text never depends on it.
 
 ### Known TODO
 

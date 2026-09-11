@@ -8,7 +8,7 @@ import { NavDropdown } from "@/components/layout/NavDropdown";
 import { CartIndicator } from "@/components/shop/CartIndicator";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { TextRoll } from "@/components/ui/skiper-ui/skiper58";
-import { navGroups, navLinks } from "@/lib/content";
+import { navEndLinks, navGroups, navLinks } from "@/lib/content";
 
 /* Inaltimea reala a randului pentru textul din header. TextRoll decupeaza cu
    `overflow-hidden`, iar 0.75 (default-ul upstream) ar taia sedila lui Ț si
@@ -51,13 +51,14 @@ export function SiteHeader() {
           {"ALMEK"}
         </Link>
 
-        {/* Pragul e 900px, nu `lg` (1024): cu cinci intrari de nivel intai bara
-            incape de la 900 in sus — 75px sigla + ~443px navigatie + ~274px
-            grupul din dreapta intra in cei 820px utili. Sub atat, tot ce e aici
-            trece in drawer-ul de mai jos. */}
+        {/* Pragul e 1100px, masurat pe capturi reale (Chrome headless), nu
+            estimat: cu sase intrari la 14px monospace bara se rupe la 1024 —
+            etichetele se taie si butonul de oferta trece pe doua randuri — si
+            incape curat de la 1100. Sub prag totul trece in drawer-ul de mai jos.
+            Adaugi o intrare? Refa capturile inainte sa atingi pragul. */}
         <nav
           aria-label="Navigație principală"
-          className="hidden items-center gap-6 min-[900px]:flex"
+          className="hidden items-center gap-6 min-[1100px]:flex"
         >
           {navLinks.map((link) => (
             <Link key={link.href} href={link.href} className={linkClass}>
@@ -73,13 +74,19 @@ export function SiteHeader() {
               lineHeight={NAV_LINE_HEIGHT}
             />
           ))}
+
+          {navEndLinks.map((link) => (
+            <Link key={link.href} href={link.href} className={linkClass}>
+              <TextRoll lineHeight={NAV_LINE_HEIGHT}>{link.label}</TextRoll>
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
           <CartIndicator />
           <Link
-            href="/#contact"
+            href="/contact"
             className="shine shine-edge bg-primary-container text-on-primary-container font-technical-data text-technical-data hover:bg-primary hover:text-on-primary hidden px-6 py-2 tracking-widest uppercase transition-all sm:inline-block"
           >
             {"Cereți ofertă"}
@@ -90,7 +97,7 @@ export function SiteHeader() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Închide meniul" : "Deschide meniul"}
-            className="border-outline-variant text-on-surface hover:border-primary hover:text-primary flex h-10 w-10 items-center justify-center border transition-colors min-[900px]:hidden"
+            className="border-outline-variant text-on-surface hover:border-primary hover:text-primary flex h-10 w-10 items-center justify-center border transition-colors min-[1100px]:hidden"
           >
             {open ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
           </button>
@@ -100,7 +107,7 @@ export function SiteHeader() {
       {open ? (
         <div
           id="mobile-nav"
-          className="border-outline-variant bg-surface/98 absolute top-full left-0 max-h-[80vh] w-full overflow-y-auto border-b backdrop-blur-xl min-[900px]:hidden"
+          className="border-outline-variant bg-surface/98 absolute top-full left-0 max-h-[80vh] w-full overflow-y-auto border-b backdrop-blur-xl min-[1100px]:hidden"
         >
           <div className="shell flex flex-col gap-6 py-8">
             {navLinks.map((link) => (
@@ -134,8 +141,19 @@ export function SiteHeader() {
               </div>
             ))}
 
+            {navEndLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className={`${linkClass} self-start`}
+              >
+                <TextRoll lineHeight={NAV_LINE_HEIGHT}>{link.label}</TextRoll>
+              </Link>
+            ))}
+
             <Link
-              href="/#contact"
+              href="/contact"
               onClick={() => setOpen(false)}
               className="shine shine-edge bg-primary-container text-on-primary-container font-technical-data text-technical-data px-6 py-3 text-center tracking-widest uppercase"
             >

@@ -58,7 +58,7 @@ export default function IntrebariFrecventePage() {
 
           <p className="font-body-lg text-body-lg text-on-surface-variant mt-12 max-w-3xl">
             {"Nu ai găsit răspunsul? "}
-            <Link href="/#contact" className="text-primary underline underline-offset-4">
+            <Link href="/contact" className="text-primary underline underline-offset-4">
               {"Scrie-ne"}
             </Link>
             {" și revenim cu detalii pentru proiectul tău."}

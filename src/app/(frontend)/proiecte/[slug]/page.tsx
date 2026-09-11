@@ -85,7 +85,7 @@ export default async function ProiectPage(props: PageProps<"/proiecte/[slug]">) 
             </dl>
 
             <Link
-              href="/#contact"
+              href="/contact"
               className="shine shine-edge bg-primary text-on-primary font-technical-data text-technical-data mt-10 inline-block px-10 py-4 tracking-widest uppercase"
             >
               {"Cereți ofertă"}

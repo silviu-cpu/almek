@@ -1,16 +1,16 @@
 import { Check } from "lucide-react";
 import type { Metadata } from "next";
 
-import { TextSection } from "@/components/info/InfoBlocks";
+import { InfoTabs } from "@/components/info/InfoTabs";
+import { FramedImage } from "@/components/ui/FramedImage";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { SectionRule } from "@/components/ui/TextureOverlays";
 import {
   woodBenefits,
   woodBenefitsLead,
-  woodClosingIntro,
-  woodClosingPoints,
   woodIntro,
-  woodSections,
+  woodIntroImages,
+  woodTabs,
 } from "@/lib/info";
 
 export const metadata: Metadata = {
@@ -28,19 +28,40 @@ export default function DeCeCasaDinLemnPage() {
         intro="Lemnul este, dintre toate materialele de construcții, unicul natural — regenerabil, versatil și potrivit pentru orice tip de construcție."
       />
 
-      <section className="section-timeline relative overflow-hidden pb-32">
+      <section className="section-timeline relative overflow-hidden py-24">
         <SectionRule />
 
         <div className="shell relative z-10">
-          <div className="max-w-3xl space-y-4">
-            {woodIntro.map((paragraph) => (
-              <p
-                key={paragraph.slice(0, 32)}
-                className="font-body-lg text-body-lg text-on-surface-variant"
-              >
-                {paragraph}
-              </p>
-            ))}
+          {/* Textul in stanga, imaginile in dreapta — aceeasi compozitie ca la
+              deschiderea din „Despre noi". Detaliul iese cu -bottom-12 sub rama
+              mare; `mt-16` de la titlul urmator ii face loc. */}
+          <div className="grid grid-cols-12 items-center gap-gutter">
+            <div className="col-span-12 space-y-4 md:col-span-6">
+              {woodIntro.map((paragraph) => (
+                <p
+                  key={paragraph.slice(0, 32)}
+                  className="font-body-lg text-body-lg text-on-surface-variant"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+
+            <div className="relative col-span-12 md:col-span-5 md:col-start-8">
+              <FramedImage
+                src={woodIntroImages.main.image}
+                alt={woodIntroImages.main.alt}
+                sizes="(min-width: 1200px) 500px, (min-width: 768px) 42vw, 100vw"
+                className="relative z-10"
+              />
+              <FramedImage
+                src={woodIntroImages.detail.image}
+                alt={woodIntroImages.detail.alt}
+                sizes="(min-width: 1200px) 210px, 18vw"
+                aspect="aspect-square"
+                className="bg-surface-container-high absolute -bottom-12 -left-12 z-20 hidden w-5/12 md:block"
+              />
+            </div>
           </div>
 
           <h2 className="font-headline-md text-headline-md text-on-surface mt-16">
@@ -65,29 +86,17 @@ export default function DeCeCasaDinLemnPage() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
 
-          <div className="mt-20 grid grid-cols-1 gap-x-gutter gap-y-14 md:grid-cols-2">
-            {woodSections.map((section) => (
-              <TextSection key={section.title} section={section} />
-            ))}
-          </div>
+      {/* Taburile, ca pe live: lista de avantaje in stanga, textul in dreapta.
+          In locul grilei de sapte blocuri de text, care se citea ca un zid. */}
+      <section className="section-timeline relative overflow-hidden py-24 pb-32">
+        <SectionRule />
 
-          <div className="border-outline-variant mt-20 max-w-3xl border-t pt-12">
-            <p className="font-body-lg text-body-lg text-on-surface-variant">
-              {woodClosingIntro}
-            </p>
-            <ul className="mt-6 flex flex-col gap-4">
-              {woodClosingPoints.map((point) => (
-                <li
-                  key={point.slice(0, 32)}
-                  className="font-body-md text-body-md text-on-surface-variant flex gap-3"
-                >
-                  <span aria-hidden className="bg-primary mt-3 size-[2px] shrink-0" />
-                  {point}
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div className="shell relative z-10">
+          <h2 className="sr-only">{"Avantajele în detaliu"}</h2>
+          <InfoTabs tabs={woodTabs} label="Avantajele în detaliu" />
         </div>
       </section>
     </>

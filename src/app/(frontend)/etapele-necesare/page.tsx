@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { FramedImage } from "@/components/ui/FramedImage";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { SectionRule } from "@/components/ui/TextureOverlays";
-import { steps, stepsIntro } from "@/lib/info";
+import { steps, stepsIntro, stepsIntroImages } from "@/lib/info";
 
 export const metadata: Metadata = {
   title: "Etapele necesare | ALMEK",
@@ -24,15 +25,36 @@ export default function EtapelePage() {
         <SectionRule />
 
         <div className="shell relative z-10">
-          <div className="max-w-3xl space-y-4">
-            {stepsIntro.map((paragraph) => (
-              <p
-                key={paragraph.slice(0, 32)}
-                className="font-body-lg text-body-lg text-on-surface-variant"
-              >
-                {paragraph}
-              </p>
-            ))}
+          {/* Aceeasi compozitie ca la „Despre noi" si „De ce casă din lemn".
+              Detaliul iese cu -bottom-12 sub rama mare; `mt-16` de pe lista de
+              pasi ii face loc. */}
+          <div className="grid grid-cols-12 items-center gap-gutter">
+            <div className="col-span-12 space-y-4 md:col-span-6">
+              {stepsIntro.map((paragraph) => (
+                <p
+                  key={paragraph.slice(0, 32)}
+                  className="font-body-lg text-body-lg text-on-surface-variant"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+
+            <div className="relative col-span-12 md:col-span-5 md:col-start-8">
+              <FramedImage
+                src={stepsIntroImages.main.image}
+                alt={stepsIntroImages.main.alt}
+                sizes="(min-width: 1200px) 500px, (min-width: 768px) 42vw, 100vw"
+                className="relative z-10"
+              />
+              <FramedImage
+                src={stepsIntroImages.detail.image}
+                alt={stepsIntroImages.detail.alt}
+                sizes="(min-width: 1200px) 210px, 18vw"
+                aspect="aspect-square"
+                className="bg-surface-container-high absolute -bottom-12 -left-12 z-20 hidden w-5/12 md:block"
+              />
+            </div>
           </div>
 
           <ol className="border-outline-variant mt-16 flex flex-col border-t">
@@ -63,7 +85,7 @@ export default function EtapelePage() {
               {"întrebările frecvente"}
             </Link>
             {" sau scrie-ne direct din "}
-            <Link href="/#contact" className="text-primary underline underline-offset-4">
+            <Link href="/contact" className="text-primary underline underline-offset-4">
               {"formularul de contact"}
             </Link>
             {"."}

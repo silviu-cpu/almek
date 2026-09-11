@@ -9,6 +9,29 @@
    confirme — trebuie verificate inainte de publicare.
    --------------------------------------------------------------------------- */
 
+import type { StaticImageData } from "next/image";
+
+import { variantImages, type InfoImage } from "./variante-images";
+
+import aboutAtelier from "../../public/images/despre/atelier.png";
+import aboutDetaliu from "../../public/images/despre/detaliu-lemn.png";
+import aboutEchipa from "../../public/images/despre/echipa.png";
+import aboutInterior from "../../public/images/despre/interior.png";
+import aboutMontaj from "../../public/images/despre/montaj.png";
+import stepsImbinare from "../../public/images/etape/imbinare.png";
+import stepsSantier from "../../public/images/etape/santier.png";
+import processMontajIzolatie from "../../public/images/procesul-tehnologic/montaj-izolatie.jpg";
+import processMontajLanteti from "../../public/images/procesul-tehnologic/montaj-lanteti.png";
+import processPremontaj from "../../public/images/procesul-tehnologic/premontaj.png";
+import wallDubluA from "../../public/images/procesul-tehnologic/perete-dublu-a.png";
+import wallDubluB from "../../public/images/procesul-tehnologic/perete-dublu-b.png";
+import wallLambrisatA from "../../public/images/procesul-tehnologic/perete-lambrisat-a.png";
+import wallLambrisatB from "../../public/images/procesul-tehnologic/perete-lambrisat-b.png";
+import wallSimpluA from "../../public/images/procesul-tehnologic/perete-simplu-a.jpg";
+import wallSimpluB from "../../public/images/procesul-tehnologic/perete-simplu-b.jpg";
+import woodCasa from "../../public/images/de-ce-lemn/casa-lemn.png";
+import woodFibra from "../../public/images/de-ce-lemn/fibra-lemn.png";
+
 export type InfoSection = { title: string; body: string[] };
 export type ProcessStep = { nr: string; title: string; body: string };
 export type Faq = { question: string; answer: string[] };
@@ -23,20 +46,60 @@ export const aboutIntro: string[] = [
   "Printr-o exploatare responsabilă urmată de o împădurire constantă, lemnul ne poate transforma mediul construit în unul sănătos și de durată.",
 ];
 
-export const aboutSections: InfoSection[] = [
+/** Imaginile de deschidere, langa `aboutIntro`: cea mare si detaliul decalat peste colt. */
+export const aboutIntroImages = {
+  main: {
+    image: aboutAtelier,
+    alt: "Îmbinare de grinzi din lemn masiv în atelierul ALMEK",
+  },
+  detail: {
+    image: aboutDetaliu,
+    alt: "Fibra lemnului de rășinoase folosit în construcție, în prim-plan",
+  },
+};
+
+export type AboutStoryBlock = {
+  body: string[];
+  image: StaticImageData;
+  alt: string;
+};
+
+/**
+ * „Angajamentul nostru" de pe live, impartit in trei blocuri, fiecare langa o
+ * imagine. Textul e neschimbat — doar regrupat. Primul paragraf al primului
+ * bloc e randat ca citat, deci trebuie sa ramana fraza scurta despre pasiune.
+ */
+export const aboutStory: AboutStoryBlock[] = [
   {
-    title: "Angajamentul nostru",
     body: [
       "Pasiunea noastră pentru lemn nu este doar o meserie – este o artă pe care o trăim zi de zi.",
       "Suntem o echipă de oameni dedicați, inspirați de frumusețea naturală a lemnului și de dorința de a transforma această resursă nobilă în spații care aduc confort, armonie și autenticitate.",
       "Cu măiestrie și atenție la fiecare detaliu, prelucrăm lemnul pentru a da viață locuințelor calde și primitoare, căsuțelor de grădină pline de farmec, teraselor elegante, foișoarelor și pergolelor rafinate, dar și pieselor de mobilier interior și exterior care îmbină funcționalitatea cu estetica.",
+    ],
+    image: aboutEchipa,
+    alt: "Casă din lemn masiv construită de echipa ALMEK",
+  },
+  {
+    body: [
       "Fiecare proiect poartă amprenta respectului nostru pentru natură, pentru tradiție și pentru clienții care ne aleg.",
       "Ne angajăm să oferim soluții personalizate, construite cu grijă, durabilitate și design contemporan – pentru ca fiecare element din lemn să devină o expresie a confortului și a rafinamentului.",
+    ],
+    image: aboutInterior,
+    alt: "Interior amenajat cu mobilier și finisaje din lemn masiv",
+  },
+  {
+    body: [
       "Trăim într-o lume care redescoperă esența echilibrului. A venit momentul să învățăm să ne dezvoltăm în armonie cu natura, bazându-ne pe principii durabile și responsabile. Valorile se transformă — iar odată cu ele, și modul nostru de a privi viața și resursele din jur.",
       "Materialismul și risipa lasă loc respectului pentru natură, pentru meșteșugul autentic și pentru simplitatea care durează în timp. Ne îndepărtăm de consumerism și de irosirea resurselor, alegând conștient sustenabilitatea, calitatea și durabilitatea.",
       "La Almek Wood Arch credem că lemnul ne reconectează la originile noastre, la ritmul natural al vieții. Prin munca noastră, închidem cercul — readucem în prezent legătura autentică dintre om și natură, reinterpretată într-o formă modernă, funcțională și estetică.",
     ],
+    image: aboutMontaj,
+    alt: "Casă din lemn în curs de montaj la locul destinației",
   },
+];
+
+/** Cele patru valori — fiecare de o fraza, deci stau ca patru carduri egale. */
+export const aboutValues: InfoSection[] = [
   {
     title: "Grijă față de mediul înconjurător",
     body: [
@@ -69,6 +132,18 @@ export const stepsIntro: string[] = [
   "Pentru a vă face o imagine în ansamblu asupra a ceea ce trebuie luat în considerare înainte de începerea procesului de construcție, și pentru a vă ajuta să planificați „etapele necesare”, am compilat câțiva pași de îndrumare, ce vă vor ajuta la evitarea surprizelor neplăcute care pot apărea dacă un detaliu important este uitat.",
   "Puteți găsi răspunsuri la multe întrebări în secțiunea Întrebări frecvente, iar dacă aveți nevoie de informații suplimentare puteți completa formularul de contact și noi vă vom răspunde la toate întrebările.",
 ];
+
+/** Imaginile de langa `stepsIntro`: cea mare si detaliul decalat peste colt. */
+export const stepsIntroImages = {
+  main: {
+    image: stepsSantier,
+    alt: "Casă din lemn în construcție, pe șantier",
+  },
+  detail: {
+    image: stepsImbinare,
+    alt: "Îmbinare de grinzi din lemn masiv, în detaliu",
+  },
+};
 
 /*
  * Pe site pasul „Îmbinarea lemnului" apare de doua ori, identic, iar ultimul
@@ -249,6 +324,18 @@ export const woodIntro: string[] = [
   "Lemnul este ușor de utilizat, curat și precis: se prelucrează industrial, construcția se pre-montează, se demontează, apoi se livrează și se montează final la locul destinației. Astfel erorile sunt eliminate și există mai puține deșeuri.",
 ];
 
+/** Imaginile de langa `woodIntro`: cea mare si detaliul decalat peste colt. */
+export const woodIntroImages = {
+  main: {
+    image: woodCasa,
+    alt: "Casă din lemn masiv construită de ALMEK",
+  },
+  detail: {
+    image: woodFibra,
+    alt: "Fibra lemnului masiv, în prim-plan",
+  },
+};
+
 export const woodBenefitsLead =
   "Casele prefabricate sunt cu adevărat confortabile, frumoase și bine gândite, până la cele mai mici detalii, oferind anumite avantaje față de alte tipuri de construcții:";
 
@@ -272,66 +359,91 @@ export const woodBenefits: string[] = [
   "Cost redus, economic și de mediu",
 ];
 
-export const woodSections: InfoSection[] = [
-  {
-    title: "Aerul din casă și eficiența energetică",
-    body: [
-      "Una dintre cele mai bune caracteristici ale unei case de lemn este capacitatea de respirație, care permite lemnului să mențină aerul proaspăt în casă pe toată durata anului. Caracteristicile bune de izolare termică reprezintă motivul esențial pentru o climă ambientală sănătoasă, atât iarna cât și vara.",
-      "Diferența de temperatură dintre pereții casei și aerul din interior este mult mai redusă față de construcțiile clasice, menținând temperatura mai constantă și ajutând la economisirea costurilor de încălzire. Din acest motiv o casă din lemn se încălzește mai ușor iarna, chiar și după o perioadă îndelungată în care nu a mai fost locuită.",
-      "Lemnul folosit funcționează ca un izolator termic, menținând umiditatea la un nivel optim și contribuind la un trai sănătos prin lipsa efectului de „pereți umezi” — igrasie, mucegai. Absența electricității statice previne formarea prafului, astfel că persoanele care suferă de alergii beneficiază de aer curat.",
-    ],
-  },
-  {
-    title: "Acustică",
-    body: [
-      "Lemnul conține proprietăți acustice extrem de căutate. Poate absorbi sunetul și ecourile și este un material preferat pentru construirea structurilor unde acustica este primordială, cum ar fi sălile de concerte.",
-    ],
-  },
-  {
-    title: "Comportamentul la foc",
-    body: [
-      "Lemnul masiv are o rezistență inerentă la foc, care îi conferă un avantaj la temperaturi ridicate. Spre deosebire de oțel, care se poate extinde sau chiar prăbuși, lemnul se usucă și devine mai puternic pe măsură ce crește temperatura.",
-      "Deși este un material combustibil, se comportă bine din punct de vedere al rezistenței structurale la foc, deoarece elementele masive se consumă relativ lent, cu o viteză de 0,5–0,7 mm pe minut. Asta presupune o scădere a secțiunii transversale de 1 cm pe fiecare față într-un sfert de oră, timp în care temperatura incendiului poate ajunge la 700–800 °C.",
-    ],
-  },
-  {
-    title: "Rezistența la cutremur și vânt",
-    body: [
-      "O altă caracteristică importantă a lemnului este rezistența la torsiune și încovoiere, capacitatea de a se îndoi sub presiune fără a se rupe. Acest lucru îl face ideal pentru construcții aflate în zone predispuse la vânt puternic și, în același timp, oferă siguranță în cazul unui cutremur, datorită capacității de a absorbi undele seismice.",
-      "Construcțiile din lemn au numeroase conexiuni, deci mai multe căi de încărcare: există mai puține șanse ca structura să se prăbușească dacă unele conexiuni cedează. Acest fapt, împreună cu greutatea proprie redusă, permite construcțiilor din lemn să reziste la seisme cu magnitudine de peste 8 grade pe scara Richter.",
-    ],
-  },
-  {
-    title: "Durabilitate în timp",
-    body: [
-      "Există multe clădiri din lemn masiv care au sute de ani și sunt încă utilizate activ. O construcție din lemn realizată corect rezistă sute de ani, iar soluțiile structurale utilizate sunt aplicate pentru condiții de siguranță.",
-      "Se acordă garanție și instrucțiuni de folosire și păstrare a calității. Întreținerea este ușoară, de tip obișnuit, și se face o dată la câțiva ani — ca pentru oricare alt material necesar realizării unei case.",
-    ],
-  },
-  {
-    title: "Legătura dintre om și natură",
-    body: [
-      "Chiar dacă clădirile devin din ce în ce mai dependente de tehnologie, nevoia umană de a se conecta cu natura nu se schimbă. Oamenii simt o legătură instinctivă și o atracție pentru materialele naturale, iar mulți designeri citează atributele calde ale lemnului ca motiv pentru utilizarea sa.",
-      "Un studiu efectuat la Universitatea din British Columbia și FPInnovations a constatat că prezența suprafețelor vizuale din lemn într-o încăpere a redus activarea sistemului nervos simpatic, responsabil pentru răspunsurile de stres fiziologic. Studiul a inclus 119 studenți în patru medii de birou diferite, unele cu suprafețe de lemn și altele fără; stresul a fost mai mic în sălile cu lemn în toate perioadele studiului.",
-    ],
-  },
-  {
-    title: "Amprenta de carbon",
-    body: [
-      "Casele din lemn masiv au o amprentă de carbon pozitivă. Lemnul folosit în construcție funcționează ca un burete de carbon de-a lungul vieții acesteia. În plus, procesul de fabricație al unei locuințe din lemn consumă cea mai mică energie în comparație cu metodele alternative de construcție.",
-      "Printr-o exploatare responsabilă urmată de o împădurire constantă, lemnul ne poate transforma mediul construit în unul sănătos și durabil. Copacii tineri au o capacitate mai mare de a prelucra dioxidul de carbon; atunci când copacii sunt transformați în produse și folosiți în arhitectură, începe o nouă fază de diminuare a emisiilor, iar lemnul dintr-o clădire asigură stocarea fizică a carbonului.",
-    ],
-  },
-];
+export type InfoTab = {
+  title: string;
+  /** Paragrafe; `**text**` se randeaza ingrosat, ca pe site-ul live. */
+  body: string[];
+  points?: string[];
+  link?: { label: string; href: string };
+};
 
-export const woodClosingIntro =
-  "Lemnul a fost întotdeauna apreciat pentru frumusețea, abundența și caracterul său practic, dar multe dintre caracteristicile lui inerente răspund unor provocări actuale. În mod obișnuit, lemnul costă mai puțin din punct de vedere economic și al mediului, oferind în același timp mai mult în ceea ce privește frumusețea, versatilitatea și performanța. Valorile tradiționale ale lemnului, împreună cu cele mai noi tehnologii, conferă avantaje prin:";
-
-export const woodClosingPoints: string[] = [
-  "Rentabilitate într-o varietate de proiecte",
-  "Adaptabilitate în utilizarea lui în provocări noi",
-  "Cost scăzut din punct de vedere al mediului, de-a lungul întregului ciclu de viață: de la sursă, din păduri regenerabile gestionate cu atenție, la un rol de eficiență energetică pe toată durata vieții și, de multe ori, la reciclarea și reutilizarea lui în alte proiecte",
-  "Conexiune unică om–natură, dintotdeauna intuitivă, acum documentată în cercetare",
+/**
+ * Cele opt taburi de pe live, cu textul lor integral. Paragrafele foarte lungi
+ * de acolo sunt despartite in mai multe, fara sa se schimbe cuvintele; s-au
+ * corectat doar greselile de tipar si doua traduceri gresite („conexiuni de
+ * unghii" -> „prin cuie", „a absorbit 119 studenti" -> „a inclus").
+ */
+export const woodTabs: InfoTab[] = [
+  {
+    title: "Eficiență energetică (termică)",
+    body: [
+      "Una dintre cele mai bune caracteristici ale unei case de lemn este capacitatea de respirație, ceea ce permite lemnului să respire și să mențină aerul proaspăt în casă pe toată durata anului. Caracteristicile bune de izolare termică a unei case din lemn reprezintă motivul esențial pentru o climă ambientală sănătoasă, atât pe timpul iernii cât și vara.",
+      "Diferența de temperatură dintre pereții casei și aerul din interior este mult mai redusă față de construcțiile clasice, menținând temperatura mai constantă în interior, ajutând astfel la economisirea costurilor de încălzire. Din acest motiv o casă din lemn se încălzește mai ușor iarna chiar și după o perioadă îndelungată în care nu a mai fost locuită. O problemă importantă este cât se cheltuiește într-o lună cu încălzirea sau răcirea spațiului în care se locuiește. Din cercetări reiese că o locuință construită în întregime din lemn masiv ajută la un consum eficient al energiei. **Astfel, s-a ajuns la concluzia că o casă construită în întregime din lemn masiv este eficientă energetic.**",
+      "**O casă confortabilă și eficientă energetic trebuie să fie bine izolată.** În afară de capacitatea unică a lemnului masiv ca material izolator termic, sunt foarte importante și materialele termoizolante folosite pentru izolația suplimentară necesară, acestea asigurând izolare termică, fonică și protecție la incendiu. Materialele termoizolante suplimentare (polistiren expandat ignifug, vată minerală, termoizolație din lână de oaie etc.) sunt ușor de instalat, rezistă pe toată durata de viață a locuinței fără să necesite întreținere și se plasează în zonele necesare, zone determinate astfel încât să nu afecteze calitățile naturale ale lemnului.",
+      "**Lemnul se dovedește, de asemenea, a fi o alegere bună pentru arhitecții care doresc să îndeplinească standardul Passive House (casa pasivă) sau să creeze o clădire cu energie zero.**",
+    ],
+  },
+  {
+    title: "Umiditatea optimă a aerului din interior — calitatea aerului respirat",
+    body: [
+      "Lemnul folosit funcționează ca un izolator termic, menținând totodată umiditatea la un nivel optim și contribuind la un trai sănătos prin lipsa efectului de „pereți umezi”, adică a igrasiei, mucegaiului etc. Prin urmare, aerul dintr-o casă de lemn este mai curat și mai ușor de respirat, împiedicând în același timp răspândirea microorganismelor dăunătoare.",
+      "Absența electricității statice în acest tip de casă previne formarea prafului, astfel că persoanele care suferă de alergii beneficiază de aerul curat din încăpere — casele din lemn sunt o alternativă excelentă la cărămizile cu praf și la casele de mortar de care suntem atât de dependenți.",
+    ],
+  },
+  {
+    title: "Izolare fonică",
+    body: [
+      "Lemnul conține, de asemenea, proprietăți acustice extrem de căutate. Poate absorbi sunetul și ecourile și este un material preferat pentru construirea structurilor unde acustica este primordială, cum ar fi sălile de concerte.",
+    ],
+  },
+  {
+    title: "Rezistența în caz de incendiu și ignifugarea",
+    body: [
+      "Lemnul masiv are o rezistență inerentă la foc, care îi conferă un avantaj în ceea ce privește rezistența la temperaturi ridicate. Spre deosebire de oțel, care se poate extinde sau chiar prăbuși la temperatură ridicată, lemnul se usucă și devine mai puternic pe măsură ce crește temperatura.",
+      "Deși este un material combustibil, se comportă bine din punct de vedere al rezistenței structurale la foc, deoarece elementele masive se consumă relativ lent, cu o viteză de 0,5–0,7 mm/minut, ceea ce presupune o scădere a secțiunii transversale de 1 cm pe fiecare față într-un sfert de oră, timp în care temperatura incendiului poate să ajungă la 700–800 °C.",
+    ],
+  },
+  {
+    title: "Elasticitate — rezistența la activități seismice",
+    body: [
+      "O altă caracteristică importantă a lemnului este rezistența la torsiune și încovoiere, capacitatea de a se îndoi sub presiune fără a se rupe. Acest lucru îl face ideal pentru folosirea în construcții aflate în zone predispuse la vânt puternic și în același timp oferă siguranță în cazul unui cutremur, datorită capacității de a absorbi undele seismice. Limita elastică a lemnului și rezistența maximă sunt mai mari atunci când sarcinile sunt aplicate pentru o perioadă scurtă de timp, ceea ce se întâmplă în cazul evenimentelor cu vânt puternic.",
+      "Ca și în cazul performanțelor seismice, faptul că aceste construcții din lemn au tendința de a avea numeroase conexiuni prin cuie înseamnă, de asemenea, că au mai multe căi de încărcare, deci există mai puține șanse ca structura să se prăbușească dacă unele conexiuni cedează. Acest fapt, împreună cu greutatea proprie redusă, permite construcțiilor realizate din lemn să reziste la seisme cu magnitudine de peste 8 grade pe scara Richter.",
+    ],
+    link: {
+      label: "Vezi testul seismic pe YouTube",
+      href: "https://www.youtube.com/watch?v=VHtrMq617gk",
+    },
+  },
+  {
+    title: "Case care trec testul timpului și întreținere ușoară",
+    body: [
+      "Deși în domeniul construcțiilor s-a progresat mult, lemnul rămâne material principal, iar evoluția a implicat și adoptarea de soluții performante de tratare a lemnului împotriva dăunătorilor. Există multe clădiri din lemn masiv care au sute de ani și sunt încă utilizate activ. Construirea caselor în întregime din lemn masiv este un obicei destul de practicat atât la noi în țară, cât și în multe țări dezvoltate care încurajează un mediu construit sănătos prin folosirea de materiale naturale, inteligente și consum redus de energie.",
+      "Cea mai mare responsabilitate este ca toate casele realizate, pentru a rezista la testul timpului, să fie construite astfel încât proprietarul să se bucure de siguranță și, totodată, să lăsăm în urma noastră o locuință trainică. O construcție din lemn realizată corect rezistă sute de ani. Soluțiile structurale utilizate sunt aplicate pentru condiții de siguranță. Acest lucru asigură că familia proprietarului va avea o casă cu o lungă durată de utilizare, în condiții de siguranță.",
+      "La proiectarea casei ne bazăm pe rezultatele și experiența acumulată, pe indicațiile arhitecților cu care lucrăm, cât și pe studiile și cercetările științifice disponibile. **Se acordă garanție și instrucțiuni de folosire și păstrare a calității.** Întreținerea este ușoară, de tip obișnuit, și se face o dată la câțiva ani — de altfel, ca pentru oricare alt material necesar realizării unei case.",
+    ],
+  },
+  {
+    title: "Importanța prezenței naturii în mediul interior",
+    body: [
+      "Chiar dacă clădirile devin din ce în ce mai dependente și concepute pentru tehnologie, nevoia umană de a se conecta cu natura nu se schimbă. Lemnul are caracteristici unice la care majoritatea oamenilor răspund intuitiv. Această conexiune pozitivă este documentată de un număr tot mai mare de cercetări și constituie un atu valoros în spațiile umplute cu dispozitive și ecrane electronice, materiale sintetice și iluminat artificial.",
+      "Oamenii simt o legătură instinctivă și o atracție pentru materialele naturale, iar mulți designeri citează atributele calde ale lemnului ca motiv pentru utilizarea sa. Dovezile sugerează, de asemenea, că lemnul expus contribuie la simțul de bunăstare al unei persoane. Într-un birou sau o școală, s-a dovedit că lemnul îmbunătățește performanța și productivitatea; în spital, are un impact pozitiv asupra recuperării pacienților.",
+      "Un studiu efectuat la Universitatea din British Columbia și FPInnovations a constatat că prezența suprafețelor vizuale din lemn într-o încăpere a redus activarea sistemului nervos simpatic (SNS). SNS este responsabil pentru răspunsurile de stres fiziologic la om, cum ar fi creșterea tensiunii arteriale și a ritmului cardiac, în timp ce inhibă sistemul parasimpatic, responsabil cu digestia, recuperarea și repararea funcțiilor în organism. Studiul a inclus 119 studenți, fiecare într-unul din patru medii de birou diferite, unele cu suprafețe de lemn și altele fără. Stresul, măsurat prin activarea SNS, a fost mai mic în sălile cu lemn în toate perioadele studiului. **Studiul a concluzionat că lemnul este o modalitate de a crea un mediu construit mai sănătos.**",
+    ],
+  },
+  {
+    title: "Cost redus din punct de vedere economic și al mediului",
+    body: [
+      "Casele din lemn masiv au o amprentă de carbon pozitivă. Lemnul folosit în construcția caselor funcționează ca un burete de carbon de-a lungul vieții acesteia. În plus, procesul de fabricație al unei locuințe din lemn consumă cea mai mică energie atunci când se compară cu metodele alternative de construcție.",
+      "Printr-o exploatare responsabilă urmată de o împădurire constantă, lemnul ne poate transforma mediul construit în unul sănătos și durabil. Copacii tineri au o capacitate mai mare de a prelucra dioxidul de carbon și de a elibera oxigenul în atmosferă, rată care încetinește la atingerea maturității. Indiferent dacă copacii sunt recoltați și utilizați ulterior în producție sau se descompun în mod natural, ciclul este în desfășurare. Dar atunci când copacii sunt transformați în produse și folosiți în arhitectura clădirilor, începe o nouă fază de diminuare a emisiilor de carbon: lemnul dintr-o clădire asigură stocarea fizică a carbonului care ar fi emis înapoi în atmosferă.",
+      "Lemnul a fost întotdeauna apreciat pentru frumusețea, abundența și caracterul său practic, dar multe din caracteristicile inerente ale acestuia se ridică la provocări actuale. În mod obișnuit, lemnul costă mai puțin din punct de vedere economic și din punct de vedere al mediului, oferind în același timp mai mult în ceea ce privește frumusețea, versatilitatea și performanța sa. Valorile tradiționale ale lemnului, împreună cu cele mai noi tehnologii, conferă avantaje prin:",
+    ],
+    points: [
+      "Rentabilitate într-o varietate de proiecte",
+      "Adaptabilitate în utilizarea lui în provocări noi",
+      "Cost scăzut din punct de vedere al mediului, de-a lungul ciclului său de viață: de la sursă, din păduri regenerabile gestionate cu atenție, la un rol de eficiență energetică pe toată durata vieții și, de multe ori, la reciclarea și reutilizarea lui în alte proiecte",
+      "Conexiune unică om–natură, care a fost dintotdeauna intuitivă, dar care acum este documentată în cercetare",
+    ],
+  },
 ];
 
 /* --- Procesul tehnologic ------------------------------------------------ */
@@ -344,8 +456,17 @@ export type WallVariant = {
 
 export type WallType = {
   id: string;
+  /** Eticheta scurta din tab („Perete simplu"). */
   label: string;
+  /** Numele variantei, titlul mare din panou („Varianta Kit"). */
+  name: string;
   title: string;
+  /**
+   * Randarile de pe live (almekwoodarch.ro). Prima e si iconita din tab. Pe
+   * live stau amandoua langa prima varianta de pret, deci sunt vederi ale
+   * tipului de perete, nu cate una pe grosime.
+   */
+  images: { image: StaticImageData; alt: string }[];
   variants: WallVariant[];
   note?: string;
   layers?: string[];
@@ -358,7 +479,12 @@ export const wallTypes: WallType[] = [
   {
     id: "perete-simplu",
     label: "Perete simplu",
-    title: "Varianta Kit — perete simplu din dulapi masivi de 40 sau 60 mm",
+    name: "Varianta Kit",
+    title: "Perete simplu din dulapi masivi de 40 mm sau de 60 mm grosime",
+    images: [
+      { image: wallSimpluA, alt: "Colț de perete simplu din dulapi masivi, pe fundație — randare 3D" },
+      { image: wallSimpluB, alt: "Perete simplu din dulapi masivi — a doua randare 3D" },
+    ],
     variants: [
       {
         price: "De la 380 Euro/mp",
@@ -382,7 +508,12 @@ export const wallTypes: WallType[] = [
   {
     id: "perete-lambrisat",
     label: "Perete lambrisat",
-    title: "Varianta Lambrisată — pereți exteriori simpli, lambrisați pe interior",
+    name: "Varianta Lambrisată",
+    title: "Pereți exteriori simpli, lambrisați pe interior",
+    images: [
+      { image: wallLambrisatA, alt: "Colț de perete lambrisat, cu izolație și lambriu interior — randare 3D" },
+      { image: wallLambrisatB, alt: "Perete lambrisat pe interior — a doua randare 3D" },
+    ],
     variants: [
       {
         // NECONCORDANTA PE LIVE: /procesul-tehnologic da 420 Euro/mp pentru
@@ -421,7 +552,12 @@ export const wallTypes: WallType[] = [
   {
     id: "perete-dublu",
     label: "Perete dublu",
-    title: "Varianta Robustă — pereți exteriori dubli",
+    name: "Varianta Robustă",
+    title: "Pereți exteriori dubli, cu izolație între ei",
+    images: [
+      { image: wallDubluA, alt: "Colț de perete dublu din dulapi masivi, cu izolație între rânduri — randare 3D" },
+      { image: wallDubluB, alt: "Perete dublu din dulapi masivi — a doua randare 3D" },
+    ],
     variants: [
       {
         price: "De la 650 Euro/mp",
@@ -455,9 +591,27 @@ export const wallTypes: WallType[] = [
   },
 ];
 
-export const processNotes: InfoSection[] = [
+/**
+ * Prima imagine e cea mare; a doua, daca exista, e detaliul decalat peste colt.
+ */
+export type ProcessNote = InfoSection & {
+  images: { image: StaticImageData; alt: string }[];
+};
+
+/*
+ * Pozele de montaj sunt reale, de pe almekwoodarch.ro. Pentru premontaj live-ul
+ * are doar o ilustratie stock (o casa pe structura usoara, nu din lemn masiv),
+ * deci aici sta un placeholder pana vine o fotografie din atelier.
+ */
+export const processNotes: ProcessNote[] = [
   {
     title: "Pe toată durata de execuție și montaj, prioritizăm protecția mediului",
+    images: [
+      {
+        image: processPremontaj,
+        alt: "Îmbinare de grinzi din lemn masiv la premontaj, în atelier",
+      },
+    ],
     body: [
       "În funcție de varianta de construcție a pereților aleasă, se studiază schițele din proiectul de execuție, se scurtează elementele la dimensiunile optime, apoi începe premontajul construcției la sediul de producție.",
       "Premontajul verifică și remediază îmbinările pereților cu tocurile ferestrelor și ale ușilor și realizează elementele necesare acoperișului — căpriori, grinzi, bazii și astereală. Are un rol important în reducerea deșeurilor rezultate din prelucrarea materiei prime și scurtează timpul asamblării finale.",
@@ -468,6 +622,16 @@ export const processNotes: InfoSection[] = [
   },
   {
     title: "Casa se reasamblează pe platforme betonate pregătite",
+    images: [
+      {
+        image: processMontajIzolatie,
+        alt: "Echipa ALMEK montează lănteții și izolația acoperișului peste folia de dispersie",
+      },
+      {
+        image: processMontajLanteti,
+        alt: "Lănteți pentru învelitoare, fixați peste folia de dispersie a acoperișului",
+      },
+    ],
     body: [
       "Montarea începe prin ridicarea pereților; progresiv, odată cu evoluția lor, se așează tocăria. După ce s-a ajuns la cota de înălțime maximă se așează grinzile și căpriorii pe pereții portanți. Când toate elementele sunt aliniate și perfect îmbinate începe montajul asterealei, care se îmbină prin nut și feder progresiv, de la streașină până la coame și dolii.",
       "Peste astereală se așează folia barieră de vapori, fixată în capse, și casetele separatoare între care se va așeza izolația. Izolarea acoperișului se face cu material izolant ignifug — vată minerală bazaltică, polistiren expandat ignifug. Sistemul de amplasare a izolației deasupra asterealei permite ca grinzile și căpriorii să rămână aparenți.",
@@ -481,58 +645,98 @@ export const processNotes: InfoSection[] = [
 
 export type PriceOption = { title: string; price: string; description: string };
 
+/** Un rand dintr-un tab: preturile in stanga, imaginile in dreapta. */
+export type PriceBlock = {
+  title: string;
+  subtitle?: string;
+  options: PriceOption[];
+  note?: string;
+  images: InfoImage[];
+};
+
 export type PriceGroup = {
   id: string;
+  /** Eticheta scurta din tab. */
+  tab: string;
   title: string;
   intro: string[];
-  options: PriceOption[];
+  /** Imagini langa intro — pentru grupul fara preturi (mobilier). */
+  introImages?: InfoImage[];
+  blocks: PriceBlock[];
   included?: { title: string; items: string[] };
   disclaimer?: string;
 };
 
+const INTERIOR_WALLS_NOTE =
+  "Pereți interiori de compartimentare din dulapi de lemn de 40 mm sau 60 mm grosime, în funcție de varianta aleasă (V1 / V2).";
+
 export const priceGroups: PriceGroup[] = [
   {
     id: "case",
+    tab: "Case din lemn",
     title: "Case din lemn",
-    intro: [
-      "Pereții structurali ai unei case din lemn se împart în trei categorii, în funcție de grosime și de modul de izolare.",
-    ],
-    options: [
+    intro: ["Pereții structurali ai unei case din lemn se împart în 3 categorii:"],
+    blocks: [
       {
-        title: "A. Perete simplu — varianta 1",
-        price: "De la 380 Euro/mp",
-        description:
-          "Pereți exteriori și pereți interiori din lemn masiv de 40 mm grosime.",
+        title: "A. Perete simplu",
+        subtitle: "Format din dulapi masivi de 40 mm sau de 60 mm grosime.",
+        options: [
+          {
+            title: "Varianta 1",
+            price: "De la 380 Euro/mp",
+            description:
+              "Pereți exteriori și pereți interiori din lemn masiv (pereții care formează compartimentările interioare) de 40 mm grosime.",
+          },
+          {
+            title: "Varianta 2",
+            price: "De la 420 Euro/mp",
+            description:
+              "Pereți exteriori și pereți interiori din lemn masiv (pereții care formează compartimentările interioare) de 60 mm grosime.",
+          },
+        ],
+        images: variantImages.caseA,
       },
       {
-        title: "A. Perete simplu — varianta 2",
-        price: "De la 420 Euro/mp",
-        description:
-          "Pereți exteriori și pereți interiori din lemn masiv de 60 mm grosime.",
+        title: "B. Perete exterior lambrisat",
+        subtitle:
+          "Format din dulapi masivi de 40 mm sau 60 mm grosime, spațiu tehnic pentru adăugarea izolației de 100 mm (minim necesar) și lambriu interior de 20 mm grosime.",
+        options: [
+          {
+            title: "Varianta 1",
+            price: "De la 520 Euro/mp",
+            description:
+              "Perete exterior din lemn masiv de 40 mm grosime, rezervă pentru izolația de 100 mm și lambriu la interior de 20 mm. Grosime totală perete exterior: 160 mm.",
+          },
+          {
+            title: "Varianta 2",
+            price: "De la 560 Euro/mp",
+            description:
+              "Perete exterior din lemn masiv de 60 mm grosime, rezervă pentru izolația de 100 mm și lambriu la interior de 20 mm. Grosime totală perete exterior: 180 mm.",
+          },
+        ],
+        note: INTERIOR_WALLS_NOTE,
+        images: variantImages.caseB,
       },
       {
-        title: "B. Perete exterior lambrisat — varianta 1",
-        price: "De la 520 Euro/mp",
-        description:
-          "Perete exterior din lemn masiv de 40 mm, rezervă pentru izolația de 100 mm și lambriu interior de 20 mm. Grosime totală 160 mm.",
-      },
-      {
-        title: "B. Perete exterior lambrisat — varianta 2",
-        price: "De la 560 Euro/mp",
-        description:
-          "Perete exterior din lemn masiv de 60 mm, rezervă pentru izolația de 100 mm și lambriu interior de 20 mm. Grosime totală 180 mm.",
-      },
-      {
-        title: "C. Perete exterior dublu — varianta 1",
-        price: "De la 650 Euro/mp",
-        description:
-          "Două rânduri de pereți exteriori de 40 mm și spațiu tehnic pentru izolația de 100 mm între ei. Grosime totală 180 mm.",
-      },
-      {
-        title: "C. Perete exterior dublu — varianta 2",
-        price: "De la 700 Euro/mp",
-        description:
-          "Două rânduri de pereți exteriori de 60 mm și rezervă pentru izolația de 100 mm între ei. Grosime totală 220 mm.",
+        title: "C. Perete exterior dublu",
+        subtitle:
+          "Format din două rânduri de dulapi de lemn de 40 mm sau 60 mm grosime și spațiu tehnic între ele pentru adăugarea izolației de 100 mm (minim necesar).",
+        options: [
+          {
+            title: "Varianta 1",
+            price: "De la 650 Euro/mp",
+            description:
+              "Două rânduri de pereți exteriori de 40 mm grosime și spațiu tehnic pentru izolația de 100 mm între ei. Grosime totală perete exterior: 180 mm.",
+          },
+          {
+            title: "Varianta 2",
+            price: "De la 700 Euro/mp",
+            description:
+              "Două rânduri de pereți exteriori de 60 mm grosime și rezervă pentru izolația de 100 mm între ei. Grosime totală perete exterior: 220 mm.",
+          },
+        ],
+        note: INTERIOR_WALLS_NOTE,
+        images: variantImages.caseC,
       },
     ],
     included: {
@@ -560,28 +764,35 @@ export const priceGroups: PriceGroup[] = [
   },
   {
     id: "casute",
+    tab: "Căsuțe de grădină",
     title: "Căsuțe de grădină",
     intro: [
       "Transformă-ți grădina într-un spațiu cu adevărat special.",
       "Căsuțele de grădină nu mai sunt doar simple anexe — pot deveni un atelier de creație, un birou liniștit, un colț de relaxare, un mic cinema în aer liber, o zonă tip spa sau o magazie cu stil.",
       "Fiecare proiect este diferit, iar pentru ca noua construcție să se potrivească cu spațiul disponibil realizăm fiecare căsuță la comandă.",
     ],
-    options: [
+    blocks: [
       {
-        title: "Varianta 1",
-        price: "De la 350 Euro/mp",
-        description: "Perete din lemn masiv de 40 mm grosime.",
-      },
-      {
-        title: "Varianta 2",
-        price: "De la 370 Euro/mp",
-        description: "Perete din lemn masiv de 60 mm grosime.",
-      },
-      {
-        title: "Varianta 3",
-        price: "De la 330 Euro/mp",
-        description:
-          "Construcție tip timber framing — structură din lemn 100×45 mm, placată la exterior cu lambriu din lemn.",
+        title: "Avem trei variante de execuție pentru realizarea căsuței de grădină",
+        options: [
+          {
+            title: "Varianta 1",
+            price: "De la 350 Euro/mp",
+            description: "Perete din lemn masiv de 40 mm grosime.",
+          },
+          {
+            title: "Varianta 2",
+            price: "De la 370 Euro/mp",
+            description: "Perete din lemn masiv de 60 mm grosime.",
+          },
+          {
+            title: "Varianta 3",
+            price: "De la 330 Euro/mp",
+            description:
+              "Construcție tip timber framing — structură din lemn 100×45 mm, placată la exterior cu lambriu din lemn.",
+          },
+        ],
+        images: variantImages.casute,
       },
     ],
     disclaimer:
@@ -589,46 +800,90 @@ export const priceGroups: PriceGroup[] = [
   },
   {
     id: "terase",
+    tab: "Foișoare și terase",
     title: "Terase și foișoare",
     intro: [
+      "Calcul estimativ al costurilor de producție pentru foișoare și terase din lemn.",
       "Ca reper orientativ, costul se estimează pe baza unui preț pe metru pătrat, în funcție de suprafața construită desfășurată și de varianta aleasă pentru balustrade sau, după caz, pentru pereți închiși cu panouri din lemn, sticlă ori sisteme culisante.",
     ],
-    options: [
+    blocks: [
       {
-        title: "1. Model deschis, fără balustradă perimetrală",
-        price: "De la 330 Euro/mp",
-        description:
-          "Structură din lemn masiv sau stratificat: stâlpi de susținere, grinzi principale și astereală din lambriu. Fără balustrade sau închideri perimetrale — potrivit pentru spații aerisite, cu design minimalist.",
+        title: "1. Model deschis",
+        subtitle: "Fără balustradă perimetrală",
+        options: [
+          {
+            title: "Preț orientativ",
+            price: "De la 330 Euro/mp",
+            description:
+              "Structură din lemn masiv sau stratificat: stâlpi de susținere, grinzi principale și astereală din lambriu. Fără balustrade sau închideri perimetrale — potrivit pentru spații aerisite, cu design minimalist.",
+          },
+        ],
+        images: variantImages.terase1,
       },
       {
-        title: "2. Model tradițional, cu balustradă tradițională",
-        price: "De la 330 Euro/mp",
-        description:
-          "Stâlpi, grinzi, astereală din lambriu și balustradă perimetrală în stil tradițional. Se potrivește cu grădini cu aspect natural sau peisaje pitorești.",
+        title: "2. Model tradițional",
+        subtitle: "Cu balustradă tradițională",
+        options: [
+          {
+            title: "Preț orientativ",
+            price: "De la 330 Euro/mp",
+            description:
+              "Stâlpi, grinzi, astereală din lambriu și balustradă perimetrală în stil tradițional. Se potrivește cu grădini cu aspect natural sau peisaje pitorești.",
+          },
+        ],
+        images: variantImages.terase2,
       },
       {
-        title: "3. Model clasic, cu balustradă din lamele de lemn",
-        price: "De la 350 Euro/mp",
-        description:
-          "Panouri cu lamele orizontale tip jaluzea sau montanți rectangulari din lemn masiv, configurabili în diferite modele, de la linii simple la forme mai elaborate.",
+        title: "3. Model clasic",
+        subtitle: "Cu balustradă din lamele de lemn",
+        options: [
+          {
+            title: "Preț orientativ",
+            price: "De la 350 Euro/mp",
+            description:
+              "Panouri cu lamele orizontale tip jaluzea sau montanți rectangulari din lemn masiv, configurabili în diferite modele, de la linii simple la forme mai elaborate.",
+          },
+        ],
+        images: variantImages.terase3,
       },
       {
-        title: "4. Model clasic, cu balustradă elegantă",
-        price: "De la 350 Euro/mp",
-        description:
-          "Păstrează elementele de bază — stâlpi, grinzi, astereală — dar se evidențiază prin detalii fine și linii stilizate. Ideal pentru grădini moderne sau clasice.",
+        title: "4. Model clasic",
+        subtitle: "Cu balustradă elegantă",
+        options: [
+          {
+            title: "Preț orientativ",
+            price: "De la 350 Euro/mp",
+            description:
+              "Păstrează elementele de bază — stâlpi, grinzi, astereală — dar se evidențiază prin detalii fine și linii stilizate. Ideal pentru grădini moderne sau clasice.",
+          },
+        ],
+        images: variantImages.terase4,
       },
       {
-        title: "5. Model semi-închis, cu pereți parțiali tip jaluzea",
-        price: "De la 370 Euro/mp",
-        description:
-          "Închideri parțiale, pe una sau două laturi, cu panouri din lemn tip jaluzea, riflaj sau stelaj. Asigură intimitate, umbrire și protecție împotriva vântului sau ploii.",
+        title: "5. Model semi-închis",
+        subtitle: "1/2 pereți tip jaluzea / riflaj",
+        options: [
+          {
+            title: "Preț orientativ",
+            price: "De la 370 Euro/mp",
+            description:
+              "Închideri parțiale, pe una sau două laturi, cu panouri din lemn tip jaluzea, riflaj sau stelaj. Asigură intimitate, umbrire și protecție împotriva vântului sau ploii.",
+          },
+        ],
+        images: variantImages.terase5,
       },
       {
-        title: "6. Model închis, cu pereți complet închiși",
-        price: "De la 400 Euro/mp",
-        description:
-          "Pereți din panouri de lemn tip jaluzea, panouri fixe sau culisante din lemn și sticlă ori rame din lemn stratificat cu sticlă. Transformă foișorul într-un spațiu semi-interior, utilizabil tot anul.",
+        title: "6. Model închis",
+        subtitle: "Pereți complet închiși",
+        options: [
+          {
+            title: "Preț orientativ",
+            price: "De la 400 Euro/mp",
+            description:
+              "Pereți din panouri de lemn tip jaluzea, panouri fixe sau culisante din lemn și sticlă ori rame din lemn stratificat cu sticlă. Transformă foișorul într-un spațiu semi-interior, utilizabil tot anul.",
+          },
+        ],
+        images: variantImages.terase6,
       },
     ],
     disclaimer:
@@ -636,12 +891,14 @@ export const priceGroups: PriceGroup[] = [
   },
   {
     id: "mobilier",
+    tab: "Mobilier",
     title: "Mobilier interior",
     intro: [
       "Fiecare piesă de mobilier din lemn masiv este unică. Dincolo de funcționalitate, mobilierul realizat din esențe tari sau ușoare poartă amprenta personalității tale și reflectă stilul tău de viață.",
       "De aceea costurile nu sunt standard, ci se calculează în funcție de complexitatea proiectului, tipul de esență dorită, dimensiuni și finisaje.",
       "Putem produce la comandă o gamă variată de piese din lemn masiv, pentru interior sau pentru grădină: o scară din lemn, câteva trepte, un blat din lemn stratificat, un perete riflat, un leagăn pentru grădină sau un set complet de mobilier interior.",
     ],
-    options: [],
+    introImages: variantImages.mobilier,
+    blocks: [],
   },
 ];

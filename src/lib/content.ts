@@ -78,6 +78,9 @@ export const navGroups: NavGroup[] = [
   },
 ];
 
+/** Linkurile de dupa grupuri — pe live Contact inchide bara, dupa submeniuri. */
+export const navEndLinks: NavLink[] = [{ label: "Contact", href: "/contact" }];
+
 export const services: Service[] = [
   {
     nr: "01",
