@@ -9,6 +9,9 @@
     "start": "next start",
     "lint": "eslint",
     "payload": "payload",
+    "migrate": "payload migrate",
+    "migrate:create": "payload migrate:create",
+    "migrate:status": "payload migrate:status",
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap"
   },
@@ -28,6 +31,7 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "server-only": "^0.0.1",
+    "sharp": "^0.35.5",
     "swiper": "^14.1.0",
     "tailwind-merge": "^3.6.0",
     "three": "^0.186.0"

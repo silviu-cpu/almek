@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Migrarile sunt generate de `npm run migrate:create` si nu se editeaza de
+    // mana: parametrii nefolositi din semnatura lor nu sunt de reparat.
+    "src/migrations/**",
   ]),
 ]);
 

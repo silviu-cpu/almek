@@ -586,6 +586,38 @@ chaos cloud and fly into place bottom-up while the house turns.
   Client Component, hence the extra file. An error boundary there drops the scene silently when
   WebGL is unavailable; the hero text never depends on it.
 
+### Deploy (Elastic Beanstalk)
+
+Step-by-step AWS instructions live in [DEPLOY.md](DEPLOY.md); this is the *why*.
+
+- **Single-instance Beanstalk running one Docker container**, not ECS: ECS needs a load
+  balancer, ~18 $/month on its own, and buys nothing for a single site. Whole stack ≈ 33 $/month,
+  half of it RDS.
+- The image is **built locally or in CI and pushed to ECR** (`Dockerrun.aws.json` points at it),
+  never built on the instance: `next build` wants ~2 GB and a small instance would OOM.
+- `output: "standalone"` keeps the runner thin, but **`sharp` is copied explicitly** (with its
+  `@img` binaries): Next's file tracing regularly misses it, and Media's resizes die without it.
+  It is also a **declared dependency** now — it used to arrive only as a transitive of `next`,
+  which would have broken the first `npm ci --omit=dev`.
+- **Migrations run at boot**, from `prodMigrations` in `payload.config.ts` (the adapter supports
+  it), so the production image needs neither the Payload CLI nor `src/`. `push` stays off in
+  production, so a collection change means `npm run migrate:create` against local Postgres and a
+  committed migration — `src/migrations/index.ts` is generated, never hand-edited.
+- `.platform/nginx/conf.d/uploads.conf` raises nginx's 1 MB default to 25 MB; without it every
+  upload from `/admin` fails with 413.
+- The image runs **Node 24 with npm pinned to 11.6.2** — the version that writes the lock locally.
+  Under npm 10 (bundled with Node 22 images) `npm ci` rejects the lock with
+  `Missing: @emnapi/runtime … from lock file`: the two npm majors resolve the platform-gated
+  optional deps (wasm fallbacks of sharp / tailwind oxide) differently. Do not "fix" that by
+  switching `npm ci` to `npm install` — bump the pin together with the local npm instead.
+- Verified end-to-end locally (2026-09-28): the image booted against an **empty** Postgres, ran
+  the initial migration by itself (13 tables), served `/`, `/magazin`, `/blog`, `/proiecte`,
+  `/admin`, `/api/*` and the GLB, and `sharp` processed an image inside the container. Image
+  size ~410 MB.
+- `next build` logs "cannot connect to Postgres" while collecting page data. That is **pre-existing
+  noise** (14 occurrences before the `prodMigrations` change, 16 after) and the build still exits
+  0 — CMS pages are not prerendered, so no database is needed at build time.
+
 ### Known TODO
 
 The contact form in [Contact.tsx](src/components/sections/Contact.tsx) is UI-only. Its submit

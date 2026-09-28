@@ -1,0 +1,31 @@
+# Contextul trimis catre Docker. Cu cat mai mic, cu atat build-ul e mai rapid —
+# si, mai important, secretele si fisierele de lucru nu ajung in imagine.
+.git
+.github
+node_modules
+.next
+npm-debug.log*
+
+# Secrete: variabilele de productie se dau din mediul Beanstalk.
+.env
+.env.*
+!.env.example
+
+# Media incarcata local prin Payload (in productie sta in S3).
+media
+public/media
+
+# Surse de modele 3D: in aplicatie intra doar GLB-ul din public/models.
+*.skp
+*.ifc
+scripts
+
+# Documentatie si unelte de dezvoltare.
+CLAUDE.md
+AGENTS.md
+README.md
+DEPLOY.md
+docker-compose.yml
+.vscode
+.claude
+tsconfig.tsbuildinfo

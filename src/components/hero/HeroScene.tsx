@@ -206,6 +206,8 @@ type Part = {
   baseQuat: THREE.Quaternion;
   chaosQuat: THREE.Quaternion;
   order: number;
+  /** Ultimul progres aplicat piesei, ca sa nu recalculam piesele care stau. */
+  lastS?: number;
 };
 
 const pivotTmp = new THREE.Vector3();
@@ -219,6 +221,10 @@ const pivotTmp = new THREE.Vector3();
 function applyBuild(parts: Part[], build: number) {
   for (const part of parts) {
     const s = THREE.MathUtils.clamp((build * (1 + PIECE_WINDOW) - part.order) / PIECE_WINDOW, 0, 1);
+    // Piesele care nu s-au miscat de la ultimul cadru (inca in haos sau deja
+    // asezate) se sar: la ~880 de piese, doar o parte zboara la un moment dat.
+    if (part.lastS === s) continue;
+    part.lastS = s;
     // easeInOutCubic: piesa se desprinde lin din haos si se aseaza lin la loc.
     const e = s < 0.5 ? 4 * s * s * s : 1 - (-2 * s + 2) ** 3 / 2;
     part.obj.quaternion.slerpQuaternions(part.chaosQuat, part.baseQuat, e);
@@ -346,8 +352,13 @@ function Build({
 
 /**
  * Progresul derularii: 0 cand elementul-pista incepe, 1 cand s-a terminat.
- * Tinta vine din scroll, iar valoarea afisata o urmareste amortizat — altfel o
- * rotita de mouse ar face constructia sa sara in trepte.
+ *
+ * Valoarea se scrie direct din scroll, FARA amortizare. Amortizarea (~0.2s)
+ * parea mai lina, dar lasa constructia in urma: bara din `ScrollCue` citeste
+ * acelasi progres nefiltrat, deci arata "gata" in timp ce casa inca se aseza,
+ * iar la o derulare rapida pista se termina si pagina pleaca inainte ca ultimele
+ * piese sa ajunga la locul lor. Cu cadre grele (modelul are ~880 de piese)
+ * intarzierea creste si mai mult. Derularea din browser e oricum lina.
  */
 function ScrollDriver({
   trackId,
@@ -373,6 +384,7 @@ function ScrollDriver({
       const el = document.getElementById(trackId);
       if (!el) return;
       targetRef.current = buildProgress(trackProgress(el));
+      currentRef.current = targetRef.current;
       invalidate();
     };
     read();
@@ -384,20 +396,8 @@ function ScrollDriver({
     };
   }, [trackId, targetRef, currentRef, still, invalidate]);
 
-  // `frameloop="demand"`: se randeaza doar cat timp valoarea inca se apropie de
-  // tinta. Cu pagina oprita, scena nu consuma nimic.
-  useFrame((_, delta) => {
-    const gap = targetRef.current - currentRef.current;
-    if (Math.abs(gap) < 1e-4) {
-      currentRef.current = targetRef.current;
-      return;
-    }
-    // Constanta de ~0.2s: miscare lina, fara trepte de la rotita de mouse, dar
-    // destul de scurta cat constructia sa se termine in pauza de dupa `BUILD_END`.
-    currentRef.current += gap * (1 - Math.exp(-delta * 5));
-    invalidate();
-  });
-
+  // `frameloop="demand"`: un cadru se randeaza doar la `invalidate()`, adica la
+  // fiecare eveniment de scroll. Cu pagina oprita, scena nu consuma nimic.
   return null;
 }
 
@@ -409,7 +409,7 @@ export default function HeroScene({ trackId, modelUrl }: Props) {
   return (
     <Canvas
       frameloop="demand"
-      dpr={[1, 1.75]}
+      dpr={[1, 1.5]}
       gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}
       camera={{ position: [10, 6, 13], fov: 32 }}
       onCreated={({ camera }) => camera.lookAt(0, 2.1, 0)}

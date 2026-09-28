@@ -13,6 +13,7 @@ import { Products } from "./collections/Products";
 import { Projects } from "./collections/Projects";
 import { Works } from "./collections/Works";
 import { Users } from "./collections/Users";
+import { migrations } from "./migrations";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -50,6 +51,10 @@ export default buildConfig({
        urma in istoric. Local se poate impinge direct, ca sa nu generam o
        migrare la fiecare ajustare de camp. */
     push: process.env.NODE_ENV !== "production",
+    /* Migrarile nerulate se aplica la pornirea aplicatiei. Asa containerul de
+       productie nu are nevoie de CLI-ul Payload, de codul sursa sau de
+       dependentele de development — vezi DEPLOY.md. */
+    prodMigrations: migrations,
   }),
 
   /* `sharp` este necesar pentru dimensiunile generate din colectia Media. */

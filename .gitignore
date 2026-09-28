@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# Sablonul fara secrete se comite: fara el nu stie nimeni ce variabile cere aplicatia.
+!.env.example
 
 # vercel
 .vercel
@@ -42,3 +44,9 @@ next-env.d.ts
 
 # Media incarcata local (in productie merge in S3)
 /public/media
+/media
+
+# Surse de modele 3D primite de la client: in aplicatie intra doar GLB-ul
+# generat in public/models. Fisierele originale nu au ce cauta in repo.
+*.skp
+*.ifc
