@@ -60,19 +60,24 @@ export default buildConfig({
   /* `sharp` este necesar pentru dimensiunile generate din colectia Media. */
   sharp,
 
-  plugins: s3Configured
-    ? [
-        s3Storage({
-          collections: { media: true },
-          bucket: process.env.S3_BUCKET!,
-          config: {
-            region: process.env.S3_REGION!,
-            credentials: {
-              accessKeyId: process.env.S3_ACCESS_KEY_ID!,
-              secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
-            },
-          },
-        }),
-      ]
-    : [],
+  /* Pluginul se inregistreaza MEREU, iar `enabled` decide daca scrie in S3.
+     Motivul: el adauga oricum o componenta client (S3ClientUploadHandler) ca
+     provider al intregului admin. Cand pluginul lipsea local, `importMap.js`
+     generat local nu avea componenta; in productie pluginul era activ, admin-ul
+     nu gasea providerul si randa o pagina alba. Inregistrat mereu, import map-ul
+     e identic in dev si in productie. */
+  plugins: [
+    s3Storage({
+      enabled: s3Configured,
+      collections: { media: true },
+      bucket: process.env.S3_BUCKET || "",
+      config: {
+        region: process.env.S3_REGION || "",
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || "",
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || "",
+        },
+      },
+    }),
+  ],
 });

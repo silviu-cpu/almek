@@ -1,0 +1,102 @@
+# Deploy automat la fiecare push pe `main`: build imagine -> ECR -> Beanstalk.
+#
+# Autentificarea in AWS se face prin OIDC: GitHub primeste la fiecare rulare
+# credentiale temporare pentru rolul din variabila AWS_DEPLOY_ROLE_ARN. Nu exista
+# chei AWS salvate in GitHub. Configurarea din AWS e descrisa in DEPLOY.md.
+#
+# Mediul Beanstalk trebuie sa existe deja: workflow-ul il actualizeaza, nu il
+# creeaza (prima publicare se face din consola, cu deploy.zip).
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Un singur deploy odata: doua push-uri rapide nu se bat pe acelasi mediu.
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+permissions:
+  id-token: write # necesar pentru OIDC
+  contents: read
+
+env:
+  AWS_REGION: eu-north-1
+  ECR_REPOSITORY: alme
+  EB_APPLICATION: almek
+  # ID-ul, nu numele: numele din consola ("Almek-env") difera ca litere mari/mici
+  # de cel din documentatie, iar ID-ul nu se schimba niciodata.
+  EB_ENVIRONMENT_ID: e-h8unuv2k7h
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # x86_64, la fel ca instanta t3.small
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Credentiale AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - uses: docker/setup-buildx-action@v3
+
+      # Imaginea primeste doua etichete: SHA-ul commit-ului (imutabila, pe ea se
+      # face deploy-ul si rollback-ul) si `latest` (pentru deploy-ul manual).
+      # Cache-ul GHA pastreaza straturile `npm ci` intre rulari.
+      - name: Build si push imagine
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+            ${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Pachet Beanstalk pentru acest commit
+        env:
+          IMAGE: ${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+        run: |
+          jq --arg img "$IMAGE" '.Image.Name = $img' Dockerrun.aws.json > Dockerrun.tmp
+          mv Dockerrun.tmp Dockerrun.aws.json
+          zip -r deploy.zip Dockerrun.aws.json .platform
+
+      - name: Deploy in Beanstalk
+        env:
+          # Eticheta include incercarea, ca un re-run al aceluiasi commit sa nu
+          # dea peste o versiune care exista deja.
+          VERSION: ${{ github.sha }}-${{ github.run_attempt }}
+        run: |
+          # Bucketul in care Beanstalk tine versiunile; il creeaza daca lipseste.
+          BUCKET=$(aws elasticbeanstalk create-storage-location --query S3Bucket --output text)
+          KEY="$EB_APPLICATION/$VERSION.zip"
+          aws s3 cp deploy.zip "s3://$BUCKET/$KEY"
+          aws elasticbeanstalk create-application-version \
+            --application-name "$EB_APPLICATION" \
+            --version-label "$VERSION" \
+            --source-bundle S3Bucket="$BUCKET",S3Key="$KEY"
+          aws elasticbeanstalk update-environment \
+            --environment-id "$EB_ENVIRONMENT_ID" \
+            --version-label "$VERSION"
+          aws elasticbeanstalk wait environment-updated --environment-ids "$EB_ENVIRONMENT_ID"
+
+      # `wait` se opreste cand mediul e Ready, nu cand e sanatos: un container
+      # care cade la pornire ar trece altfel drept deploy reusit.
+      - name: Verificare sanatate
+        run: |
+          HEALTH=$(aws elasticbeanstalk describe-environments \
+            --environment-ids "$EB_ENVIRONMENT_ID" \
+            --query 'Environments[0].Health' --output text)
+          echo "Health: $HEALTH"
+          test "$HEALTH" = "Green"

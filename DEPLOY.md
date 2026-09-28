@@ -29,9 +29,20 @@ este baza de date.
 - Engine **PostgreSQL 17**, template *Production* sau *Dev/Test*, clasă **db.t4g.micro**,
   20 GB gp3, **Single-AZ** (Multi-AZ dublează costul).
 - **Public access: No.** Baza rămâne în subnetul privat; nu se conectează nimeni de pe laptop.
+- **Initial database name: `almek`** (în *Additional configuration*). Fără el RDS nu creează
+  nicio bază cu numele din `DATABASE_URI`.
+- Parola: **doar litere și cifre**. Intră într-un URL, unde `@ : / ? #` îl rup.
 - Notează endpointul, portul, userul și parola: intră în `DATABASE_URI`.
-- Grupul de securitate al bazei: intrare pe portul **5432 doar dinspre grupul de securitate al
-  instanței Beanstalk** (se completează după pasul 5), nu dinspre `0.0.0.0/0`.
+- **SSL**: RDS cu PostgreSQL 15+ refuză conexiunile necriptate (`rds.force_ssl=1`). De aceea
+  `DATABASE_URI` se termină cu `?sslmode=no-verify`: conexiunea e criptată, dar certificatul nu
+  se verifică. Cu `sslmode=require`, driverul `pg` ar verifica certificatul după lista de
+  autorități din Node, unde autoritatea Amazon RDS nu există, și conexiunea ar eșua.
+- Grupul de securitate al bazei: **`default`**, așa cum vine. Grupul `default` permite traficul
+  între resursele din el, iar instanța Beanstalk intră și ea în `default` (pasul 5), deci nu e
+  nevoie de nicio regulă nouă. Verifică doar că în *Inbound rules* al lui `default` există rândul
+  *All traffic* cu sursa chiar ID-ul grupului; într-un cont nou e acolo implicit. Varianta e
+  potrivită pentru un cont dedicat site-ului; într-un cont folosit și la altceva, fă grupuri
+  separate, cu intrare pe 5432 doar dinspre grupul instanței.
 
 ## 2. S3 pentru media
 
@@ -85,7 +96,7 @@ Completează același URI în `Dockerrun.aws.json` (câmpul `Image.Name`).
 
 | Variabilă | Valoare |
 |---|---|
-| `DATABASE_URI` | `postgres://user:parola@endpoint-rds:5432/almek` |
+| `DATABASE_URI` | `postgres://almek:PAROLA@endpoint-rds:5432/almek?sslmode=no-verify` |
 | `PAYLOAD_SECRET` | șir aleator lung: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
 | `S3_BUCKET` | `almek-media-prod` |
 | `S3_REGION` | regiunea bucketului |
@@ -99,8 +110,9 @@ Completează același URI în `Dockerrun.aws.json` (câmpul `Image.Name`).
 Compress-Archive -Path Dockerrun.aws.json, .platform -DestinationPath deploy.zip -Force
 ```
 
-- După prima pornire, completează regula de intrare a bazei de date (pasul 1) cu grupul de
-  securitate al instanței.
+- La *Configure instance traffic and scaling* → *EC2 security groups*, bifează **`default`**,
+  ca instanța să ajungă la baza de date (vezi pasul 1). Grupul pentru portul 80 îl creează
+  Beanstalk singur.
 
 ## 6. HTTPS prin CloudFront
 
@@ -126,6 +138,29 @@ Load balancerul se poate adăuga oricând mai târziu (~18 $/lună în plus), f�
 
 După ce mediul e verde, deschide `https://domeniu/admin`. Payload cere crearea primului cont.
 Nu există utilizator implicit.
+
+## Deploy automat din GitHub
+
+După prima publicare manuală, fiecare push pe `main` rulează
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml): build imagine → ECR (etichetată cu
+SHA-ul commit-ului) → versiune nouă în Beanstalk → așteaptă mediul verde. Configurare, o
+singură dată:
+
+1. **IAM → Identity providers → Add provider** → *OpenID Connect*:
+   - Provider URL: `https://token.actions.githubusercontent.com`
+   - Audience: `sts.amazonaws.com`
+2. **IAM → Roles → Create role** → *Web identity*:
+   - Identity provider: `token.actions.githubusercontent.com`, Audience: `sts.amazonaws.com`
+   - GitHub organization: `silviu-cpu`, repository: `almek`, branch: `main`
+   - Politici: **`AmazonEC2ContainerRegistryPowerUser`** și **`AdministratorAccess-AWSElasticBeanstalk`**
+   - Name: `almek-github-deploy` → copiază **ARN-ul** rolului
+3. **GitHub → repo → Settings → Secrets and variables → Actions → tab *Variables*** → variabilă nouă
+   `AWS_DEPLOY_ROLE_ARN` = ARN-ul de la pasul 2. E variabilă, nu secret: ARN-ul nu dă acces
+   singur, accesul vine din regula de încredere a rolului.
+
+Rolul poate fi asumat **doar** de workflow-urile rulate pe `main` din acest repo; nicio cheie AWS nu
+stă în GitHub. Rollback: în consola Beanstalk → *Application versions* → versiunea anterioară
+(eticheta e SHA-ul commit-ului) → *Deploy*.
 
 ## Ce se întâmplă la fiecare deploy
 

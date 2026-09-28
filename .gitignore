@@ -42,6 +42,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Arhiva de deploy pentru Beanstalk: se genereaza din Dockerrun.aws.json + .platform/
+deploy.zip
+
 # Media incarcata local (in productie merge in S3)
 /public/media
 /media

@@ -248,9 +248,15 @@ Payload 3.88 runs **inside this app**, not as a separate service. `@payloadcms/n
   are already wired for when one lands.
 - `revalidateFor` also purges the **old** path when a slug changes or a document is deleted —
   otherwise a stale page keeps being served from a URL that no longer exists.
-- **Media storage is conditional.** The S3 plugin is only registered when all four `S3_*`
-  variables are present; without them Payload writes to `public/media` (gitignored). So local
-  work needs no AWS credentials and cannot pollute the production bucket.
+- **Media storage is conditional, but the S3 plugin is always registered.** `s3Storage` runs
+  with `enabled: s3Configured` (all four `S3_*` variables present); disabled, Payload writes to
+  `public/media` (gitignored), so local work needs no AWS credentials and cannot pollute the
+  production bucket. **Never go back to omitting the plugin when S3 is unset**: it always adds
+  `@payloadcms/storage-s3/client#S3ClientUploadHandler` as an admin **provider**, so an
+  `importMap.js` generated locally without the plugin lacks it, and production (plugin on)
+  rendered a **blank `/admin`** — title "Dashboard - Payload", empty body, no JS errors; the
+  only trace is the server log `getFromImportMap: PayloadComponent not found in importMap`.
+  Reproduced and verified fixed locally by running the image with dummy `S3_*` vars.
 - Schema changes are pushed automatically in development (`push: NODE_ENV !== "production"`).
   For production, generate migrations and commit them — otherwise the first boot alters RDS
   with no trace in history.
@@ -614,6 +620,17 @@ Step-by-step AWS instructions live in [DEPLOY.md](DEPLOY.md); this is the *why*.
   the initial migration by itself (13 tables), served `/`, `/magazin`, `/blog`, `/proiecte`,
   `/admin`, `/api/*` and the GLB, and `sharp` processed an image inside the container. Image
   size ~410 MB.
+- **CI/CD**: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) deploys every push to
+  `main` — buildx image (GHA layer cache) → ECR tagged with the commit SHA and `latest` → a new
+  Beanstalk application version whose `Dockerrun.aws.json` is rewritten to the **SHA** tag →
+  waits for the environment, then fails the run unless Health is `Green` (`wait
+  environment-updated` only waits for *Ready*, which a crash-looping container also reaches).
+  AWS access is **OIDC** via the `AWS_DEPLOY_ROLE_ARN` repository *variable*; no AWS keys live in
+  GitHub. The workflow updates an existing environment — the first publish is manual. Live setup:
+  region `eu-north-1`, ECR repo `alme`, application `almek`, environment `Almek-env`
+  (ID `e-h8unuv2k7h` — the workflow addresses it by ID), domain
+  `Almek-env.eba-v2gm2tew.eu-north-1.elasticbeanstalk.com`, CloudFront
+  `d1stsea7t35ir1.cloudfront.net` in front. The docs' `almek-prod` name was never used.
 - `next build` logs "cannot connect to Postgres" while collecting page data. That is **pre-existing
   noise** (14 occurrences before the `prodMigrations` change, 16 after) and the build still exits
   0 — CMS pages are not prerendered, so no database is needed at build time.

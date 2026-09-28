@@ -1,8 +1,7 @@
 {
-  "_comment": "Beanstalk ia imaginea gata construita din ECR. Inlocuieste CONT si REGIUNE cu ID-ul contului AWS si regiunea (ex. 123456789012 si eu-central-1). Vezi DEPLOY.md.",
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "CONT.dkr.ecr.REGIUNE.amazonaws.com/almek:latest",
+    "Name": "429665474911.dkr.ecr.eu-north-1.amazonaws.com/alme:latest",
     "Update": "true"
   },
   "Ports": [
