@@ -158,6 +158,18 @@ singură dată:
    `AWS_DEPLOY_ROLE_ARN` = ARN-ul de la pasul 2. E variabilă, nu secret: ARN-ul nu dă acces
    singur, accesul vine din regula de încredere a rolului.
 
+**Atenție la regula de încredere a rolului.** GitHub trimite `sub` în formatul nou, cu ID-urile
+numerice ale contului și ale repo-ului, iar comparația e exactă. Regula trebuie să conțină:
+
+```json
+"token.actions.githubusercontent.com:sub": "repo:silviu-cpu@70367652/almek@1338385076:ref:refs/heads/main"
+```
+
+Asistentul din consolă generează formatul vechi, `repo:silviu-cpu/almek:ref:refs/heads/main`, iar
+cu el login-ul pică cu *Not authorized to perform sts:AssumeRoleWithWebIdentity*, deși totul
+arată corect. Formatul nou e și mai sigur: un repo recreat cu același nume are alt ID și nu
+poate folosi rolul.
+
 Rolul poate fi asumat **doar** de workflow-urile rulate pe `main` din acest repo; nicio cheie AWS nu
 stă în GitHub. Rollback: în consola Beanstalk → *Application versions* → versiunea anterioară
 (eticheta e SHA-ul commit-ului) → *Deploy*.

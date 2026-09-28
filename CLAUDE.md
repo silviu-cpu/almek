@@ -626,7 +626,12 @@ Step-by-step AWS instructions live in [DEPLOY.md](DEPLOY.md); this is the *why*.
   waits for the environment, then fails the run unless Health is `Green` (`wait
   environment-updated` only waits for *Ready*, which a crash-looping container also reaches).
   AWS access is **OIDC** via the `AWS_DEPLOY_ROLE_ARN` repository *variable*; no AWS keys live in
-  GitHub. The workflow updates an existing environment — the first publish is manual. Live setup:
+  GitHub. GitHub's OIDC `sub` claim for this repo uses the **immutable-ID format**
+  `repo:silviu-cpu@70367652/almek@1338385076:ref:refs/heads/main`; the role's trust policy must
+  match it exactly. The IAM console wizard writes the old `repo:silviu-cpu/almek:…` form, which
+  fails with a bare "Not authorized to perform sts:AssumeRoleWithWebIdentity" while every other
+  piece (provider, audience, account, ARN) checks out — it took printing the token's claims in a
+  workflow step to see it. The workflow updates an existing environment — the first publish is manual. Live setup:
   region `eu-north-1`, ECR repo `alme`, application `almek`, environment `Almek-env`
   (ID `e-h8unuv2k7h` — the workflow addresses it by ID), domain
   `Almek-env.eba-v2gm2tew.eu-north-1.elasticbeanstalk.com`, CloudFront
