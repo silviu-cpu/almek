@@ -143,7 +143,9 @@ Nu există utilizator implicit.
 
 După prima publicare manuală, fiecare push pe `main` rulează
 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml): build imagine → ECR (etichetată cu
-SHA-ul commit-ului) → versiune nouă în Beanstalk → așteaptă mediul verde. Configurare, o
+SHA-ul commit-ului) → versiune nouă în Beanstalk → așteaptă să se termine actualizarea și afișează
+starea mediului. Rularea nu pică dacă mediul e galben (erorile 4xx îl țin des acolo), așa că după
+un deploy aruncă o privire în consola Beanstalk. Configurare, o
 singură dată:
 
 1. **IAM → Identity providers → Add provider** → *OpenID Connect*:

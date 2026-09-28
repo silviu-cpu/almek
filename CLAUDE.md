@@ -623,8 +623,11 @@ Step-by-step AWS instructions live in [DEPLOY.md](DEPLOY.md); this is the *why*.
 - **CI/CD**: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) deploys every push to
   `main` — buildx image (GHA layer cache) → ECR tagged with the commit SHA and `latest` → a new
   Beanstalk application version whose `Dockerrun.aws.json` is rewritten to the **SHA** tag →
-  waits for the environment, then fails the run unless Health is `Green` (`wait
-  environment-updated` only waits for *Ready*, which a crash-looping container also reaches).
+  waits for the environment to be *Ready* and prints its health. It **does not fail on health**:
+  a `Green`-only gate was removed on request because the environment sits on `Yellow` from
+  normal 4xx traffic (bad logins, 404s). The cost is that a crash-looping container still
+  shows a green run (`wait environment-updated` only waits for *Ready*) — check the Beanstalk
+  console after a deploy. A middle ground, if wanted later: fail only on `Red`.
   AWS access is **OIDC** via the `AWS_DEPLOY_ROLE_ARN` repository *variable*; no AWS keys live in
   GitHub. GitHub's OIDC `sub` claim for this repo uses the **immutable-ID format**
   `repo:silviu-cpu@70367652/almek@1338385076:ref:refs/heads/main`; the role's trust policy must
